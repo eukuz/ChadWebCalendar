@@ -14,5 +14,6 @@ namespace ChadCalendar.Models
         public int WorkingHoursTo { get; set; }
         public int TimeZone { get; set; }
         public int RemindEveryNDays { get; set; }
+        public List<Duty> Duties { get; set; }
     }
 }

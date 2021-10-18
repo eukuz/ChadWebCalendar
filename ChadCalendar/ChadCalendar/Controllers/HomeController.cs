@@ -27,6 +27,20 @@ namespace ChadCalendar.Controllers
         {
             return View();
         }
+        public IActionResult AddUsers()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AddUsers(User user)
+        {
+            using(var db = new ApplicationContext())
+            {
+                db.Add(user);
+                db.SaveChanges();
+            }
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

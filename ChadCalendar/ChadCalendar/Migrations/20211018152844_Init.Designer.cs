@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ChadCalendar.Migrations
 {
-    [DbContext(typeof(AppContext))]
+    [DbContext(typeof(ApplicationContext))]
     [Migration("20211018152844_Init")]
     partial class Init
     {
