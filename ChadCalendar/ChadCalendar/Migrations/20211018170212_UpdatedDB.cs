@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ChadCalendar.Migrations
 {
-    public partial class UPDConStr : Migration
+    public partial class UpdatedDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,13 +31,13 @@ namespace ChadCalendar.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     Accessed = table.Column<DateTime>(type: "TEXT", nullable: false),
                     NRepetitions = table.Column<int>(type: "INTEGER", nullable: false),
                     Multiplier = table.Column<int>(type: "INTEGER", nullable: false),
                     Frequency = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: true)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,7 +47,7 @@ namespace ChadCalendar.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
