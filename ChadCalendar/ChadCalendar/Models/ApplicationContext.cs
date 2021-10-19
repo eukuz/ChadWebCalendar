@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ChadCalendar.Models;
 
 namespace ChadCalendar.Models
 {
@@ -36,5 +37,6 @@ namespace ChadCalendar.Models
                 .WithOne(s => s.Predecessor)
                 .HasForeignKey<Task>(b => b.PredecessorFK);
         }
+        public DbSet<ChadCalendar.Models.Task> Task { get; set; }
     }
 }
