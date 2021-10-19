@@ -28,6 +28,10 @@ namespace ChadCalendar.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Frequency")
                         .HasColumnType("TEXT");
 
@@ -49,6 +53,8 @@ namespace ChadCalendar.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Duty");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Duty");
                 });
 
             modelBuilder.Entity("ChadCalendar.Models.User", b =>
@@ -77,7 +83,57 @@ namespace ChadCalendar.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
+                });
+
+            modelBuilder.Entity("ChadCalendar.Models.Project", b =>
+                {
+                    b.HasBaseType("ChadCalendar.Models.Duty");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("IconNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.HasDiscriminator().HasValue("Project");
+                });
+
+            modelBuilder.Entity("ChadCalendar.Models.Task", b =>
+                {
+                    b.HasBaseType("ChadCalendar.Models.Duty");
+
+                    b.Property<bool>("AllowedToDistribute")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Task_Deadline");
+
+                    b.Property<decimal>("HoursTakes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MaxPerDay")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PredecessorFK")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SuccessorFK")
+                        .HasColumnType("INTEGER");
+
+                    b.HasIndex("PredecessorFK")
+                        .IsUnique();
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasDiscriminator().HasValue("Task");
                 });
 
             modelBuilder.Entity("ChadCalendar.Models.Duty", b =>
@@ -91,9 +147,31 @@ namespace ChadCalendar.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ChadCalendar.Models.Task", b =>
+                {
+                    b.HasOne("ChadCalendar.Models.Task", "Successor")
+                        .WithOne("Predecessor")
+                        .HasForeignKey("ChadCalendar.Models.Task", "PredecessorFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChadCalendar.Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId");
+
+                    b.Navigation("Project");
+
+                    b.Navigation("Successor");
+                });
+
             modelBuilder.Entity("ChadCalendar.Models.User", b =>
                 {
                     b.Navigation("Duties");
+                });
+
+            modelBuilder.Entity("ChadCalendar.Models.Task", b =>
+                {
+                    b.Navigation("Predecessor");
                 });
 #pragma warning restore 612, 618
         }
