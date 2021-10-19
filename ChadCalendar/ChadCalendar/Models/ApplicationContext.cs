@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,7 +20,9 @@ namespace ChadCalendar.Models
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(@"Data Source=\Calendar.db");
+            string path = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ChadCalendar");
+            System.IO.Directory.CreateDirectory(path);
+            optionsBuilder.UseSqlite($"Data Source = { Path.Combine(path,"Calendar.db")}");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
