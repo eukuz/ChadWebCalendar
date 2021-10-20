@@ -36,6 +36,13 @@ namespace ChadCalendar.Controllers
         {
             using(var db = new ApplicationContext())
             {
+                //User u = new User() { Login = "user1", Password = "123", };
+                //Project p = new Project() { Name="MainProject", User= u};
+                //Models.Task task = new Models.Task() {User = u, Project= p};
+                //db.Add(u);
+                //db.Add(p);
+                //db.Add(task);
+
                 db.Add(user);
                 db.SaveChanges();
             }

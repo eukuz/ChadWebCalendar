@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChadCalendar.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20211019072317_TaskFix")]
-    partial class TaskFix
+    [Migration("20211020194124_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,27 +24,22 @@ namespace ChadCalendar.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Accessed")
+                    b.Property<DateTime?>("Accessed")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Frequency")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Multiplier")
+                    b.Property<int?>("Multiplier")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("NRepetitions")
+                    b.Property<int?>("NRepetitions")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
@@ -54,9 +49,7 @@ namespace ChadCalendar.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Duty");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Duty");
+                    b.ToTable("Duties");
                 });
 
             modelBuilder.Entity("ChadCalendar.Models.User", b =>
@@ -85,49 +78,64 @@ namespace ChadCalendar.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ChadCalendar.Models.Event", b =>
+                {
+                    b.HasBaseType("ChadCalendar.Models.Duty");
+
+                    b.Property<DateTime>("FinishesAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RemindNMinutesBefore")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartsAt")
+                        .HasColumnType("TEXT");
+
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("ChadCalendar.Models.Project", b =>
                 {
                     b.HasBaseType("ChadCalendar.Models.Duty");
 
-                    b.Property<DateTime>("Deadline")
+                    b.Property<DateTime?>("Deadline")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("IconNumber")
+                    b.Property<int?>("IconNumber")
                         .HasColumnType("INTEGER");
 
-                    b.HasDiscriminator().HasValue("Project");
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("ChadCalendar.Models.Task", b =>
                 {
                     b.HasBaseType("ChadCalendar.Models.Duty");
 
-                    b.Property<bool>("AllowedToDistribute")
+                    b.Property<bool?>("AllowedToDistribute")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Deadline")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("Task_Deadline");
-
-                    b.Property<decimal>("HoursTakes")
+                    b.Property<DateTime?>("Deadline")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsCompleted")
+                    b.Property<decimal?>("HoursTakes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool?>("IsCompleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("MaxPerDay")
+                    b.Property<int?>("MaxPerDay")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("PredecessorFK")
+                    b.Property<int?>("PredecessorFK")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("ProjectId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SuccessorFK")
+                    b.Property<int?>("SuccessorFK")
                         .HasColumnType("INTEGER");
 
                     b.HasIndex("PredecessorFK")
@@ -135,7 +143,7 @@ namespace ChadCalendar.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasDiscriminator().HasValue("Task");
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("ChadCalendar.Models.Duty", b =>
@@ -149,13 +157,35 @@ namespace ChadCalendar.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ChadCalendar.Models.Task", b =>
+            modelBuilder.Entity("ChadCalendar.Models.Event", b =>
                 {
-                    b.HasOne("ChadCalendar.Models.Task", "Successor")
-                        .WithOne("Predecessor")
-                        .HasForeignKey("ChadCalendar.Models.Task", "PredecessorFK")
+                    b.HasOne("ChadCalendar.Models.Duty", null)
+                        .WithOne()
+                        .HasForeignKey("ChadCalendar.Models.Event", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ChadCalendar.Models.Project", b =>
+                {
+                    b.HasOne("ChadCalendar.Models.Duty", null)
+                        .WithOne()
+                        .HasForeignKey("ChadCalendar.Models.Project", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ChadCalendar.Models.Task", b =>
+                {
+                    b.HasOne("ChadCalendar.Models.Duty", null)
+                        .WithOne()
+                        .HasForeignKey("ChadCalendar.Models.Task", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChadCalendar.Models.Task", "Successor")
+                        .WithOne("Predecessor")
+                        .HasForeignKey("ChadCalendar.Models.Task", "PredecessorFK");
 
                     b.HasOne("ChadCalendar.Models.Project", "Project")
                         .WithMany()
