@@ -7,7 +7,7 @@ namespace ChadCalendar.Models
     {
         public DateTime Deadline { get; set; }
         [Required]
-        public int IconNumber { get; set; }
+        public int IconNumber { get; set; } = 0;
     }
 }
 

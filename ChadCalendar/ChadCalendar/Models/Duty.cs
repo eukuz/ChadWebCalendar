@@ -10,15 +10,15 @@ namespace ChadCalendar.Models
     {
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = " ";
+        public string Description { get; set; } = " ";
         [Required]
-        public DateTime Accessed { get; set; }
-        public int NRepetitions { get; set; }
-        public int Multiplier { get; set; }
-        public string Frequency { get; set; }
+        public DateTime Accessed { get; set; } = DateTime.Now;
+        public int NRepetitions { get; set; } = 0;
+        public int Multiplier { get; set; } = 0;
+        public string Frequency { get; set; } = "";
         [Required]
-        public User User { get; set; }
+        public User User { get; set; } = new User();
     }
 }
 

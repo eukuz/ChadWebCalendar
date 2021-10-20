@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ChadCalendar.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,20 @@ namespace ChadCalendar.Controllers
     {
         public IActionResult Index()
         {
+            return View();
+        }
+        public IActionResult AddTask()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AddTask(Models.Task task)
+        {
+            using (var db = new ApplicationContext())
+            {
+                db.Add(task);
+                db.SaveChanges();
+            }
             return View();
         }
     }

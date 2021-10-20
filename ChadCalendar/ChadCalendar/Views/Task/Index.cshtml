@@ -1,1 +1,26 @@
-﻿<p>Test</p>
+﻿@{
+    ViewData["Title"] = "AddTask";
+}
+@model ChadCalendar.Models.Task
+
+
+<form action="/task/addtask" method="post">
+    <div class="form-group">
+        <label>Enter duration</label>
+        <input type="text" placeholder="Hours for task" asp-for="HoursTakes">
+    </div>
+    <div class="form-group">
+        <label>Enter task name</label>
+        <input type="text" placeholder="Name" asp-for="Name">
+    </div>
+    <div class="form-group">
+        <label>Enter decription</label>
+        <input type="text" placeholder="Description" asp-for="Description">
+    </div>
+    <div class="form-group">
+        <label>Enter count of repeats</label>
+        <input type="text" placeholder="Repetitions" asp-for="NRepetitions">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

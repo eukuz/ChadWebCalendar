@@ -23,6 +23,7 @@ namespace ChadCalendar.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
