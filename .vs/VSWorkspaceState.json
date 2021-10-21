@@ -3,7 +3,8 @@
     "",
     "\\ChadCalendar",
     "\\ChadCalendar\\ChadCalendar",
-    "\\ChadCalendar\\ChadCalendar\\Models"
+    "\\ChadCalendar\\ChadCalendar\\Models",
+    "\\ChadCalendar\\ChadCalendar\\Views"
   ],
   "SelectedNode": "\\ChadCalendar\\ChadCalendar\\Models\\Project.cs",
   "PreviewInSolutionExplorer": false

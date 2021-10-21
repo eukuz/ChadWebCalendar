@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewData["Title"] = "AddEvent";
+}
+@model ChadCalendar.Models.Event
+
+<form action="/event/addevent" method="post">
+    <div class="form-group">
+        <label>Name of Task</label>
+        <input type="text" placeholder="Name" asp-for="Name">
+    </div>
+    <div class="form-group">
+        <label>Enter description</label>
+        <textarea type="text" placeholder="Description" asp-for="Description"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Повторять раз в </label>
+        <select asp-for="Frequency">
+            <option disabled>Частота</option>
+            <option>день</option>
+            <option>неделю</option>
+            <option>месяц</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Starts at</label>
+        <input type="datetime-local" asp-for="StartsAt" />
+    </div>
+    <div class="form-group">
+        <label>Finishes at</label>
+        <input type="datetime-local" asp-for="FinishesAt" />
+    </div>
+    <div class="form-group">
+        <label>Remind in minutes</label>
+        <input type="number" placeholder="Name" asp-for="RemindNMinutesBefore">
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+

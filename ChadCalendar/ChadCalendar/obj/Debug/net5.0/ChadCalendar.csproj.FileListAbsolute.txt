@@ -855,3 +855,4 @@ C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\obj\Debug\net5.0\ref\ChadCalen
 C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\obj\Debug\net5.0\ChadCalendar.pdb
 C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\obj\Debug\net5.0\ChadCalendar.genruntimeconfig.cache
 C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\obj\Debug\net5.0\Razor\Views\Task\AddTask.cshtml.g.cs
+C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\obj\Debug\net5.0\Razor\Views\Event\AddEvent.cshtml.g.cs
