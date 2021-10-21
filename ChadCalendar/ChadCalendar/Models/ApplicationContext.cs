@@ -14,15 +14,15 @@ namespace ChadCalendar.Models
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Project> Projects { get; set; }
-        public ApplicationContext()
+        public ApplicationContext(DbContextOptions<ApplicationContext> options): base(options)
         {
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string path = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ChadCalendar");
-            System.IO.Directory.CreateDirectory(path);
-            optionsBuilder.UseSqlite($"Data Source = { Path.Combine(path,"Calendar.db")}");
+            //string path = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ChadCalendar");
+            //System.IO.Directory.CreateDirectory(path);
+            //optionsBuilder.UseSqlite($"Data Source = { Path.Combine(path,"Calendar.db")}");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
