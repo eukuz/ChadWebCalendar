@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewData["Title"] = "AddTask";
+}
+@model ChadCalendar.Models.Task
+
+<form action="/task/addtask" method="post">
+    <div class="form-group">
+        <label>Enter hours</label>
+        <input type="text" placeholder="Hours" asp-for="HoursTakes">
+    </div>
+    <div class="form-group">
+        <label>Enter max per day times</label>
+        <input type="text" placeholder="" asp-for="MaxPerDay">
+    </div>
+    <div class="form-group">
+        <label>Name of Task</label>
+        <input type="text" placeholder="Name" asp-for="Name">
+    </div>
+    <div class="form-group">
+        <label>Enter description</label>
+        <textarea type="text" placeholder="Description" asp-for="Description"></textarea>
+    </div>
+    <div class="form-group">
+        <input type="checkbox" asp-for="AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
+    </div>
+    <div class="form-group">
+        <label>Enter deadline</label>
+        <input type="datetime-local" asp-for="Deadline" />
+    </div>
+    <div class="form-group">
+        <label>Enter repeats on week</label>
+        <input type="text" asp-for="NRepetitions">
+    </div>
+    <div class="form-group">
+        <label>Повторять раз в </label>
+        <select asp-for="Frequency">
+            <option disabled>Частота</option>
+            <option>день</option>
+            <option>неделю</option>
+            <option>месяц</option>
+        </select>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
