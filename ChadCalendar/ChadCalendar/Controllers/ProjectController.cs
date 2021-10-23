@@ -22,6 +22,8 @@ namespace ChadCalendar.Controllers
         {
             using (var db = new ApplicationContext())
             {
+
+                project.User = db.Users.FirstOrDefault(); //Add identity use
                 db.Add(project);
                 db.SaveChanges();
             }
