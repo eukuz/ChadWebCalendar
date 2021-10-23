@@ -1,0 +1,65 @@
+﻿@model ChadCalendar.Models.Project
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Project</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Deadline" class="control-label"></label>
+                <input asp-for="Deadline" class="form-control" />
+                <span asp-validation-for="Deadline" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IconNumber" class="control-label"></label>
+                <input asp-for="IconNumber" class="form-control" />
+                <span asp-validation-for="IconNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Accessed" class="control-label"></label>
+                <input asp-for="Accessed" class="form-control" />
+                <span asp-validation-for="Accessed" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NRepetitions" class="control-label"></label>
+                <input asp-for="NRepetitions" class="form-control" />
+                <span asp-validation-for="NRepetitions" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Multiplier" class="control-label"></label>
+                <input asp-for="Multiplier" class="form-control" />
+                <span asp-validation-for="Multiplier" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Frequency" class="control-label"></label>
+                <input asp-for="Frequency" class="form-control" />
+                <span asp-validation-for="Frequency" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

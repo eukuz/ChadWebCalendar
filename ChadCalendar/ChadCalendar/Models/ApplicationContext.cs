@@ -18,6 +18,11 @@ namespace ChadCalendar.Models
         {
             Database.EnsureCreated();
         }
+
+        public ApplicationContext()
+        {
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //string path = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ChadCalendar");
