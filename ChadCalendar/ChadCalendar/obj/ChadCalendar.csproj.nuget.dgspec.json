@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\tempForProject\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj": {}
+    "C:\\Users\\user\\source\\repos\\eukuz\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj": {}
   },
   "projects": {
-    "C:\\tempForProject\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj": {
+    "C:\\Users\\user\\source\\repos\\eukuz\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\tempForProject\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj",
+        "projectUniqueName": "C:\\Users\\user\\source\\repos\\eukuz\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj",
         "projectName": "ChadCalendar",
-        "projectPath": "C:\\tempForProject\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj",
-        "packagesPath": "C:\\Users\\almaz\\.nuget\\packages\\",
-        "outputPath": "C:\\tempForProject\\GigaChad\\ChadCalendar\\ChadCalendar\\obj\\",
+        "projectPath": "C:\\Users\\user\\source\\repos\\eukuz\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\source\\repos\\eukuz\\GigaChad\\ChadCalendar\\ChadCalendar\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\almaz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
