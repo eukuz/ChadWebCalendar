@@ -18,6 +18,7 @@ namespace ChadCalendar.Controllers
         {
             _logger = logger;
         }
+
         [Authorize]
         public IActionResult Index()
         {

@@ -64,6 +64,41 @@ namespace ChadCalendar.Controllers
             }
             return View(model);
         }
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Details()
+        {
+            User user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+            return View(user);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Details(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await db.Users.FirstOrDefaultAsync(u => u.Login == model.Login);
+                if (user == null)
+                {
+                    db.Users.Add(new User
+                    {
+                        Login = model.Login,
+                        Password = model.Password,
+                        TimeZone = model.UTC,
+                        WorkingHoursFrom = model.WorkingHoursFrom,
+                        WorkingHoursTo = model.WorkingHoursTo,
+                        RemindEveryNDays = 5
+                    });
+                    await db.SaveChangesAsync();
+                    await Authenticate(model.Login);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                    ModelState.AddModelError("", "User with this login already exists");
+            }
+            return View(model);
+        }
+
 
         private async System.Threading.Tasks.Task Authenticate(string login)
         {
