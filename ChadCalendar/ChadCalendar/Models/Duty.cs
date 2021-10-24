@@ -7,9 +7,16 @@ using System.Threading.Tasks;
 
 namespace ChadCalendar.Models
 {
+
     [Table("Duties")]
     public class Duty
     {
+        //static public DateTime CutTheMilliseconds(DateTime inputDateTime)
+        //{
+        //    string tempDateTime = inputDateTime.ToString("MM:dd:yyyy");
+        //    DateTime dateTime = DateTime.Parse(tempDateTime);
+        //    return dateTime;
+        //}
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

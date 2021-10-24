@@ -7,11 +7,11 @@
 <form action="/task/addtask" method="post">
     <div class="form-group">
         <label>Enter hours</label>
-        <input type="text" placeholder="Hours" asp-for="HoursTakes">
+        <input type="number" asp-for="HoursTakes">
     </div>
     <div class="form-group">
         <label>Enter max per day times</label>
-        <input type="text" placeholder="" asp-for="MaxPerDay">
+        <input type="number" placeholder="" asp-for="MaxPerDay">
     </div>
     <div class="form-group">
         <label>Name of Task</label>
@@ -30,7 +30,7 @@
     </div>
     <div class="form-group">
         <label>Enter repeats on week</label>
-        <input type="text" asp-for="NRepetitions">
+        <input type="number" asp-for="NRepetitions">
     </div>
     <div class="form-group">
         <label>Повторять раз в </label>
@@ -41,7 +41,19 @@
             <option>месяц</option>
         </select>
     </div>
-    
+    <div class="form-group">
+        <label>Выберите проект для задачи</label>
+        <select asp-for="Project">
+            @foreach (var proj in ViewBag.Projects)
+            {
+                <option>@proj.Name</option>
+            }
+        </select>
+    </div>
+    @if (!Model.IsCorrect())
+    {
+        <label>Введены некорректные данные, попробуйте еще раз</label>
+    }
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 

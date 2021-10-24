@@ -12,19 +12,33 @@ namespace ChadCalendar.Controllers
 {
     public class TaskController : Controller
     {
+        private IEnumerable<Project> getProjects()
+        {
+            var db = new ApplicationContext();
+            return db.Projects.Where(proj => proj != null);
+        }
         public IActionResult Index()
         {
             return View();
         }
         public IActionResult AddTask()
         {
-            return View();
+
+            ViewBag.Projects = getProjects();
+            Models.Task task = new Models.Task();
+            task.Name = "";
+            task.NRepetitions = 1;
+            task.MaxPerDay = 1;
+            return View(task);
         }
         [HttpPost]
         public IActionResult AddTask(Models.Task task)
         {
             using (var db = new ApplicationContext())
             {
+                ViewBag.Projects = getProjects();
+                if (!task.IsCorrect())
+                    return View(task);
                 User u = new User() { Login = "user1", Password = "123", };
                 Project p = new Project() { Name="MainProject", User= u};
                 task.Project = p;
@@ -33,8 +47,9 @@ namespace ChadCalendar.Controllers
                 task.Multiplier = 1;
                 db.Add(task);
                 db.SaveChanges();
+                var listOfUserProjects = db.Projects.Where(Proj => Proj.Name == "NotMain");
             }
-            return View();
+            return View(task);
         }
     }
 }

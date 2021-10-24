@@ -16,13 +16,24 @@ namespace ChadCalendar.Controllers
 
         public IActionResult AddEvent()
         {
-            return View();
+            Event _event = new Event();
+            DateTime dt = DateTime.Now;
+            _event.StartsAt = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
+            dt = dt.AddMinutes(10);
+            _event.FinishesAt = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
+            _event.Description = "";
+            _event.Name = "";
+            return View(_event);
         }
         [HttpPost]
         public IActionResult AddEvent(Event _event)
         {
             using (var db = new ApplicationContext())
             {
+                if (!_event.IsCorrect())
+                {
+                    return View(_event);
+                }
                 User u = new User() { Login = "user1", Password = "123", };
                 db.Add(u);
                 db.SaveChanges();
@@ -32,7 +43,7 @@ namespace ChadCalendar.Controllers
                 db.Add(_event);
                 db.SaveChanges();
             }
-            return View();
+            return View(_event);
         }
 
     }

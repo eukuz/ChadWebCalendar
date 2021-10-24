@@ -8,10 +8,18 @@ namespace ChadCalendar.Models
     public class Event : Duty
     {
         [Required]
-        public DateTime StartsAt { get; set; }
+
+        public DateTime StartsAt { get; set; } = DateTime.Now;
         [Required]
-        public DateTime FinishesAt { get; set; }
+        public DateTime FinishesAt { get; set; } = DateTime.Now.AddMinutes(10);
         public int RemindNMinutesBefore { get; set; }
+        public bool IsCorrect()
+        {
+            if (!(StartsAt < FinishesAt) || RemindNMinutesBefore < 0 || Name == null)
+                return false;
+            else
+                return true;
+        }
     }
 }
 

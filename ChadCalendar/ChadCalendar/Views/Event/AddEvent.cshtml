@@ -32,8 +32,12 @@
     </div>
     <div class="form-group">
         <label>Remind in minutes</label>
-        <input type="number" placeholder="Name" asp-for="RemindNMinutesBefore">
+        <input type="number" asp-for="RemindNMinutesBefore">
     </div>
+    @if (!Model.IsCorrect())
+            {
+                <label>Введенные данные некорректны, попробуйте еще раз</label>
+            }
     
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

@@ -3,9 +3,12 @@
     "",
     "\\ChadCalendar",
     "\\ChadCalendar\\ChadCalendar",
+    "\\ChadCalendar\\ChadCalendar\\Controllers",
     "\\ChadCalendar\\ChadCalendar\\Models",
-    "\\ChadCalendar\\ChadCalendar\\Views"
+    "\\ChadCalendar\\ChadCalendar\\Views",
+    "\\ChadCalendar\\ChadCalendar\\Views\\Event",
+    "\\ChadCalendar\\ChadCalendar\\Views\\Task"
   ],
-  "SelectedNode": "\\ChadCalendar\\ChadCalendar\\Models\\Project.cs",
+  "SelectedNode": "\\ChadCalendar\\ChadCalendar\\Views\\Task\\AddTask.cshtml",
   "PreviewInSolutionExplorer": false
 }
