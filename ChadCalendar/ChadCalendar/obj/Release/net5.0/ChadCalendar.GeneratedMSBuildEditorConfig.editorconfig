@@ -7,4 +7,8 @@ build_property.PublishSingleFile =
 build_property.IncludeAllContentForSelfExtract = 
 build_property._SupportedPlatformList = Android,iOS,Linux,macOS,Windows
 build_property.RootNamespace = ChadCalendar
+<<<<<<< HEAD
 build_property.ProjectDir = C:\tempForProject\GigaChad\ChadCalendar\ChadCalendar\
+=======
+build_property.ProjectDir = C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\
+>>>>>>> taskControllerv2

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChadCalendar.Models
 {
+
     [Table("Duties")]
     public class Duty
     {

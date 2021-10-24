@@ -13,14 +13,14 @@ namespace AspNetCore
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
 #nullable restore
-#line 1 "C:\Users\user\source\repos\eukuz\GigaChad\ChadCalendar\ChadCalendar\Views\_ViewImports.cshtml"
+#line 1 "C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\Views\_ViewImports.cshtml"
 using ChadCalendar;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "C:\Users\user\source\repos\eukuz\GigaChad\ChadCalendar\ChadCalendar\Views\_ViewImports.cshtml"
+#line 2 "C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\Views\_ViewImports.cshtml"
 using ChadCalendar.Models;
 
 #line default
@@ -78,7 +78,7 @@ using ChadCalendar.Models;
             __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "898757c6f135dd9147dce55d6883cfa1c0aed3339002", async() => {
                 WriteLiteral("\r\n    <meta charset=\"utf-8\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\r\n    <title>");
 #nullable restore
-#line 6 "C:\Users\user\source\repos\eukuz\GigaChad\ChadCalendar\ChadCalendar\Views\Shared\_Layout.cshtml"
+#line 6 "C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\Views\Shared\_Layout.cshtml"
       Write(ViewData["Title"]);
 
 #line default
@@ -179,7 +179,7 @@ using ChadCalendar.Models;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\r\n                        </li>\r\n                        <li class=\"nav-item\">\r\n                            ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "898757c6f135dd9147dce55d6883cfa1c0aed33317329", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "b2a35e680b4ad18680a05cbe50a505c5347d5e2716410", async() => {
                     WriteLiteral("Privacy");
                 }
                 );
@@ -234,6 +234,48 @@ using ChadCalendar.Models;
                 __tagHelperExecutionContext.AddTagHelperAttribute(__tagHelperAttribute_11);
                 __Microsoft_AspNetCore_Mvc_TagHelpers_AnchorTagHelper.Action = (string)__tagHelperAttribute_12.Value;
                 __tagHelperExecutionContext.AddTagHelperAttribute(__tagHelperAttribute_12);
+                await __tagHelperRunner.RunAsync(__tagHelperExecutionContext);
+                if (!__tagHelperExecutionContext.Output.IsContentModified)
+                {
+                    await __tagHelperExecutionContext.SetOutputContentAsync();
+                }
+                Write(__tagHelperExecutionContext.Output);
+                __tagHelperExecutionContext = __tagHelperScopeManager.End();
+                WriteLiteral("\r\n                        </li>\r\n                        <li class=\"nav-item\">\r\n                            ");
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9881c9499975b54104fe20caa8c6e495f540e9c821241", async() => {
+                    WriteLiteral("Add Tasks");
+                }
+                );
+                __Microsoft_AspNetCore_Mvc_TagHelpers_AnchorTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.AnchorTagHelper>();
+                __tagHelperExecutionContext.Add(__Microsoft_AspNetCore_Mvc_TagHelpers_AnchorTagHelper);
+                __tagHelperExecutionContext.AddHtmlAttribute(__tagHelperAttribute_7);
+                __Microsoft_AspNetCore_Mvc_TagHelpers_AnchorTagHelper.Area = (string)__tagHelperAttribute_4.Value;
+                __tagHelperExecutionContext.AddTagHelperAttribute(__tagHelperAttribute_4);
+                __Microsoft_AspNetCore_Mvc_TagHelpers_AnchorTagHelper.Controller = (string)__tagHelperAttribute_10.Value;
+                __tagHelperExecutionContext.AddTagHelperAttribute(__tagHelperAttribute_10);
+                __Microsoft_AspNetCore_Mvc_TagHelpers_AnchorTagHelper.Action = (string)__tagHelperAttribute_11.Value;
+                __tagHelperExecutionContext.AddTagHelperAttribute(__tagHelperAttribute_11);
+                await __tagHelperRunner.RunAsync(__tagHelperExecutionContext);
+                if (!__tagHelperExecutionContext.Output.IsContentModified)
+                {
+                    await __tagHelperExecutionContext.SetOutputContentAsync();
+                }
+                Write(__tagHelperExecutionContext.Output);
+                __tagHelperExecutionContext = __tagHelperScopeManager.End();
+                WriteLiteral("\r\n                        </li>\r\n                        <li class=\"nav-item\">\r\n                            ");
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9881c9499975b54104fe20caa8c6e495f540e9c823089", async() => {
+                    WriteLiteral("Add Events");
+                }
+                );
+                __Microsoft_AspNetCore_Mvc_TagHelpers_AnchorTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.AnchorTagHelper>();
+                __tagHelperExecutionContext.Add(__Microsoft_AspNetCore_Mvc_TagHelpers_AnchorTagHelper);
+                __tagHelperExecutionContext.AddHtmlAttribute(__tagHelperAttribute_7);
+                __Microsoft_AspNetCore_Mvc_TagHelpers_AnchorTagHelper.Area = (string)__tagHelperAttribute_4.Value;
+                __tagHelperExecutionContext.AddTagHelperAttribute(__tagHelperAttribute_4);
+                __Microsoft_AspNetCore_Mvc_TagHelpers_AnchorTagHelper.Controller = (string)__tagHelperAttribute_12.Value;
+                __tagHelperExecutionContext.AddTagHelperAttribute(__tagHelperAttribute_12);
+                __Microsoft_AspNetCore_Mvc_TagHelpers_AnchorTagHelper.Action = (string)__tagHelperAttribute_13.Value;
+                __tagHelperExecutionContext.AddTagHelperAttribute(__tagHelperAttribute_13);
                 await __tagHelperRunner.RunAsync(__tagHelperExecutionContext);
                 if (!__tagHelperExecutionContext.Output.IsContentModified)
                 {
