@@ -22,6 +22,6 @@ namespace ChadCalendar.ViewModels
         public int WorkingHoursTo { get; set; }
 
         [Required(ErrorMessage = "Your UTC reqired")]
-        public int UTC { get; set; }
+        public int TimeZone { get; set; }
     }
 }

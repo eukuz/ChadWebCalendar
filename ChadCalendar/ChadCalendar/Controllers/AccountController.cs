@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace ChadCalendar.Controllers
 {
     public class AccountController : Controller
-    {   
+    {
         private ApplicationContext db;
         public AccountController(ApplicationContext context) { db = context; }
         [HttpGet]
@@ -31,7 +31,7 @@ namespace ChadCalendar.Controllers
                 User user = await db.Users.FirstOrDefaultAsync(u => u.Login == model.Login && u.Password == model.Password);
                 if (user != null)
                 {
-                    await Authenticate(model.Login); 
+                    await Authenticate(model.Login);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -53,38 +53,11 @@ namespace ChadCalendar.Controllers
                 User user = await db.Users.FirstOrDefaultAsync(u => u.Login == model.Login);
                 if (user == null)
                 {
-                    db.Users.Add(new User { Login = model.Login, Password = model.Password,
-                        TimeZone = model.UTC,WorkingHoursFrom = model.WorkingHoursFrom,WorkingHoursTo = model.WorkingHoursTo,RemindEveryNDays =5});
-                    await db.SaveChangesAsync();
-                    await Authenticate(model.Login);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                    ModelState.AddModelError("", "User with this login already exists");
-            }
-            return View(model);
-        }
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> Details()
-        {
-            User user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
-            return View(user);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Details(RegisterModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Login == model.Login);
-                if (user == null)
-                {
                     db.Users.Add(new User
                     {
                         Login = model.Login,
                         Password = model.Password,
-                        TimeZone = model.UTC,
+                        TimeZone = model.TimeZone,
                         WorkingHoursFrom = model.WorkingHoursFrom,
                         WorkingHoursTo = model.WorkingHoursTo,
                         RemindEveryNDays = 5
@@ -96,6 +69,55 @@ namespace ChadCalendar.Controllers
                 else
                     ModelState.AddModelError("", "User with this login already exists");
             }
+            return View(model);
+        }
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Edit()
+        {
+            User user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+            RegisterModel userDetails = new RegisterModel()
+            {
+                Login = user.Login,
+                Password = user.Password,
+                ConfirmPassword = user.Password,
+                TimeZone = user.TimeZone,
+                WorkingHoursFrom = user.WorkingHoursFrom,
+                WorkingHoursTo = user.WorkingHoursTo
+            };
+            ViewBag.User = user;
+            return View(userDetails);
+        }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(RegisterModel model)
+        {
+            if (model.Password.Length > 0)
+            {
+                if (ModelState.IsValid)
+                {
+
+                    User user = await db.Users.FirstOrDefaultAsync(u => u.Login == model.Login);
+                    if (user != null)
+                    {
+                        user.Login = model.Login;
+                        user.Password = model.Password;
+                        user.TimeZone = model.TimeZone;
+                        user.WorkingHoursFrom = model.WorkingHoursFrom;
+                        user.WorkingHoursTo = model.WorkingHoursTo;
+                        user.RemindEveryNDays = 5;
+
+                        db.Users.Update(user);
+                        await db.SaveChangesAsync();
+                        await Authenticate(model.Login);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                        ModelState.AddModelError("", "User does not exist! Some error happend with DB");
+                }
+            }
+            else ModelState.AddModelError("", "Password length must be grated than zero");
             return View(model);
         }
 
