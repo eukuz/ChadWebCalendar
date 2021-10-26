@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "iRDT/Zw8zM1OCQVPGnlfFknR/oWqIgDmLREHrj/ovP7YwpUKF4KkuvCLxQtpZg8GXITlS1M0DYgD2xdnN2m8XA==",
+  "dgSpecHash": "eqE4LMnSUoDHT8dSl+ZsfSFhd/yJZEnRuLlC9jjli5crj/wCT8Xq6cRxZSc+yPS/6gjZ1RyYTizJfiUodizjEw==",
   "success": true,
   "projectFilePath": "C:\\Users\\user\\source\\repos\\eukuz\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj",
   "expectedPackageFiles": [
@@ -140,12 +140,5 @@
     "C:\\Users\\user\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\user\\source\\repos\\eukuz\\GigaChad\\ChadCalendar\\ChadCalendar\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }

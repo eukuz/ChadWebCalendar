@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Qt\\projects\\gigaviva\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj": {}
+    "C:\\Users\\user\\source\\repos\\eukuz\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj": {}
   },
   "projects": {
-    "C:\\Qt\\projects\\gigaviva\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj": {
+    "C:\\Users\\user\\source\\repos\\eukuz\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Qt\\projects\\gigaviva\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj",
+        "projectUniqueName": "C:\\Users\\user\\source\\repos\\eukuz\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj",
         "projectName": "ChadCalendar",
-        "projectPath": "C:\\Qt\\projects\\gigaviva\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj",
-        "packagesPath": "C:\\Users\\Алмаз\\.nuget\\packages\\",
-        "outputPath": "C:\\Qt\\projects\\gigaviva\\ChadCalendar\\ChadCalendar\\obj\\",
+        "projectPath": "C:\\Users\\user\\source\\repos\\eukuz\\GigaChad\\ChadCalendar\\ChadCalendar\\ChadCalendar.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\source\\repos\\eukuz\\GigaChad\\ChadCalendar\\ChadCalendar\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Алмаз\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -41,6 +41,10 @@
           "targetAlias": "net5.0",
           "dependencies": {
             "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation": {
+              "target": "Package",
+              "version": "[5.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[5.0.11, )"
             },
