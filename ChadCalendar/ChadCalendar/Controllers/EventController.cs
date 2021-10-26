@@ -39,7 +39,7 @@ namespace ChadCalendar.Controllers
                 db.SaveChanges();
                 _event.User = u;
                 _event.Accessed = DateTime.Now;
-                _event.Multiplier = 1;
+                _event.NRepetitions = 1;
                 db.Add(_event);
                 db.SaveChanges();
             }

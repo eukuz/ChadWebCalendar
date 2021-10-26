@@ -8,8 +8,11 @@ namespace ChadCalendar.Models
     [Table("Tasks")]
     public class Task : Duty
     {
+        [Required]
         public bool? IsCompleted { get; set; } = false; // false т.к при создании Task задача еще не выполнена
+        [Required]
         public bool AllowedToDistribute { get; set; } = false; // избежание null
+        [Required]
         public decimal? HoursTakes { get; set; }
         public int? MaxPerDay { get; set; }
         public DateTime? Deadline { get; set; }

@@ -44,7 +44,7 @@ namespace ChadCalendar.Controllers
                 task.Project = p;
                 task.User = u;
                 task.Accessed = DateTime.Now;
-                task.Multiplier = 1;
+                task.NRepetitions = 1;
                 db.Add(task);
                 db.SaveChanges();
                 var listOfUserProjects = db.Projects.Where(Proj => Proj.Name == "NotMain");
