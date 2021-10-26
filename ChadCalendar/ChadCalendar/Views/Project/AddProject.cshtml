@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["Title"] = "AddProject";
+}
+
+@model ChadCalendar.Models.Project
+
+
+<form action="/project/addproject" method="post" >
+
+    <div class="form-group">
+        <label>Enter deadline</label>
+        <input type="datetime-local" asp-for="Deadline" />
+    </div>
+    <div class="form-group">
+        <label>Select IconNumber</label>
+        <input type="text" asp-for="IconNumber">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

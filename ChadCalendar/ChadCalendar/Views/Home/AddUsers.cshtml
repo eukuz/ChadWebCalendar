@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewData["Title"] = "AddUsers";
+}
+@model ChadCalendar.Models.User
+
+<form action="/home/addusers" method="post">
+    <div class="form-group">
+        <label>Login</label>
+        <input type="text" placeholder="Enter login" asp-for="Login">
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" placeholder="Enter Password" asp-for="Password">
+    </div>
+    <div class="form-group">
+        <label>Working Hours From</label>
+        <input type="number" placeholder="Enter INT" asp-for="WorkingHoursFrom">
+    </div>
+    <div class="form-group">
+        <label>Working Hours To</label>
+        <input type="number" placeholder="Enter INT" asp-for="WorkingHoursTo">
+    </div>
+    <div class="form-group">
+        <label>UTC + </label>
+        <input type="number" placeholder="Enter INT" asp-for="TimeZone">
+    </div>
+    <div class="form-group">
+        <label>Remind me about forgotten tasks every </label>
+        <input type="number" placeholder="Enter INT" asp-for="RemindEveryNDays">
+        <label>Days</label>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>  
+
