@@ -7,11 +7,11 @@
 <form action="/task/addtask" method="post">
     <div class="form-group">
         <label>Enter hours</label>
-        <input type="number" asp-for="HoursTakes">
+        <input type="number" asp-for="HoursTakes" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
     </div>
     <div class="form-group">
         <label>Enter max per day times</label>
-        <input type="number" placeholder="" asp-for="MaxPerDay">
+        <input type="number" placeholder="" asp-for="MaxPerDay" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
     </div>
     <div class="form-group">
         <label>Name of Task</label>
@@ -30,7 +30,7 @@
     </div>
     <div class="form-group">
         <label>Enter repeats on week</label>
-        <input type="number" asp-for="NRepetitions">
+        <input type="number" asp-for="NRepetitions" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
     </div>
     <div class="form-group">
         <label>Повторять раз в </label>

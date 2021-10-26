@@ -12,10 +12,10 @@ namespace ChadCalendar.Controllers
 {
     public class TaskController : Controller
     {
-        private IEnumerable<Project> getProjects()
+        private IEnumerable<Project> getProjects(User user)
         {
             var db = new ApplicationContext();
-            return db.Projects.Where(proj => proj != null);
+            return db.Projects.Where(proj => proj != null && proj.User == user);
         }
         public IActionResult Index()
         {
@@ -23,8 +23,9 @@ namespace ChadCalendar.Controllers
         }
         public IActionResult AddTask()
         {
-
-            ViewBag.Projects = getProjects();
+            var db = new ApplicationContext();
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            ViewBag.Projects = getProjects(user);
             Models.Task task = new Models.Task();
             task.Name = "";
             task.NRepetitions = 1;
@@ -36,18 +37,16 @@ namespace ChadCalendar.Controllers
         {
             using (var db = new ApplicationContext())
             {
-                ViewBag.Projects = getProjects();
+
                 if (!task.IsCorrect())
                     return View(task);
-                User u = new User() { Login = "user1", Password = "123", };
-                Project p = new Project() { Name="MainProject", User= u};
-                task.Project = p;
-                task.User = u;
+                User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+                ViewBag.Projects = getProjects(user);
+                task.User = user;
                 task.Accessed = DateTime.Now;
                 task.NRepetitions = 1;
                 db.Add(task);
                 db.SaveChanges();
-                var listOfUserProjects = db.Projects.Where(Proj => Proj.Name == "NotMain");
             }
             return View(task);
         }
