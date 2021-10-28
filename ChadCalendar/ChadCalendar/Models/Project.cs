@@ -8,7 +8,7 @@ namespace ChadCalendar.Models
     public class Project : Duty
     {
         public DateTime? Deadline { get; set; }
-        public int? IconNumber { get; set; }
+        public string IconNumber { get; set; }
     }
 }
 
