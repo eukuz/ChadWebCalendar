@@ -34,10 +34,10 @@ namespace ChadCalendar.Controllers
             using (var db = new ApplicationContext())
             {
                 User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-
                 project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+                project.Accessed = DateTime.Now;
                 //if (project.Id == null) 
-                    db.Add(project);
+                db.Add(project);
                 //else db.Update(project); //bag
                 db.SaveChanges();
             }
