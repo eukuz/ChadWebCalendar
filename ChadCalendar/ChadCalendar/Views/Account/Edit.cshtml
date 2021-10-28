@@ -1,38 +1,56 @@
-﻿@model ChadCalendar.ViewModels.RegisterModel
+﻿@model ChadCalendar.ViewModels.EditModel
 
 <h2>@Model.Login's Settings</h2>
-
-@using (Html.BeginForm())
-    Html.HiddenFor(x=>x.Login);
 
 
 <form asp-action="Edit" asp-controller="Account" asp-anti-forgery="true">
     <div class="validation" asp-validation-summary="All" ,></div>
     <div>
+        <div hidden="hidden">
+            <label asp-for="Id">Input Login</label><br />
+            <input asp-for="Id" />
+            <span asp-validation-for="Id" />
+        </div>
         <div>
-            <label asp-for="Password">Input Password</label><br />
+            <label asp-for="Login">Input Login</label><br />
+            <input asp-for="Login" />
+            <span asp-validation-for="Login" />
+        </div>
+        <div>
+            <label asp-for="Password">Input new password</label><br />
             <input asp-for="Password" />
             <span asp-validation-for="Password" />
         </div>
         <div>
-            <label asp-for="ConfirmPassword">Input same password again</label><br />
+            <label asp-for="ConfirmPassword">Input new password again</label><br />
             <input asp-for="ConfirmPassword" />
             <span asp-validation-for="ConfirmPassword" />
         </div>
         <div>
             <label asp-for="WorkingHoursFrom">Input the start work time</label><br />
             <input asp-for="WorkingHoursFrom" />
-            <span asp-validation-for="WorkingHoursFrom" />
+            <span asp-validation-for="WorkingHoursFrom" type="number" />
         </div>
         <div>
             <label asp-for="WorkingHoursTo">Input the finish work time</label><br />
             <input asp-for="WorkingHoursTo" />
-            <span asp-validation-for="WorkingHoursTo" />
+            <span asp-validation-for="WorkingHoursTo" type="number" />
         </div>
         <div>
             <label asp-for="TimeZone">Input your UTC+ value</label><br />
             <input asp-for="TimeZone" />
-            <span asp-validation-for="TimeZone" />
+            <span asp-validation-for="TimeZone" type="number" />
+        </div>
+        <div>
+            <label asp-for="RemindMe">Should we remind you about forgotten duties?</label><br />
+            <input asp-for="RemindMe" />
+            <span asp-validation-for="RemindMe" type="checkbox" />
+        </div>
+        <div>
+            <label asp-for="RemindEveryNDays">Remind me every </label><br />
+            <input asp-for="RemindEveryNDays" />
+            <span asp-validation-for="RemindEveryNDays" type="number" />
+            <label asp-for="RemindEveryNDays">days</label><br />
         </div>
         <div>
             <input type="submit" value="Submit" />

@@ -76,14 +76,17 @@ namespace ChadCalendar.Controllers
         public async Task<IActionResult> Edit()
         {
             User user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
-            RegisterModel userDetails = new RegisterModel()
+            EditModel userDetails = new EditModel()
             {
+                Id = user.Id,
                 Login = user.Login,
                 Password = user.Password,
                 ConfirmPassword = user.Password,
                 TimeZone = user.TimeZone,
                 WorkingHoursFrom = user.WorkingHoursFrom,
-                WorkingHoursTo = user.WorkingHoursTo
+                WorkingHoursTo = user.WorkingHoursTo,
+                RemindMe = user.RemindEveryNDays>0,
+                RemindEveryNDays = user.RemindEveryNDays > 0 ? user.RemindEveryNDays : 0
             };
             ViewBag.User = user;
             return View(userDetails);
@@ -91,33 +94,31 @@ namespace ChadCalendar.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(RegisterModel model)
+        public async Task<IActionResult> Edit(EditModel model)
         {
-            if (model.Password.Length > 0)
+
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+
+                User user = await db.Users.FirstOrDefaultAsync(u => u.Id == model.Id);
+                if (user != null)
                 {
+                    user.Login = model.Login;
+                    user.Password = model.ConfirmPassword.Length>0 ? model.ConfirmPassword :user.Password;
+                    user.TimeZone = model.TimeZone;
+                    user.WorkingHoursFrom = model.WorkingHoursFrom;
+                    user.WorkingHoursTo = model.WorkingHoursTo;
+                    user.RemindEveryNDays = 5;
+                    user.RemindEveryNDays = model.RemindMe ? model.RemindEveryNDays : -1;
 
-                    User user = await db.Users.FirstOrDefaultAsync(u => u.Login == model.Login);
-                    if (user != null)
-                    {
-                        user.Login = model.Login;
-                        user.Password = model.Password;
-                        user.TimeZone = model.TimeZone;
-                        user.WorkingHoursFrom = model.WorkingHoursFrom;
-                        user.WorkingHoursTo = model.WorkingHoursTo;
-                        user.RemindEveryNDays = 5;
-
-                        db.Users.Update(user);
-                        await db.SaveChangesAsync();
-                        await Authenticate(model.Login);
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                        ModelState.AddModelError("", "User does not exist! Some error happend with DB");
+                    db.Users.Update(user);
+                    await db.SaveChangesAsync();
+                    await Authenticate(model.Login);
+                    return RedirectToAction("Index", "Home");
                 }
+                else
+                    ModelState.AddModelError("", "User does not exist! Some error happend with DB");
             }
-            else ModelState.AddModelError("", "Password length must be grated than zero");
             return View(model);
         }
 
