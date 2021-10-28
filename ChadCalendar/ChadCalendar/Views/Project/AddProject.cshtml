@@ -15,6 +15,10 @@
         <textarea type="text" placeholder="Description" asp-for="Description"></textarea>
     </div>
     <div class="form-group">
+        <label>Enter repeats on week</label>
+        <input type="number" asp-for="NRepetitions" min="0" max="20">
+    </div>
+    <div class="form-group">
         <label>Повторять раз в </label>
         <select asp-for="Frequency">
             <option disabled>Частота</option>
@@ -29,7 +33,12 @@
     </div>
     <div class="form-group">
         <label>Select IconNumber</label>
-        <input type="text" asp-for="IconNumber">
+        <select asp-for="IconNumber">
+            <option disabled>Выберите смайл для проекта</option>
+            <option>&#128640;</option>
+            <option>&#128293;</option>
+            <option>&#10084;</option>
+        </select>
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
