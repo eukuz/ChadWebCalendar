@@ -16,16 +16,17 @@ namespace ChadCalendar.ViewModels
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "The start time of your working day required")]
+        [Range(0, 24)]
         public int WorkingHoursFrom { get; set; }
 
         [Required(ErrorMessage = "The finish time of your working day required")]
+        [Range(0, 24)]
         public int WorkingHoursTo { get; set; }
 
         [Required(ErrorMessage = "Your UTC reqired")]
+        [Range(-12, 14)]
         public int TimeZone { get; set; }
-        //[Required(ErrorMessage = "Should we remind you about forgotten duties?")]
         public bool RemindMe { get; set; } = true;
-        //[Required(ErrorMessage = "Required the number of days. With this frequency we'll remind you about duties you don't interact with (considering them forgotten)")]
         public int RemindEveryNDays { get; set; }
 
 
