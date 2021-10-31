@@ -1,0 +1,30 @@
+﻿@model ChadCalendar.Models.Project
+@{
+    ViewBag.Title = Model.Name;
+}
+<h2>Проект: @Model.Name @Model.IconNumber</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Идентификатор</dt>
+        <dd>@Model.Id</dd>
+
+        <dt>Название</dt>
+        <dd>@Model.Name</dd>
+
+        <dt>Описание</dt>
+        <dd>@Model.Description</dd>
+
+        <dt>Повторы в неделю</dt>
+        <dd>@Model.NRepetitions</dd>
+
+        <dt>Повторять раз в</dt>
+        <dd>@Model.Frequency</dd>
+
+        <dt>Дедлайн</dt>
+        <dd>@Model.Deadline</dd>
+
+        <dt>Иконка</dt>
+        <dd>@Model.IconNumber</dd>
+
+    </dl>
+</div>
