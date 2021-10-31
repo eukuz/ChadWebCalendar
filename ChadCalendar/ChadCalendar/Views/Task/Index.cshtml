@@ -1,0 +1,12 @@
+﻿@model IEnumerable<ChadCalendar.Models.Task>
+@{
+    ViewBag.Title = "Все пользователи";
+}
+<a asp-action="AddTask">Добавить задачу</a>
+<table class="table">
+    <tr><td>Название</td><td>Дедлайн</td></tr>
+    @foreach (var item in Model)
+    {
+        <tr><td>@item.Name</td><td>@item.Deadline</td><td><a asp-action="Edit" asp-route-id="@item.Id">Изменить</a></td></tr>
+    }
+</table>

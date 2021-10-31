@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChadCalendar.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20211026144232_Init")]
-    partial class Init
+    [Migration("20211029184502_new")]
+    partial class @new
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

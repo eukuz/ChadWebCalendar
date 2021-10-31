@@ -4,38 +4,51 @@
 }
 @model ChadCalendar.Models.Task
 
-<form action="/task/addtask" method="post">
-    <div class="form-group">
-        <label>Количество часов</label>
-        <input type="number" asp-for="HoursTakes" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
+<form action="/task/edit" method="post">
+    <div hidden="hidden">
+        <label asp-for="Id">Input Login</label><br />
+        <input asp-for="Id" />
+        <span asp-validation-for="Id" />
+    </div>
+    <div hidden="hidden">
+        <label asp-for="Accessed">Input Accessed</label><br />
+        <input asp-for="Accessed" />
+        <span asp-validation-for="Accessed" />
     </div>
     <div class="form-group">
-        <label>Максимум в день</label>
+        <label>Enter hours</label>
+        <input type="number" placeholder="" asp-for="HoursTakes" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
+    </div>
+    <div class="form-group">
+        <label>Enter max per day times</label>
         <input type="number" placeholder="" asp-for="MaxPerDay" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
     </div>
     <div class="form-group">
-        <label>Название задачи</label>
+        <label>Name of Task</label>
         <input type="text" placeholder="Name" asp-for="Name">
     </div>
     <div class="form-group">
-        <label>Описание</label>
+        <label>Enter description</label>
         <textarea type="text" placeholder="Description" asp-for="Description"></textarea>
     </div>
     <div class="form-group">
         <input type="checkbox" asp-for="AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
     </div>
     <div class="form-group">
-        <label>Дедлайн</label>
+        <label>Enter deadline</label>
         <input type="datetime-local" asp-for="Deadline" />
     </div>
     <div class="form-group">
-        <label>Частота</label>
+        <label>Enter repeats on week</label>
+        <input type="number" asp-for="NRepetitions" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
+    </div>
+    <div class="form-group">
+        <label>Повторять раз в </label>
         <select asp-for="Frequency">
             <option disabled>Частота</option>
-            <option>Каждый день</option>
-            <option>Каждую неделю</option>
-            <option>Каждый месяц</option>
-            <option>Никогда</option>
+            <option>день</option>
+            <option>неделю</option>
+            <option>месяц</option>
         </select>
     </div>
     <div class="form-group">

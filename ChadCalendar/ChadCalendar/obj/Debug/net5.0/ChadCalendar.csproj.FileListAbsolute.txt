@@ -1375,3 +1375,6 @@ C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\obj\Debug\net5.0\Razor\Views\A
 C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\obj\Debug\net5.0\Razor\Views\Account\Login.cshtml.g.cs
 C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\obj\Debug\net5.0\Razor\Views\Account\Register.cshtml.g.cs
 C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\obj\Debug\net5.0\Razor\Views\Project\AddProject.cshtml.g.cs
+C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\obj\Debug\net5.0\Razor\Views\Task\Edit.cshtml.g.cs
+C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\obj\Debug\net5.0\Razor\Views\Task\EditTask.cshtml.g.cs
+C:\Qt\projects\gigaviva\ChadCalendar\ChadCalendar\obj\Debug\net5.0\Razor\Views\Task\Index.cshtml.g.cs

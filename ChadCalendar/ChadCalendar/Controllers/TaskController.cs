@@ -1,29 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ChadCalendar.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-
 
 namespace ChadCalendar.Controllers
 {
     public class TaskController : Controller
     {
+        ApplicationContext db = new ApplicationContext();
         private IEnumerable<Project> getProjects(User user)
         {
-            var db = new ApplicationContext();
-            return db.Projects.Where(proj => proj != null && proj.User == user);
+            return db.Projects.Where(proj => proj.User == user);
         }
-        public IActionResult Index()
+        private IEnumerable<Models.Task> getTasks(User user)
         {
-            return View();
+            return db.Tasks.Where(task => task.User == user);
         }
+
+        public async Task<IActionResult> Index()
+        {
+            return View(await db.Tasks.ToListAsync());
+        }
+
         public IActionResult AddTask()
         {
-            var db = new ApplicationContext();
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             ViewBag.Projects = getProjects(user);
             Models.Task task = new Models.Task();
@@ -35,20 +40,39 @@ namespace ChadCalendar.Controllers
         [HttpPost]
         public IActionResult AddTask(Models.Task task)
         {
-            using (var db = new ApplicationContext())
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            if (!task.IsCorrect())
+                 return View(task);
+            ViewBag.Projects = getProjects(user);
+            task.User = user;
+            task.Accessed = DateTime.Now;
+            task.NRepetitions = 1;
+            db.Add(task);
+            db.SaveChanges();
+            return Redirect("~/Task/Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            ViewBag.Projects = getProjects(user);
+            if (id != null)
             {
-
-                if (!task.IsCorrect())
+                Models.Task task = await db.Tasks.FirstOrDefaultAsync(p => p.Id == id);
+                if (task != null)
                     return View(task);
-                User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-                ViewBag.Projects = getProjects(user);
-                task.User = user;
-                task.Accessed = DateTime.Now;
-                task.NRepetitions = 1;
-                db.Add(task);
-                db.SaveChanges();
             }
-            return View(task);
+            return NotFound();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(Models.Task task)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            task.Accessed = DateTime.Now;
+            ViewBag.Projects = getProjects(user);
+            db.Tasks.Update(task);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
     }
 }
