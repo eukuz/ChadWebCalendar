@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChadCalendar.Controllers
 {
@@ -22,6 +23,7 @@ namespace ChadCalendar.Controllers
             return db.Tasks.Where(task => task.User == user);
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
