@@ -36,6 +36,7 @@ namespace ChadCalendar.Controllers
             ViewBag.Projects = getProjects(user);
             Models.Task task = new Models.Task();
             task.Name = "";
+            task.HoursTakes = 1;
             task.NRepetitions = 1;
             task.MaxPerDay = 1;
             return View(task);
@@ -49,6 +50,7 @@ namespace ChadCalendar.Controllers
                 return View(task);
             task.User = user;
             task.Accessed = DateTime.Now;
+            task.HoursTakes = 1;
             task.NRepetitions = 1;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
             db.Add(task);
