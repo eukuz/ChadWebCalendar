@@ -1,10 +1,9 @@
-﻿
-@{
-    ViewData["Title"] = "AddEvent";
+﻿@{
+    ViewData["Title"] = "Изменение события";
 }
 @model ChadCalendar.Models.Event
 
-<form action="/event/addevent" method="post">
+<form action="/event/edit" method="post">
     <div class="form-group">
         <label>Name of Task</label>
         <input type="text" placeholder="Name" asp-for="Name">
@@ -35,10 +34,9 @@
         <input type="number" asp-for="RemindNMinutesBefore">
     </div>
     @if (!Model.IsCorrect())
-            {
-                <label>Введенные данные некорректны, попробуйте еще раз</label>
-            }
-    
+    {
+        <label>Введенные данные некорректны, попробуйте еще раз</label>
+    }
+
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-

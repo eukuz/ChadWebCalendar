@@ -13,7 +13,6 @@ namespace ChadCalendar.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -22,6 +21,7 @@ namespace ChadCalendar.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            ViewBag.User = User.Identity.Name;
             return View();
         }
 

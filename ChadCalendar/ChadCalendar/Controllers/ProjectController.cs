@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,9 +15,10 @@ namespace ChadCalendar.Controllers
         {
             db = context;
         }
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            return View(await db.Projects.ToListAsync());
+            return View(await db.Projects.Where(p => p.User.Login == User.Identity.Name).ToListAsync());
         }
 
         [Authorize]
@@ -37,31 +37,24 @@ namespace ChadCalendar.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id != null)
-            {
-                Project project = await db.Projects.FirstOrDefaultAsync(p => p.Id == id);
-                if (project != null)
-                    return View(project);
-            }
-            return NotFound();
-        }
 
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             if (id != null)
             {
                 Project project = await db.Projects.FirstOrDefaultAsync(p => p.Id == id);
-                if (project != null)
+                if (project != null && project.User == user)
                     return View(project);
             }
             return NotFound();
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Edit(Project project)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             project.Accessed = DateTime.Now;
             db.Projects.Update(project);
@@ -69,6 +62,7 @@ namespace ChadCalendar.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
         [HttpGet]
         [ActionName("Delete")]
         public async Task<IActionResult> ConfirmDelete(int? id)
@@ -82,6 +76,7 @@ namespace ChadCalendar.Controllers
             return NotFound();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Delete(int? id)
         {

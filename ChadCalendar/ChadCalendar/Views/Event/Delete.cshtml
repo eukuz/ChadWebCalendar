@@ -1,6 +1,6 @@
-﻿@model ChadCalendar.Models.Project
+﻿@model ChadCalendar.Models.Event
 @{
-    ViewBag.Title = "Удаление проекта";
+    ViewBag.Title = "Удаление события";
 }
 
 <div>
@@ -17,7 +17,7 @@
     </dl>
 
     <div>
-        <form asp-controller="Project" asp-action="Delete" method="post">
+        <form asp-controller="Event" asp-action="Delete" method="post">
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Удалить" />
             </div>

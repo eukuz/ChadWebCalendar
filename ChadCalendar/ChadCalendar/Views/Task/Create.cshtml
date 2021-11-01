@@ -1,44 +1,41 @@
 ﻿
 @{
-    ViewData["Title"] = "AddTask";
+    ViewData["Title"] = "Создание задания";
 }
 @model ChadCalendar.Models.Task
 
-<form action="/task/addtask" method="post">
+<form action="/task/create" method="post">
     <div class="form-group">
-        <label>Enter hours</label>
-        <input type="number" asp-for="HoursTakes">
+        <label>Количество часов</label>
+        <input type="number" asp-for="HoursTakes" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
     </div>
     <div class="form-group">
-        <label>Enter max per day times</label>
-        <input type="number" placeholder="" asp-for="MaxPerDay">
+        <label>Максимум в день</label>
+        <input type="number" placeholder="" asp-for="MaxPerDay" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
     </div>
     <div class="form-group">
-        <label>Name of Task</label>
+        <label>Название задачи</label>
         <input type="text" placeholder="Name" asp-for="Name">
     </div>
     <div class="form-group">
-        <label>Enter description</label>
+        <label>Описание</label>
         <textarea type="text" placeholder="Description" asp-for="Description"></textarea>
     </div>
     <div class="form-group">
         <input type="checkbox" asp-for="AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
     </div>
     <div class="form-group">
-        <label>Enter deadline</label>
+        <label>Дедлайн</label>
         <input type="datetime-local" asp-for="Deadline" />
     </div>
     <div class="form-group">
-        <label>Enter repeats on week</label>
-        <input type="number" asp-for="NRepetitions">
-    </div>
-    <div class="form-group">
-        <label>Повторять раз в </label>
+        <label>Частота</label>
         <select asp-for="Frequency">
             <option disabled>Частота</option>
-            <option>день</option>
-            <option>неделю</option>
-            <option>месяц</option>
+            <option>Каждый день</option>
+            <option>Каждую неделю</option>
+            <option>Каждый месяц</option>
+            <option>Никогда</option>
         </select>
     </div>
     <div class="form-group">
