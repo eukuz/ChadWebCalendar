@@ -34,9 +34,7 @@ namespace ChadCalendar.Controllers
                 {
                     return View(_event);
                 }
-                User u = new User() { Login = "user1", Password = "123", };
-                db.Add(u);
-                db.SaveChanges();
+                User u = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
                 _event.User = u;
                 _event.Accessed = DateTime.Now;
                 _event.NRepetitions = 1;

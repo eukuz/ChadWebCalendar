@@ -13,6 +13,7 @@ namespace ChadCalendar.Controllers
     public class TaskController : Controller
     {
         ApplicationContext db = new ApplicationContext();
+
         private IEnumerable<Project> getProjects(User user)
         {
             return db.Projects.Where(proj => proj.User == user);
@@ -24,7 +25,8 @@ namespace ChadCalendar.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await db.Tasks.ToListAsync());
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            return View(await db.Tasks.Where(task => task.User == user).ToListAsync());
         }
 
         public IActionResult AddTask()
@@ -55,12 +57,15 @@ namespace ChadCalendar.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            ViewBag.Projects = getProjects(user);
+
             if (id != null)
             {
                 Models.Task task = await db.Tasks.FirstOrDefaultAsync(p => p.Id == id);
-                if (task != null)
+                ViewBag.Projects = getProjects(user);
+
+                if (task != null && task.User == user)
                     return View(task);
+
             }
             return NotFound();
         }
