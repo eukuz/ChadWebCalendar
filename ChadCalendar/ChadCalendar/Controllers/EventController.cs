@@ -44,6 +44,9 @@ namespace ChadCalendar.Controllers
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             _event.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             _event.Accessed = DateTime.Now;
+            DateTime temp = DateTime.Now;
+            _event.StartsAt = new DateTime(temp.Year, temp.Month, temp.Day, temp.Hour, temp.Minute, 0, temp.Kind);
+            _event.FinishesAt = _event.StartsAt.AddMinutes(30);
             _event.NRepetitions = 1;
             db.Events.Add(_event);
             await db.SaveChangesAsync();
