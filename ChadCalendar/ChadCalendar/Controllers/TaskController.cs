@@ -50,6 +50,7 @@ namespace ChadCalendar.Controllers
             task.User = user;
             task.Accessed = DateTime.Now;
             task.NRepetitions = 1;
+            task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
             db.Add(task);
             db.SaveChanges();
             return Redirect("~/Task/Index");
