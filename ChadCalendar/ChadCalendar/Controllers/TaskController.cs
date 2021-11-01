@@ -30,6 +30,7 @@ namespace ChadCalendar.Controllers
             return View(await db.Tasks.Where(task => task.User == user).ToListAsync());
         }
 
+        [Authorize]
         public IActionResult AddTask()
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
@@ -41,6 +42,7 @@ namespace ChadCalendar.Controllers
             task.MaxPerDay = 1;
             return View(task);
         }
+        [Authorize]
         [HttpPost]
         public IActionResult AddTask(Models.Task task)
         {
@@ -57,6 +59,7 @@ namespace ChadCalendar.Controllers
             db.SaveChanges();
             return Redirect("~/Task/Index");
         }
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -73,6 +76,7 @@ namespace ChadCalendar.Controllers
             }
             return NotFound();
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Edit(Models.Task task)
         {
