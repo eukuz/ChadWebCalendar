@@ -43,9 +43,9 @@ namespace ChadCalendar.Controllers
         public IActionResult AddTask(Models.Task task)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            ViewBag.Projects = getProjects(user);
             if (!task.IsCorrect())
                  return View(task);
-            ViewBag.Projects = getProjects(user);
             task.User = user;
             task.Accessed = DateTime.Now;
             task.NRepetitions = 1;
@@ -57,11 +57,11 @@ namespace ChadCalendar.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-
+            ViewBag.Projects = getProjects(user);
             if (id != null)
             {
                 Models.Task task = await db.Tasks.FirstOrDefaultAsync(p => p.Id == id);
-                ViewBag.Projects = getProjects(user);
+                
 
                 if (task != null && task.User == user)
                     return View(task);
