@@ -27,14 +27,20 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Index">Events</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Edit">Edit my account</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Log out</a>
-                        </li>
                     </ul>
+                    <div>
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                                @User.Identity.Name
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Edit">Edit my account</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Log out</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </nav>
     </header>
@@ -46,7 +52,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - ChadCalendar - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - ChadCalendar - <a asp-area="" asp-controller="Home" asp-action="Privacy"></a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -21,7 +21,6 @@ namespace ChadCalendar.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            ViewBag.User = User.Identity.Name;
             return View();
         }
 
