@@ -13,9 +13,9 @@ namespace ChadCalendar.Models
         [Required]
         public bool AllowedToDistribute { get; set; } = false; // избежание null
         [Required]
-        public decimal? HoursTakes { get; set; }
+        public int? HoursTakes { get; set; }
         public int? MaxPerDay { get; set; }
-        public DateTime? Deadline { get; set; }
+        public DateTime? Deadline { get; set; } = DateTime.Now.AddDays(1);
         public int? PredecessorFK { get; set; }
         public Task Predecessor { get; set; }
         public int? SuccessorFK { get; set; }
@@ -25,7 +25,7 @@ namespace ChadCalendar.Models
 
         public bool IsCorrect()
         {
-            if (NRepetitions < 0 || MaxPerDay < 0 || Deadline <= DateTime.Now || HoursTakes < 0 || Name == null || Deadline != null)
+            if (NRepetitions < 0 || MaxPerDay < 0 || Deadline <= DateTime.Now || HoursTakes < 0 || Name == null || Deadline == null)
                 return false;
             else
                 return true;

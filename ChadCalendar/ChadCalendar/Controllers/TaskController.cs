@@ -6,7 +6,6 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ChadCalendar.Controllers
 {
@@ -23,15 +22,13 @@ namespace ChadCalendar.Controllers
             return db.Tasks.Where(task => task.User == user);
         }
 
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             return View(await db.Tasks.Where(task => task.User == user).ToListAsync());
         }
 
-        [Authorize]
-        public IActionResult Create()
+        public IActionResult AddTask()
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             ViewBag.Projects = getProjects(user);
@@ -41,14 +38,13 @@ namespace ChadCalendar.Controllers
             task.MaxPerDay = 1;
             return View(task);
         }
-        [Authorize]
         [HttpPost]
-        public IActionResult Create(Models.Task task)
+        public IActionResult AddTask(Models.Task task)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            ViewBag.Projects = getProjects(user);
             if (!task.IsCorrect())
                 return View(task);
-            ViewBag.Projects = getProjects(user);
             task.User = user;
             task.Accessed = DateTime.Now;
             task.NRepetitions = 1;
@@ -56,17 +52,15 @@ namespace ChadCalendar.Controllers
             db.SaveChanges();
             return Redirect("~/Task/Index");
         }
-
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-
+            ViewBag.Projects = getProjects(user);
             if (id != null)
             {
                 Models.Task task = await db.Tasks.FirstOrDefaultAsync(p => p.Id == id);
-                ViewBag.Projects = getProjects(user);
+
 
                 if (task != null && task.User == user)
                     return View(task);
@@ -74,8 +68,6 @@ namespace ChadCalendar.Controllers
             }
             return NotFound();
         }
-
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Edit(Models.Task task)
         {

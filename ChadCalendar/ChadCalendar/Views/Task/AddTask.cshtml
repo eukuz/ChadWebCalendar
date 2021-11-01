@@ -4,7 +4,7 @@
 }
 @model ChadCalendar.Models.Task
 
-<form action="/task/create" method="post">
+<form action="/task/AddTask" method="post">
     <div class="form-group">
         <label>Количество часов</label>
         <input type="number" asp-for="HoursTakes" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">

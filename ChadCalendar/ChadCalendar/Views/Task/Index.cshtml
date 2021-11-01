@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Все задачи";
 }
-<a asp-action="Create">Добавить задачу</a>
+<a asp-action="AddTask">Добавить задачу</a>
 <table class="table">
     <tr><td>Название</td><td>Дедлайн</td></tr>
     @foreach (var item in Model)
