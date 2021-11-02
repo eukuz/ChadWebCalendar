@@ -60,6 +60,14 @@
     {
         <label>Введены некорректные данные, попробуйте еще раз</label>
     }
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Готово</button>
+</form>
+<form asp-controller="Task" asp-action="Delete" method="post">
+    <div hidden="hidden">
+        <label asp-for="Id">Input Login</label><br />
+        <input asp-for="Id" />
+        <span asp-validation-for="Id" />
+    </div>
+    <button type="submit" class="btn btn-primary">Удалить задачу</button>
 </form>
 

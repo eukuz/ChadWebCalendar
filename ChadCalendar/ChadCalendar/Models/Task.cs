@@ -25,7 +25,7 @@ namespace ChadCalendar.Models
 
         public bool IsCorrect()
         {
-            if (NRepetitions < 0 || MaxPerDay < 0 || Deadline <= DateTime.Now || HoursTakes < 0 || Name == null || HoursTakes == null)
+            if (NRepetitions < 0 || MaxPerDay < 0 || HoursTakes < 0 || Name == null || HoursTakes == null)
                 return false;
             else
                 return true;

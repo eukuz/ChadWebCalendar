@@ -87,5 +87,20 @@ namespace ChadCalendar.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id != null)
+            {
+                Models.Task task = await db.Tasks.FirstOrDefaultAsync(p => p.Id == id);
+                if (task != null)
+                {
+                    db.Tasks.Remove(task);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+            }
+            return NotFound();
+        }
     }
 }
