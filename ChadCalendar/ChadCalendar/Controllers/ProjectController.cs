@@ -33,6 +33,9 @@ namespace ChadCalendar.Controllers
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             project.Accessed = DateTime.Now;
+            project.Name = "";
+            project.Description = "";
+            project.NRepetitions = 0;
             db.Projects.Add(project);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -60,20 +63,6 @@ namespace ChadCalendar.Controllers
             db.Projects.Update(project);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
-        }
-
-        [Authorize]
-        [HttpGet]
-        [ActionName("Delete")]
-        public async Task<IActionResult> ConfirmDelete(int? id)
-        {
-            if (id != null)
-            {
-                Project project = await db.Projects.FirstOrDefaultAsync(p => p.Id == id);
-                if (project != null)
-                    return View(project);
-            }
-            return NotFound();
         }
 
         [Authorize]
