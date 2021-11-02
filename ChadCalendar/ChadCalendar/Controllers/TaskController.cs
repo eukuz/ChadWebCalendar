@@ -82,6 +82,7 @@ namespace ChadCalendar.Controllers
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             task.Accessed = DateTime.Now;
+            task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
             ViewBag.Projects = getProjects(user);
             db.Tasks.Update(task);
             await db.SaveChangesAsync();

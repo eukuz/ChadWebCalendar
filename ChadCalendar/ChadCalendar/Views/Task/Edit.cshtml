@@ -49,10 +49,14 @@
     </div>
     <div class="form-group">
         <label>Выберите проект для задачи</label>
-        <select asp-for="Project">
+        <select asp-for="Project.Id">
+
             @foreach (var proj in ViewBag.Projects)
             {
-                <option>@proj.Name</option>
+                @if (proj != Model.Project)
+                {
+                    <option value="@proj.Id">@proj.Name</option>
+                }
             }
         </select>
     </div>

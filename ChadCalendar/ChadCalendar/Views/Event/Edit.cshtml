@@ -4,6 +4,16 @@
 @model ChadCalendar.Models.Event
 
 <form action="/event/edit" method="post">
+    <div hidden="hidden">
+        <label asp-for="Id">Input Login</label><br />
+        <input asp-for="Id" />
+        <span asp-validation-for="Id" />
+    </div>
+    <div hidden="hidden">
+        <label asp-for="Accessed">Input Accessed</label><br />
+        <input asp-for="Accessed" />
+        <span asp-validation-for="Accessed" />
+    </div>
     <div class="form-group">
         <label>Название мероприятия</label>
         <input type="text" placeholder="" asp-for="Name">
