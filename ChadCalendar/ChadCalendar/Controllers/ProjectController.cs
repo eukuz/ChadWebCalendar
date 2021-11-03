@@ -33,9 +33,12 @@ namespace ChadCalendar.Controllers
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             project.Accessed = DateTime.Now;
-            project.Name = "";
-            project.Description = "";
-            project.NRepetitions = 0;
+
+            if (string.IsNullOrEmpty(project.Name))
+            {
+                ModelState.AddModelError("Name", "Введите имя");
+            }
+
             db.Projects.Add(project);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

@@ -3,9 +3,11 @@
     ViewBag.Title = "Добавление проекта";
 }
 <form asp-action="create" asp-controller="Project">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div class="form-group">
         <label asp-for="Name">Имя</label>
         <input type="text" asp-for="Name" />
+        <span asp-validation-for="Name" />
     </div>
     <div class="form-group">
         <label asp-for="Description">Описание</label>
@@ -14,6 +16,7 @@
     <div class="form-group">
         <label asp-for="NRepetitions" class="control-label">Количество повторений в неделю</label>
         <input type="number" asp-for="NRepetitions" min="0">
+        <span asp-validation-for="NRepetitions" />
     </div>
     <div class="form-group">
         <label>Повторять раз в </label>
@@ -24,6 +27,7 @@
             <option>неделю</option>
             <option>месяц</option>
         </select>
+        <span asp-validation-for="Frequency" />
     </div>
     <div class="form-group">
         <label>Введите время дедлайна</label>
