@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using ChadCalendar.TaskHandlers;
 
 namespace ChadCalendar.Controllers
 {
     public class TaskController : Controller
     {
         ApplicationContext db = new ApplicationContext();
-
+        ErrorsHandler errorsHandler = new ErrorsHandler();
         private IEnumerable<Project> getProjects(User user)
         {
             return db.Projects.Where(proj => proj.User == user);
@@ -49,11 +50,12 @@ namespace ChadCalendar.Controllers
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             ViewBag.Projects = getProjects(user);
             if (!task.IsCorrect())
+            {
+                ViewBag.Errors = errorsHandler.GetErrors(ref task);
                 return View(task);
+            }
             task.User = user;
             task.Accessed = DateTime.Now;
-            task.HoursTakes = 1;
-            task.NRepetitions = 1;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
             db.Add(task);
             db.SaveChanges();

@@ -49,7 +49,10 @@
     </div>
     @if (!Model.IsCorrect())
     {
-        <label>Введены некорректные данные, попробуйте еще раз</label>
+        @foreach (var error in ViewBag.Errors)
+                {
+                    <label></label>
+                }
     }
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
