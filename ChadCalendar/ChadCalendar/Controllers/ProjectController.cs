@@ -39,9 +39,13 @@ namespace ChadCalendar.Controllers
                 ModelState.AddModelError("Name", "Введите имя");
             }
 
-            db.Projects.Add(project);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                db.Projects.Add(project);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(project);
         }
 
         [HttpGet]
