@@ -69,7 +69,7 @@ namespace ChadCalendar.Controllers
             ViewBag.Projects = getProjects(user);
             if (id != null)
             {
-                Models.Task task = await db.Tasks.FirstOrDefaultAsync(p => p.Id == id);
+                Models.Task task = await db.Tasks.Include(t => t.Project).FirstOrDefaultAsync(p => p.Id == id);
 
 
                 if (task != null && task.User == user)

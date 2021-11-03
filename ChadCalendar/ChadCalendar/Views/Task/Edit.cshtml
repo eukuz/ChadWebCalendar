@@ -50,6 +50,7 @@
     <div class="form-group">
         <label>Выберите проект для задачи</label>
         <select asp-for="Project.Id">
+            <option value="@Model.Project.Id">@Model.Project.Name</option>
             @foreach (var proj in ViewBag.Projects)
             {
                 @if (proj != Model.Project)
