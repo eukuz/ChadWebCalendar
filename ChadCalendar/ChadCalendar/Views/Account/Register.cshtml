@@ -8,32 +8,31 @@
         <div>
             <label asp-for="Login">Input Login</label><br />
             <input type="text" asp-for="Login" />
-            <span asp-validation-for="Login" />
+            <span asp-validation-for="Login" class="text-danger"></span>
         </div>
         <div>
             <label asp-for="Password">Input Password</label><br />
             <input asp-for="Password" />
-            <span asp-validation-for="Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
         <div>
             <label asp-for="ConfirmPassword">Input same password again</label><br />
             <input asp-for="ConfirmPassword" />
-            <span asp-validation-for="ConfirmPassword" />
         </div>
         <div>
             <label asp-for="WorkingHoursFrom">Input the start work time</label><br />
             <input asp-for="WorkingHoursFrom" />
-            <span asp-validation-for="WorkingHoursFrom" />
+            <span asp-validation-for="WorkingHoursFrom" class="text-danger"></span>
         </div>
         <div>
             <label asp-for="WorkingHoursTo">Input the finish work time</label><br />
             <input asp-for="WorkingHoursTo" />
-            <span asp-validation-for="WorkingHoursTo" />
+            <span asp-validation-for="WorkingHoursTo" class="text-danger"></span>
         </div>
         <div>
             <label asp-for="TimeZone">Input your UTC+ value</label><br />
             <input asp-for="TimeZone" />
-            <span asp-validation-for="TimeZone" />
+            <span asp-validation-for="TimeZone" class="text-danger"></span>
         </div>
            <div>
             <input type="submit" value="Register" />

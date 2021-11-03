@@ -1,4 +1,5 @@
 ﻿using ChadCalendar.Models;
+using ChadCalendar.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,16 +29,23 @@ namespace ChadCalendar.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Project project)
+        public async Task<IActionResult> Create(CreateProjectModel _project)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            project.Accessed = DateTime.Now;
+            _project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            _project.Accessed = DateTime.Now;
 
-            if (string.IsNullOrEmpty(project.Name))
+            Project project = new Project()
             {
-                ModelState.AddModelError("Name", "Введите имя");
-            }
+                Name = _project.Name,
+                Description = _project.Description,
+                Accessed = _project.Accessed,
+                Frequency = _project.Frequency,
+                Deadline = _project.Deadline,
+                IconNumber = _project.IconNumber,
+                NRepetitions = _project.NRepetitions,
+                User = _project.User,
+            };
 
             if (ModelState.IsValid)
             {
@@ -45,7 +53,7 @@ namespace ChadCalendar.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(project);
+            return View();
         }
 
         [HttpGet]
@@ -67,6 +75,10 @@ namespace ChadCalendar.Controllers
         {
             project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             project.Accessed = DateTime.Now;
+            if (string.IsNullOrEmpty(project.Name))
+            {
+                ModelState.AddModelError("Name", "Некорректное имя");
+            }
             db.Projects.Update(project);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

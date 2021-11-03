@@ -6,6 +6,7 @@
     <div class="form-group">
         <label asp-for="Name">Имя</label>
         <input type="text" asp-for="Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Description">Описание</label>
@@ -14,6 +15,7 @@
     <div class="form-group">
         <label asp-for="NRepetitions" class="control-label">Количество повторений в неделю</label>
         <input type="number" asp-for="NRepetitions" min="0">
+        <span asp-validation-for="NRepetitions" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label>Повторять раз в </label>

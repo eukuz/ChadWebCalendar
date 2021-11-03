@@ -93,7 +93,7 @@ namespace ChadCalendar.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(RegisterModel model)
         {
-            if (model.Password.Length > 0)
+            if (model.Password != null)
             {
                 if (ModelState.IsValid)
                 {
