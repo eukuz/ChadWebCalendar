@@ -7,6 +7,7 @@ namespace ChadCalendar.ViewModels
 {
     public class CreateProjectModel
     {
+        public int? Id { get; set; }
         [Required(ErrorMessage = "Не указано название")]
         public string Name { get; set; }
         public string Description { get; set; }
@@ -17,6 +18,6 @@ namespace ChadCalendar.ViewModels
         public DateTime? Deadline { get; set; }
         public string IconNumber { get; set; }
         public User User { get; internal set; }
-        public DateTime Accessed { get; internal set; }
+        public DateTime? Accessed { get; internal set; }
     }
 }
