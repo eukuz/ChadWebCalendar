@@ -20,15 +20,37 @@
         <textarea type="text" placeholder="" asp-for="Description"></textarea>
     </div>
     <div class="form-group">
+        <label>Дедлайн</label>
+        <input type="datetime-local" asp-for="Deadline" />
+    </div>
+    <div class="form-group">
+        <label>Выберите проект для задачи</label>
+        <select asp-for="Project.Id">
+            @foreach (var proj in ViewBag.Projects)
+            {
+                <option value="@proj.Id">@proj.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
         <input type="checkbox" asp-for="AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
+    </div>
+    <div class="form-group">
+        <label>После какой задачи расположить</label>
+        <select asp-for="Predecessor.Id">
+            @if (ViewBag.TasksOfProject != null)
+            {
+                <option value="@null">После любой</option>
+                foreach (var task in ViewBag.TasksOfProject)
+                {
+                    <option value="@task.Id">@task.Name</option>
+                }
+            }
+        </select>
     </div>
     <div class="form-group">
         <label>Максимум в день</label>
         <input type="number" placeholder="" asp-for="MaxPerDay" min="0">
-    </div>
-    <div class="form-group">
-        <label>Дедлайн</label>
-        <input type="datetime-local" asp-for="Deadline" />
     </div>
     <div class="form-group">
         <label>Частота</label>
@@ -38,15 +60,6 @@
             <option>Каждый день</option>
             <option>Каждую неделю</option>
             <option>Каждый месяц</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label>Выберите проект для задачи</label>
-        <select asp-for="Project.Id">
-            @foreach (var proj in ViewBag.Projects)
-            {
-                <option value="@proj.Id">@proj.Name</option>
-            }
         </select>
     </div>
     <div class="form-group">
