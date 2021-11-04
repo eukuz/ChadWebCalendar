@@ -1,7 +1,21 @@
-﻿@{
+﻿@model ChadCalendar.ViewModels.FooViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1>Home/Index.cshtml</h1>
+    <table class="table">
+        <tr><td>Имя</td><td>Возраст</td></tr>
+        @foreach (var item in Model.Projects)
+        {
+            <tr><td>@item.Name</td><td>@item.Description</td></tr>
+        }
+
+        @foreach (var item in Model.Tasks)
+        {
+            <tr><td>@item.Name</td><td>@item.Deadline</td></tr>
+        }
+
+    </table>
 </div>
