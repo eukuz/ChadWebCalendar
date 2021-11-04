@@ -4,18 +4,45 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <table class="table">
-        <tr><td>Имя</td><td>Возраст</td></tr>
-        @foreach (var item in Model.Projects)
-        {
-            <tr><td>@item.Name</td><td>@item.Description</td></tr>
-        }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 
-        @foreach (var item in Model.Tasks)
-        {
-            <tr><td>@item.Name</td><td>@item.Deadline</td></tr>
-        }
-
-    </table>
+<div class="content">
+    <aside class="project">
+        <div class="project__menu">
+            <table class="project__table">
+                @foreach (var item in Model.Projects)
+                {
+                    <tr>
+                        <td><button><h2>@item.IconNumber</h2></button></td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </aside>
+    <div class="aside_left">
+        <header class="panel">
+            <div class="panel_aside">
+                <table class="panel__table">
+                    @foreach (var item in Model.Tasks)
+                    {
+                        <tr>
+                            <td><button><h2>@item.Name</h2></button></td>
+                        </tr>
+                    }
+                </table>
+             </div>
+        </header>
+        <div class="tasks">
+            <ul class="tasks__list">
+                @foreach (var item in Model.Events)
+                {
+                        <li><input type="checkbox">@item.Name</li>
+                }
+            </ul>
+        </div>
+    </div>
 </div>
