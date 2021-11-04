@@ -32,8 +32,6 @@ namespace ChadCalendar.Controllers
             _event.StartsAt = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
             dt = dt.AddMinutes(10);
             _event.FinishesAt = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
-            _event.Description = "";
-            _event.Name = "";
             return View(_event);
         }
 
@@ -46,8 +44,14 @@ namespace ChadCalendar.Controllers
             _event.Accessed = DateTime.Now;
             DateTime temp = DateTime.Now;
             _event.StartsAt = new DateTime(temp.Year, temp.Month, temp.Day, temp.Hour, temp.Minute, 0, temp.Kind);
-            _event.FinishesAt = _event.StartsAt.AddMinutes(30);
+            DateTime tempTwo = (DateTime) _event.StartsAt;
+            _event.FinishesAt = tempTwo.AddMinutes(30);
             _event.NRepetitions = 1;
+            if (!_event.IsCorrect())
+            {
+                ViewBag.Error = true;
+                return View(_event);
+            }
             db.Events.Add(_event);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -73,6 +77,11 @@ namespace ChadCalendar.Controllers
         {
             _event.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             _event.Accessed = DateTime.Now;
+            if (!_event.IsCorrect())
+            {
+                ViewBag.Error = true;
+                return View(_event);
+            }
             db.Events.Update(_event);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
