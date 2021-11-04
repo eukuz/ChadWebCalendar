@@ -1,4 +1,17 @@
 ﻿@model ChadCalendar.ViewModels.FooViewModel
+@functions
+{
+    public string GetMonthName(int numm)
+    {
+        if (numm == 11)
+        {
+            return "нояб";
+        }
+        else
+            return "Пока не завезли";
+    }
+
+}
 
 @{
     ViewData["Title"] = "Home Page";
@@ -7,8 +20,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
 </head>
+
+
+
 
 <div class="content">
     <aside class="project">
@@ -20,6 +35,13 @@
                         <td><button><h3>@item.IconNumber</h3></button></td>
                     </tr>
                 }
+                <tr><td></td></tr>
+                <tr>
+                    <td><button><h3>D</h3></button></td>
+                </tr>
+                <tr>
+                    <td><button><h3>C</h3></button></td>
+                </tr>
             </table>
         </div>
     </aside>
@@ -27,22 +49,59 @@
         <header class="panel">
             <div class="panel_aside">
                 <table class="panel__table">
-                    @foreach (var item in Model.Tasks)
-                    {
-                        <tr>
-                            <td><button><h2>@item.Name</h2></button></td>
-                        </tr>
-                    }
+                    <tr>
+                        <td><button>1</button></td>
+                        <td><div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+       Задачи
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item" href="#">Действие</a></li>
+        <li><a class="dropdown-item" href="#">Другое действие</a></li>
+        <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
+    </ul>
+</div></td>
+                        <td><button>2</button></td>
+                    </tr>
                 </table>
-             </div>
+            </div>
         </header>
         <div class="tasks">
-            <ul class="tasks__list">
-                @foreach (var item in Model.Events)
+            <ul class="tasks__list list-group">
+                @foreach (var item in Model.Tasks)
                 {
-                        <li><input type="checkbox">@item.Name</li>
+                    <li class="list-group-item"><input type="checkbox">@item.Name</li>
                 }
+             
             </ul>
         </div>
     </div>
+    
+    <div class="main_menu">
+        <div class="month">
+            Сегодня @DateTime.Now.Day @GetMonthName(DateTime.Now.Month)
+        </div>
+        <table class="table">
+            @foreach (var item in Model.Events)
+            {
+                @if (item.StartsAt.ToString().Substring(0, 10) == DateTime.Now.ToString().Substring(0, 10))
+                {
+                    <tr>
+                        <td>@item.Name | @item.StartsAt.Hour:@item.StartsAt.Minute  - @item.FinishesAt.Hour:@item.FinishesAt.Minute</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="dropbtn">Редактировать</button>
+                                <div class="dropdown-content">
+                                    <a asp-action="Edit" asp-controller="Event" asp-route-id="@item.Id">Изменить</a>
+                                    <a asp-action="Delete" asp-controller="Event" asp-route-id="@item.Id">Удалить</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            }
+        </table>
+    </div>
+</div>
 </div>
