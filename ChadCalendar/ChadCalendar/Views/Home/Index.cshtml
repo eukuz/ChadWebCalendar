@@ -47,7 +47,7 @@
             <div class="panel_aside">
                 <table class="panel__table">
                     <tr>
-                        <td><button>1</button></td>
+                        
                         <td><div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
        Задачи
@@ -77,6 +77,7 @@
     <div class="main_menu">
         <div class="month">
             Сегодня @DateTime.Now.Day @GetMonthName(DateTime.Now.Month)
+            <a><button>+</button></a>
         </div>
         <table class="table">
             @foreach (var item in Model.Events)
