@@ -17,7 +17,6 @@ namespace ChadCalendar.Models
         public int? MaxPerDay { get; set; }
         public DateTime? Deadline { get; set; } = DateTime.Now.AddDays(1);
         public Task? Predecessor { get; set; }
-        public Task? Successor { get; set; }
         [Required]
         public Project Project { get; set; }
 
