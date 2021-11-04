@@ -21,13 +21,13 @@
         <span asp-validation-for="Name"></span>
     </div>
     <div class="form-group">
-        <label>Описание</label>
-        <textarea type="text" placeholder="Description" asp-for="Description"></textarea>
-    </div>
-    <div class="form-group">
         <label>Количество часов на задачу</label>
         <input type="number" placeholder="" asp-for="HoursTakes" min="0">
         <span asp-validation-for="HoursTakes"></span>
+    </div>
+    <div class="form-group">
+        <label>Описание</label>
+        <textarea type="text" placeholder="Description" asp-for="Description"></textarea>
     </div>
     <div class="form-group">
         <input type="checkbox" asp-for="AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
@@ -76,6 +76,6 @@
         <input asp-for="Id" />
         <span asp-validation-for="Id" />
     </div>
-    <button type="submit" class="btn btn-primary">Удалить задачу</button>
+    <button type="submit" class="btn btn-danger">Удалить задачу</button>
 </form>
 
