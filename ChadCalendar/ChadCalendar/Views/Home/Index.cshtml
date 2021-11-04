@@ -37,10 +37,7 @@
                 }
                 <tr><td></td></tr>
                 <tr>
-                    <td><button><h3>D</h3></button></td>
-                </tr>
-                <tr>
-                    <td><button><h3>C</h3></button></td>
+                    <td><button><h3>+</h3></button></td>
                 </tr>
             </table>
         </div>
@@ -90,9 +87,9 @@
                         <td>@item.Name | @item.StartsAt.Hour:@item.StartsAt.Minute  - @item.FinishesAt.Hour:@item.FinishesAt.Minute</td>
                         <td>
                             <div class="dropdown">
-                                <button class="dropbtn">
-                                    <a asp-action="Edit" asp-controller="Event" asp-route-id="@item.Id">Изменить</a>
-                                </button>
+                                
+                                    <a asp-action="Edit" asp-controller="Event" asp-route-id="@item.Id"><button class="dropbtn">Изменить</button></a>
+                               
                             </div>
                         </td>
                     </tr>
