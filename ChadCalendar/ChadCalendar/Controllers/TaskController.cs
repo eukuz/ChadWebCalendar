@@ -37,10 +37,6 @@ namespace ChadCalendar.Controllers
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             ViewBag.Projects = getProjects(user);
             Models.Task task = new Models.Task();
-            task.Name = "";
-            task.HoursTakes = 1;
-            task.NRepetitions = 1;
-            task.MaxPerDay = 1;
             return View(task);
         }
         [Authorize]
@@ -49,14 +45,15 @@ namespace ChadCalendar.Controllers
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             ViewBag.Projects = getProjects(user);
-            if (!task.IsCorrect())
-            {
-                ViewBag.Errors = errorsHandler.GetErrors(ref task);
-                return View(task);
-            }
             task.User = user;
             task.Accessed = DateTime.Now;
+            task.NRepetitions = 1;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
+            if (!task.IsCorrect())
+            {
+                ViewBag.Error = true;
+                return View(task);
+            }
             db.Add(task);
             db.SaveChanges();
             return Redirect("~/Task/Index");
@@ -82,10 +79,16 @@ namespace ChadCalendar.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Models.Task task)
         {
+
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             task.Accessed = DateTime.Now;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
             ViewBag.Projects = getProjects(user);
+            if (!task.IsCorrect())
+            {
+                ViewBag.Error = true;
+                return View(task);
+            }
             db.Tasks.Update(task);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

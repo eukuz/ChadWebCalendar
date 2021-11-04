@@ -12,7 +12,7 @@ namespace ChadCalendar.Models
         public bool? IsCompleted { get; set; } = false; // false т.к при создании Task задача еще не выполнена
         [Required]
         public bool AllowedToDistribute { get; set; } = false; // избежание null
-        [Required]
+        [Required(ErrorMessage = "Поле не может быть пустым")]
         public int? HoursTakes { get; set; }
         public int? MaxPerDay { get; set; }
         public DateTime? Deadline { get; set; }
@@ -25,7 +25,7 @@ namespace ChadCalendar.Models
 
         public bool IsCorrect()
         {
-            if (NRepetitions < 0 || MaxPerDay < 0 || HoursTakes < 0 || Name == null || HoursTakes == null)
+            if (NRepetitions < 0 || MaxPerDay < 0 || HoursTakes < 0 || Name == null || HoursTakes == null || Name == "")
                 return false;
             else
                 return true;

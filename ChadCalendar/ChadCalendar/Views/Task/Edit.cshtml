@@ -18,6 +18,7 @@
     <div class="form-group">
         <label>Название задачи</label>
         <input type="text" placeholder="Name" asp-for="Name">
+        <span asp-validation-for="Name"></span>
     </div>
     <div class="form-group">
         <label>Описание</label>
@@ -26,6 +27,7 @@
     <div class="form-group">
         <label>Количество часов на задачу</label>
         <input type="number" placeholder="" asp-for="HoursTakes" min="0">
+        <span asp-validation-for="HoursTakes"></span>
     </div>
     <div class="form-group">
         <input type="checkbox" asp-for="AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
@@ -60,10 +62,12 @@
             }
         </select>
     </div>
-    @if (!Model.IsCorrect())
-    {
-        <label>Введены некорректные данные, попробуйте еще раз</label>
-    }
+    <div class="form-group">
+        @if (ViewBag.Error != null)
+        {
+            <label>Проверьте правильность заполнения полей</label>
+        }
+    </div>
     <button type="submit" class="btn btn-primary">Готово</button>
 </form>
 <form asp-controller="Task" asp-action="Delete" method="post">
