@@ -32,14 +32,20 @@ namespace ChadCalendar.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Task>()
-                .HasOne(s => s.Predecessor)
-                .WithOne(p => p.Successor)
-                .HasForeignKey<Task>(b => b.SuccessorFK);
+                   .HasOne<Task>(x => x.Successor)
+                   .WithMany()
+                   .HasPrincipalKey("Id")
+                   .HasForeignKey("SuccessorFK")
+                   .OnDelete(DeleteBehavior.ClientSetNull)
+                    .IsRequired(false);
 
             modelBuilder.Entity<Task>()
-                .HasOne(p => p.Successor)
-                .WithOne(s => s.Predecessor)
-                .HasForeignKey<Task>(b => b.PredecessorFK);
+                .HasOne<Task>(x => x.Predecessor)
+                .WithMany()
+                .HasPrincipalKey("Id")
+                .HasForeignKey("PredecessorFK")
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .IsRequired(false);
         }
     }
 }

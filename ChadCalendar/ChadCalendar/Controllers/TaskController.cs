@@ -47,6 +47,17 @@ namespace ChadCalendar.Controllers
                 task.NRepetitions = 1;
                 db.Add(task);
                 db.SaveChanges();
+
+                Models.Task predecessor = db.Tasks.FirstOrDefault(t => t.Id == task.Id - 1);
+                task.Predecessor = predecessor;
+                predecessor.Successor = task;
+                db.Update(task);
+                db.Update(predecessor);
+                db.SaveChanges();
+
+                Models.Task tw5 = db.Tasks.FirstOrDefault(t => t.Id == 25);
+                db.Tasks.Remove(tw5);
+                db.SaveChanges();
             }
             return View(task);
         }
