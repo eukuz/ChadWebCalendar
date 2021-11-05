@@ -23,7 +23,13 @@ namespace ChadCalendar.Controllers
         {
             return db.Tasks.Where(task => task.User == user);
         }
-
+        private Models.Task getPredecessor(int? id)
+        {
+            if (id != null)
+                return db.Tasks.FirstOrDefault(t => t.Id == id);
+            else
+                return null;
+        }
         [Authorize]
         public async Task<IActionResult> Index()
         {
@@ -47,7 +53,7 @@ namespace ChadCalendar.Controllers
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             ViewBag.Projects = getProjects(user);
             task.User = user;
-            task.Predecessor = db.Tasks.FirstOrDefault(t => t.Id == task.Predecessor.Id);
+            task.Predecessor = getPredecessor(task.Predecessor.Id);
             task.Accessed = DateTime.Now;
             task.NRepetitions = 1;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
@@ -67,7 +73,7 @@ namespace ChadCalendar.Controllers
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             ViewBag.Projects = getProjects(user);
-            ViewBag.TasksOfProject = getTasks(user);
+            ViewBag.TasksOfProject = getTasks(user); 
             if (id != null)
             {
                 Models.Task task = await db.Tasks.Include(t => t.Project).FirstOrDefaultAsync(p => p.Id == id);
@@ -87,6 +93,7 @@ namespace ChadCalendar.Controllers
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             task.Accessed = DateTime.Now;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
+            //task.Predecessor = getPredecessor(task.Predecessor.Id); -предецессор редактивароение
             ViewBag.Projects = getProjects(user);
             if (!task.IsCorrect())
             {

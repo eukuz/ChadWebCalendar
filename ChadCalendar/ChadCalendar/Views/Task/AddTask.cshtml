@@ -38,9 +38,9 @@
     <div class="form-group">
         <label>После какой задачи расположить</label>
         <select asp-for="Predecessor.Id">
+            <option value="@null">После любой</option>
             @if (ViewBag.TasksOfProject != null)
             {
-                <option value="@null">После любой</option>
                 foreach (var task in ViewBag.TasksOfProject)
                 {
                     <option value="@task.Id">@task.Name</option>
