@@ -1,8 +1,8 @@
 ﻿using ChadCalendar.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,39 +10,87 @@ namespace ChadCalendar.Controllers
 {
     public class ProjectController : Controller
     {
+        private ApplicationContext db;
+        public ProjectController(ApplicationContext context)
+        {
+            db = context;
+        }
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            return View(await db.Projects.Where(p => p.User.Login == User.Identity.Name).ToListAsync());
+        }
 
         [Authorize]
-        public IActionResult AddProject(int? id)
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(Project project)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            project.Accessed = DateTime.Now;
+            db.Projects.Add(project);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            if (id != null)
+            {
+                Project project = await db.Projects.FirstOrDefaultAsync(p => p.Id == id);
+                if (project != null && project.User == user)
+                    return View(project);
+            }
+            return NotFound();
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(Project project)
+        {
+            project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            project.Accessed = DateTime.Now;
+            db.Projects.Update(project);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        [HttpGet]
+        [ActionName("Delete")]
+        public async Task<IActionResult> ConfirmDelete(int? id)
         {
             if (id != null)
             {
-                Project p;
-                using (var db = new ApplicationContext())
-                {
-                    p = db.Projects.FirstOrDefault(p => p.Id == id);
-                }
-                return View(p);
+                Project project = await db.Projects.FirstOrDefaultAsync(p => p.Id == id);
+                if (project != null)
+                    return View(project);
             }
-            return View();
+            return NotFound();
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult AddProject(Models.Project project)
+        public async Task<IActionResult> Delete(int? id)
         {
-            
-            using (var db = new ApplicationContext())
+            if (id != null)
             {
-                User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-                project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-                project.Accessed = DateTime.Now;
-                if (project.Id == null)
-                    db.Add(project);
-                //else db.Update(project); //bag
-                db.SaveChanges();
+                Project project = await db.Projects.FirstOrDefaultAsync(p => p.Id == id);
+                if (project != null)
+                {
+                    db.Projects.Remove(project);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
             }
-            return View();
-            
+            return NotFound();
         }
     }
 }

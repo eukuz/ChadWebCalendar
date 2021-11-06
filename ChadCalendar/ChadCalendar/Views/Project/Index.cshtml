@@ -1,0 +1,18 @@
+﻿@model IEnumerable<ChadCalendar.Models.Project>
+@{
+    ViewBag.Title = "Все проекты";
+}
+<a asp-action="Create">Добавить проект</a>
+<table class="table">
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>
+                <a asp-action="Edit" asp-controller="Project" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-action="Delete" asp-controller="Project" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+    }
+</table>

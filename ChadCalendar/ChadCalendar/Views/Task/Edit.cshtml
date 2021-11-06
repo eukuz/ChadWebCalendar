@@ -1,23 +1,33 @@
 ﻿
 @{
-    ViewData["Title"] = "Создание задачи";
+    ViewData["Title"] = "Изменение задачи";
 }
 @model ChadCalendar.Models.Task
 
-<form action="/task/AddTask" method="post">
+<form action="/task/edit" method="post">
+    <div hidden="hidden">
+        <label asp-for="Id">Input Login</label><br />
+        <input asp-for="Id" />
+        <span asp-validation-for="Id" />
+    </div>
+    <div hidden="hidden">
+        <label asp-for="Accessed">Input Accessed</label><br />
+        <input asp-for="Accessed" />
+        <span asp-validation-for="Accessed" />
+    </div>
     <div class="form-group">
         <label>Название задачи</label>
-        <input type="text" placeholder="" asp-for="Name">
+        <input type="text" placeholder="Name" asp-for="Name">
         <span asp-validation-for="Name"></span>
     </div>
     <div class="form-group">
         <label>Количество часов на задачу</label>
-        <input type="number" asp-for="HoursTakes" min="0">
+        <input type="number" placeholder="" asp-for="HoursTakes" min="0">
         <span asp-validation-for="HoursTakes"></span>
     </div>
     <div class="form-group">
         <label>Описание</label>
-        <textarea type="text" placeholder="" asp-for="Description"></textarea>
+        <textarea type="text" placeholder="Description" asp-for="Description"></textarea>
     </div>
     <div class="form-group">
         <label>Дедлайн</label>
@@ -26,28 +36,20 @@
     <div class="form-group">
         <label>Выберите проект для задачи</label>
         <select asp-for="Project.Id">
+            <option value="@Model.Project.Id">@Model.Project.Name</option>
             @foreach (var proj in ViewBag.Projects)
             {
-                <option value="@proj.Id">@proj.Name</option>
+                @if (proj != Model.Project)
+                {
+                    <option value="@proj.Id">@proj.Name</option>
+                }
             }
         </select>
     </div>
     <div class="form-group">
         <input type="checkbox" asp-for="AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
     </div>
-    <div class="form-group">
-        <label>После какой задачи расположить</label>
-        <select asp-for="Predecessor.Id">
-            <option value="@null">После любой</option>
-            @if (ViewBag.TasksOfProject != null)
-            {
-                foreach (var task in ViewBag.TasksOfProject)
-                {
-                    <option value="@task.Id">@task.Name</option>
-                }
-            }
-        </select>
-    </div>
+
     <div class="form-group">
         <label>Максимум в день</label>
         <input type="number" placeholder="" asp-for="MaxPerDay" min="0">
@@ -55,11 +57,10 @@
     <div class="form-group">
         <label>Частота</label>
         <select asp-for="Frequency">
-            <option disabled>Частота</option>
-            <option>Никогда</option>
             <option>Каждый день</option>
             <option>Каждую неделю</option>
             <option>Каждый месяц</option>
+            <option>Никогда</option>
         </select>
     </div>
     <div class="form-group">
@@ -69,5 +70,13 @@
         }
     </div>
     <button type="submit" class="btn btn-primary">Готово</button>
+</form>
+<form asp-controller="Task" asp-action="Delete" method="post">
+    <div hidden="hidden">
+        <label asp-for="Id">Input Login</label><br />
+        <input asp-for="Id" />
+        <span asp-validation-for="Id" />
+    </div>
+    <button type="submit" class="btn btn-danger">Удалить задачу</button>
 </form>
 

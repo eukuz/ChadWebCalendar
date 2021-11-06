@@ -1,0 +1,17 @@
+﻿@model IEnumerable<ChadCalendar.Models.Event>
+@{
+    ViewBag.Title = "Все события";
+}
+<a asp-action="Create">Добавить событие</a>
+<table class="table">
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>
+                <a asp-action="Edit" asp-controller="Event" asp-route-id="@item.Id">Изменить</a>
+            </td>
+        </tr>
+    }
+</table>

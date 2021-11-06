@@ -2,49 +2,120 @@
 using ChadCalendar.Models;
 using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChadCalendar.Controllers
 {
     public class EventController : Controller
     {
-        public IActionResult Index()
+        private ApplicationContext db;
+
+        public EventController(ApplicationContext context)
         {
-            return View();
+            db = context;
         }
 
-        public IActionResult AddEvent()
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            return View(await db.Events.Where(p => p.User.Login == User.Identity.Name).ToListAsync());
+        }
+
+        [Authorize]
+        public IActionResult Create()
         {
             Event _event = new Event();
             DateTime dt = DateTime.Now;
             _event.StartsAt = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
             dt = dt.AddMinutes(10);
             _event.FinishesAt = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
-            _event.Description = "";
-            _event.Name = "";
-            return View(_event);
-        }
-        [HttpPost]
-        public IActionResult AddEvent(Event _event)
-        {
-            using (var db = new ApplicationContext())
-            {
-                if (!_event.IsCorrect())
-                {
-                    return View(_event);
-                }
-                User u = new User() { Login = "user1", Password = "123", };
-                db.Add(u);
-                db.SaveChanges();
-                _event.User = u;
-                _event.Accessed = DateTime.Now;
-                _event.NRepetitions = 1;
-                db.Add(_event);
-                db.SaveChanges();
-            }
             return View(_event);
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Create(Event _event)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            _event.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            _event.Accessed = DateTime.Now;
+            DateTime temp = DateTime.Now;
+            _event.StartsAt = new DateTime(temp.Year, temp.Month, temp.Day, temp.Hour, temp.Minute, 0, temp.Kind);
+            DateTime tempTwo = (DateTime) _event.StartsAt;
+            _event.FinishesAt = tempTwo.AddMinutes(30);
+            _event.NRepetitions = 1;
+            if (!_event.IsCorrect())
+            {
+                ViewBag.Error = true;
+                return View(_event);
+            }
+            db.Events.Add(_event);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            if (id != null)
+            {
+                Event _event = await db.Events.FirstOrDefaultAsync(p => p.Id == id);
+                if (_event != null && _event.User == user)
+                    return View(_event);
+            }
+            return NotFound();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(Event _event)
+        {
+            _event.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            _event.Accessed = DateTime.Now;
+            if (!_event.IsCorrect())
+            {
+                ViewBag.Error = true;
+                return View(_event);
+            }
+            db.Events.Update(_event);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        [HttpGet]
+        [ActionName("Delete")]
+        public async Task<IActionResult> ConfirmDelete(int? id)
+        {
+            if (id != null)
+            {
+                Event _event = await db.Events.FirstOrDefaultAsync(p => p.Id == id);
+                if (_event != null)
+                    return View(_event);
+            }
+            return NotFound();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id != null)
+            {
+                Event _event = await db.Events.FirstOrDefaultAsync(p => p.Id == id);
+                if (_event != null)
+                {
+                    db.Events.Remove(_event);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+            }
+            return NotFound();
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace ChadCalendar.Models
     {
         [Required]
         public int? Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Поле не может быть пустым")]
         public string Name { get; set; }
         public string Description { get; set; }
         [Required]
