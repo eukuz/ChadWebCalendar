@@ -23,12 +23,21 @@ namespace ChadCalendar.Controllers
         }
 
         [Authorize]
-        public IActionResult Index()
+        public IActionResult Index(int? id)
         {
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             var model = new FooViewModel();
-            model.Tasks = db.Tasks.ToList();
-            model.Events = db.Events.ToList();
-            model.Projects = db.Projects.ToList();
+            if (id.HasValue)
+            {
+                model.Tasks = db.Tasks.Where(t => t.Project.Id == id).ToList();
+            }
+            else
+            {
+                model.Tasks = db.Tasks.Where(t => t.User == user).ToList();
+            }
+
+            model.Events = db.Events.Where(e => e.User == user).ToList();
+            model.Projects = db.Projects.Where(p => p.User == user).ToList();
             return View(model);
         }
 

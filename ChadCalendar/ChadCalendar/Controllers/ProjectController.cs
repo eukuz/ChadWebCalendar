@@ -31,6 +31,11 @@ namespace ChadCalendar.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateProjectModel _project)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             _project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             _project.Accessed = DateTime.Now;
@@ -47,13 +52,9 @@ namespace ChadCalendar.Controllers
                 User = _project.User,
             };
 
-            if (ModelState.IsValid)
-            {
-                db.Projects.Add(project);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View();
+            db.Projects.Add(project);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -86,6 +87,11 @@ namespace ChadCalendar.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(CreateProjectModel _project)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             _project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             _project.Accessed = DateTime.Now;
@@ -102,13 +108,9 @@ namespace ChadCalendar.Controllers
                 User = _project.User,
             };
 
-            if (ModelState.IsValid)
-            {
-                db.Projects.Update(project);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(_project);
+            db.Projects.Update(project);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         [Authorize]
