@@ -100,11 +100,11 @@ body{
 
 .aside_left {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     border: 1px solid lightgray;
+    
 }
 .panel {
-
 }
 .panel_aside {
     display: flex;
@@ -117,7 +117,9 @@ body{
  text-align: center;
 }
 .tasks {
- 
+    max-height: 67vh;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 .tasks__list {
 }
