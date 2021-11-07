@@ -49,14 +49,10 @@
                     <tr>
                         
                         <td><div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    <button>
        Задачи
     </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-        <li><a class="dropdown-item" href="#">Действие</a></li>
-        <li><a class="dropdown-item" href="#">Другое действие</a></li>
-        <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
-    </ul>
+    
 </div></td>
                         <td><a asp-action="AddTask" asp-controller="Task"><button>+</button></a> </td>
                     </tr>
@@ -90,7 +86,7 @@
                 @if (item.StartsAt.ToString().Substring(0, 10) == DateTime.Now.ToString().Substring(0, 10))
                 {
                     <tr>
-                        <td>@item.Name | @item.StartsAt.Hour:@item.StartsAt.Minute  - @item.FinishesAt.Hour:@item.FinishesAt.Minute</td>
+                        <td>@item.Name <br />| @item.StartsAt.Hour:@item.StartsAt.Minute  - @item.FinishesAt.Hour:@item.FinishesAt.Minute</td>
                         <td>
                             <div class="dropdown">
 

@@ -134,7 +134,7 @@ body{
 .dropbtn {
     background-color: #808080;
     color: white;
-    padding: 16px;
+    padding: 10px;
     font-size: 16px;
     border: none;
 }
@@ -172,6 +172,7 @@ body{
     height: 75vh;
 }
 .table td{
+    vertical-align: central;
 }
 .content {
     display: flex;
