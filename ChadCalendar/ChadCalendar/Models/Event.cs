@@ -19,6 +19,20 @@ namespace ChadCalendar.Models
             else
                 return true;
         }
+        public Event(){} // Default constructor
+        public Event (Task task, DateTime startsAt, int remindNMunutesBefore)
+        {
+            Accessed = DateTime.Now;
+            Description = task.Description;
+            StartsAt = startsAt;
+            FinishesAt = startsAt.AddHours((double)task.HoursTakes);
+            Frequency = task.Frequency;
+            Name = task.Name;
+            NRepetitions = task.NRepetitions;
+            RemindNMinutesBefore = remindNMunutesBefore;
+            User = task.User;
+        }
+        
     }
 }
 
