@@ -176,8 +176,28 @@ body{
     flex-direction: row;
     flex-wrap: nowrap;
 }
+
+.main_menu_header{
+    display: flex;
+}
 .month {
     text-align: center;
     font-size: 16px;
     font-weight: bold;
+    width: 100%;
+}
+
+.create_event_button {
+    align-self: flex-end;
+}
+
+.checkbox_tasks{
+    margin-right: 5px;
+}
+
+.form-control {
+    width: 25%
+}
+.task_height{
+    height: 100vh;
 }

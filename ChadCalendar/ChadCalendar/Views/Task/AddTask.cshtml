@@ -4,29 +4,29 @@
 }
 @model ChadCalendar.Models.Task
 
-<form action="/task/AddTask" method="post">
+<form class="task_height" action="/task/AddTask" method="post">
     <div class="form-group">
         <label>Название задачи</label>
-        <input type="text" placeholder="" asp-for="Name">
+        <input class="form-control" type="text" placeholder="" asp-for="Name">
     </div>
     <div class="form-group">
         <label>Описание</label>
-        <textarea type="text" placeholder="" asp-for="Description"></textarea>
+        <textarea class="form-control" type="text" placeholder="" asp-for="Description"></textarea>
     </div>
     <div class="form-group">
         <label>Количество часов на задачу</label>
-        <input type="number" asp-for="HoursTakes" min="0">
+        <input class="form-control" type="number" asp-for="HoursTakes" min="0">
     </div>
     <div class="form-group">
         <input type="checkbox" asp-for="AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
     </div>
     <div class="form-group">
         <label>Максимум в день</label>
-        <input type="number" placeholder="" asp-for="MaxPerDay" min="0">
+        <input class="form-control" type="number" placeholder="" asp-for="MaxPerDay" min="0">
     </div>
     <div class="form-group">
         <label>Дедлайн</label>
-        <input type="datetime-local" asp-for="Deadline" />
+        <input class="form-control" type="datetime-local" asp-for="Deadline" />
     </div>
     <div class="form-group">
         <label>Частота</label>
@@ -51,6 +51,6 @@
     {
         <label>Введены некорректные данные, попробуйте еще раз</label>
     }
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Создать задачу</button>
 </form>
 
