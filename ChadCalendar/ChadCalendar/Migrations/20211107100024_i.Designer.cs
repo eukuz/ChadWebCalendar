@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChadCalendar.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20211104182550_SuccessorRemoved")]
-    partial class SuccessorRemoved
+    [Migration("20211107100024_i")]
+    partial class i
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -85,13 +85,15 @@ namespace ChadCalendar.Migrations
                 {
                     b.HasBaseType("ChadCalendar.Models.Duty");
 
-                    b.Property<DateTime>("FinishesAt")
+                    b.Property<DateTime?>("FinishesAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("RemindNMinutesBefore")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("StartsAt")
+                    b.Property<DateTime?>("StartsAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.ToTable("Events");
@@ -120,7 +122,7 @@ namespace ChadCalendar.Migrations
                     b.Property<DateTime?>("Deadline")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("HoursTakes")
+                    b.Property<DateTime?>("HoursTakes")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

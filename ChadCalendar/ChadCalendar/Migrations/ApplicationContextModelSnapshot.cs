@@ -83,13 +83,15 @@ namespace ChadCalendar.Migrations
                 {
                     b.HasBaseType("ChadCalendar.Models.Duty");
 
-                    b.Property<DateTime>("FinishesAt")
+                    b.Property<DateTime?>("FinishesAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("RemindNMinutesBefore")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("StartsAt")
+                    b.Property<DateTime?>("StartsAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.ToTable("Events");
@@ -118,7 +120,7 @@ namespace ChadCalendar.Migrations
                     b.Property<DateTime?>("Deadline")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("HoursTakes")
+                    b.Property<DateTime?>("HoursTakes")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
