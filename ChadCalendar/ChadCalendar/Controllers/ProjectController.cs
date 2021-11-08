@@ -1,4 +1,5 @@
 ﻿using ChadCalendar.Models;
+using ChadCalendar.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,11 +29,29 @@ namespace ChadCalendar.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Project project)
+        public async Task<IActionResult> Create(CreateProjectModel _project)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            project.Accessed = DateTime.Now;
+            _project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            _project.Accessed = DateTime.Now;
+
+            Project project = new Project()
+            {
+                Name = _project.Name,
+                Description = _project.Description,
+                Accessed = _project.Accessed,
+                Frequency = _project.Frequency,
+                Deadline = _project.Deadline,
+                IconNumber = _project.IconNumber,
+                NRepetitions = _project.NRepetitions,
+                User = _project.User,
+            };
+
             db.Projects.Add(project);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -46,34 +65,52 @@ namespace ChadCalendar.Controllers
             if (id != null)
             {
                 Project project = await db.Projects.FirstOrDefaultAsync(p => p.Id == id);
+                CreateProjectModel projectModel = new CreateProjectModel
+                {
+                    Id = project.Id,
+                    Name = project.Name,
+                    Description = project.Description,
+                    Accessed = project.Accessed,
+                    Frequency = project.Frequency,
+                    Deadline = project.Deadline,
+                    IconNumber = project.IconNumber,
+                    NRepetitions = project.NRepetitions,
+                    User = project.User
+
+                };
                 if (project != null && project.User == user)
-                    return View(project);
+                    return View(projectModel);
             }
             return NotFound();
         }
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Edit(Project project)
+        public async Task<IActionResult> Edit(CreateProjectModel _project)
         {
-            project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            project.Accessed = DateTime.Now;
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            _project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            _project.Accessed = DateTime.Now;
+
+            Project project = new Project()
+            {
+                Name = _project.Name,
+                Description = _project.Description,
+                Accessed = _project.Accessed,
+                Frequency = _project.Frequency,
+                Deadline = _project.Deadline,
+                IconNumber = _project.IconNumber,
+                NRepetitions = _project.NRepetitions,
+                User = _project.User,
+            };
+
             db.Projects.Update(project);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
-        }
-
-        [Authorize]
-        [HttpGet]
-        [ActionName("Delete")]
-        public async Task<IActionResult> ConfirmDelete(int? id)
-        {
-            if (id != null)
-            {
-                Project project = await db.Projects.FirstOrDefaultAsync(p => p.Id == id);
-                if (project != null)
-                    return View(project);
-            }
-            return NotFound();
         }
 
         [Authorize]

@@ -19,38 +19,27 @@
         <div>
             <label asp-for="Password">Input new password</label><br />
             <input asp-for="Password" />
-            <span asp-validation-for="Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
         <div>
             <label asp-for="ConfirmPassword">Input new password again</label><br />
             <input asp-for="ConfirmPassword" />
-            <span asp-validation-for="ConfirmPassword" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
         <div>
             <label asp-for="WorkingHoursFrom">Input the start work time</label><br />
             <input asp-for="WorkingHoursFrom" />
-            <span asp-validation-for="WorkingHoursFrom" type="number" />
+            <span asp-validation-for="WorkingHoursFrom" class="text-danger"></span>
         </div>
         <div>
             <label asp-for="WorkingHoursTo">Input the finish work time</label><br />
             <input asp-for="WorkingHoursTo" />
-            <span asp-validation-for="WorkingHoursTo" type="number" />
+            <span asp-validation-for="WorkingHoursTo" class="text-danger"></span>
         </div>
         <div>
             <label asp-for="TimeZone">Input your UTC+ value</label><br />
             <input asp-for="TimeZone" />
-            <span asp-validation-for="TimeZone" type="number" />
-        </div>
-        <div>
-            <label asp-for="RemindMe">Should we remind you about forgotten duties?</label><br />
-            <input asp-for="RemindMe" />
-            <span asp-validation-for="RemindMe" type="checkbox" />
-        </div>
-        <div>
-            <label asp-for="RemindEveryNDays">Remind me every </label><br />
-            <input asp-for="RemindEveryNDays" />
-            <span asp-validation-for="RemindEveryNDays" type="number" />
-            <label asp-for="RemindEveryNDays">days</label><br />
+            <span asp-validation-for="TimeZone" class="text-danger"></span>
         </div>
         <div>
             <input type="submit" value="Submit" />

@@ -1,4 +1,5 @@
 ﻿using ChadCalendar.Models;
+using ChadCalendar.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -12,16 +13,32 @@ namespace ChadCalendar.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationContext db;
+
         private readonly ILogger<HomeController> _logger;
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationContext context)
         {
             _logger = logger;
+            db = context;
         }
 
         [Authorize]
-        public IActionResult Index()
+        public IActionResult Index(int? id)
         {
-            return View();
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            var model = new FooViewModel();
+            if (id.HasValue)
+            {
+                model.Tasks = db.Tasks.Where(t => t.Project.Id == id).ToList();
+            }
+            else
+            {
+                model.Tasks = db.Tasks.Where(t => t.User == user).ToList();
+            }
+
+            model.Events = db.Events.Where(e => e.User == user).ToList();
+            model.Projects = db.Projects.Where(p => p.User == user).ToList();
+            return View(model);
         }
 
         public IActionResult Privacy()

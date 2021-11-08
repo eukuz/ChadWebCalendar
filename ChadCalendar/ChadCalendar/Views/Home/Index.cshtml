@@ -1,7 +1,100 @@
-﻿@{
+﻿@model ChadCalendar.ViewModels.FooViewModel
+@functions
+{
+    public string GetMonthName(int numm)
+    {
+        if (numm == 11)
+        {
+            return "нояб";
+        }
+        else
+            return "Пока не завезли";
+    }
+}
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1>Home/Index.cshtml</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<div class="content">
+    <aside class="project">
+        <div class="project__menu">
+            <table class="project__table">
+                @foreach (var item in Model.Projects)
+                {
+                    <h3>
+                        <button><a type="button" asp-action="Index" asp-controller="Home" asp-route-id="@item.Id">
+                            @item.IconNumber
+                        </a></button>
+                    </h3>
+                }
+                <tr><td></td></tr>
+                <tr>
+                    <td><a asp-action="Create" asp-controller="Project"><button><h3>+</h3></button></a> </td>
+                </tr>
+            </table>
+        </div>
+    </aside>
+    <div class="aside_left">
+        <header class="panel">
+            <div class="panel_aside">
+                <table class="panel__table">
+                    <tr>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Задачи
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" href="#">Действие</a></li>
+                                    <li><a class="dropdown-item" href="#">Другое действие</a></li>
+                                    <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td><a asp-action="AddTask" asp-controller="Task"><button>+</button></a> </td>
+                    </tr>
+                </table>
+            </div>
+        </header>
+        <div class="tasks">
+            <ul class="tasks__list list-group">
+                @foreach (var item in Model.Tasks)
+                {
+                    <li class="list-group-item"><input type="checkbox">@item.Name <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.Id"><button>&#9881;&#65039;</button></a></li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="main_menu">
+        <div class="month">
+            Сегодня @DateTime.Now.Day @GetMonthName(DateTime.Now.Month)
+            <a asp-action="Create" asp-controller="Event"><button>+</button></a>
+        </div>
+        <table class="table">
+            @foreach (var item in Model.Events)
+            {
+                @if (item.StartsAt.ToString().Substring(0, 10) == DateTime.Now.ToString().Substring(0, 10))
+                {
+                    <tr>
+                        <td>@item.Name | @item.StartsAt.Hour:@item.StartsAt.Minute  - @item.FinishesAt.Hour:@item.FinishesAt.Minute</td>
+                        <td>
+                            <div class="dropdown">
+
+                                <a asp-action="Edit" asp-controller="Event" asp-route-id="@item.Id"><button class="dropbtn">Изменить</button></a>
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            }
+        </table>
+    </div>
 </div>

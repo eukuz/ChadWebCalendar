@@ -13,12 +13,12 @@ namespace ChadCalendar.Models
     {
         [Required]
         public int? Id { get; set; }
-        [Required(ErrorMessage = "Поле не может быть пустым")]
+        [Required(ErrorMessage = "Не указано имя")]
         public string Name { get; set; }
         public string Description { get; set; }
         [Required]
         public DateTime? Accessed { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Не указано NRepetitions")]
         public int? NRepetitions { get; set; } = 1;
         public string Frequency { get; set; }
         [Required]
