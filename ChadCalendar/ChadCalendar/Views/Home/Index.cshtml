@@ -12,6 +12,8 @@
     }
 }
 
+}
+
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -20,6 +22,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
+
+
 
 <div class="content">
     <aside class="project">
@@ -66,24 +71,30 @@
             <ul class="tasks__list list-group">
                 @foreach (var item in Model.Tasks)
                 {
-                    <li class="list-group-item"><input type="checkbox">@item.Name <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.Id"><button>&#9881;&#65039;</button></a></li>
+                    <li class="list-group-item"><input class="checkbox_tasks" type="checkbox">@item.Name</li>
                 }
+             
             </ul>
         </div>
     </div>
-
+    
     <div class="main_menu">
-        <div class="month">
-            Сегодня @DateTime.Now.Day @GetMonthName(DateTime.Now.Month)
-            <a asp-action="Create" asp-controller="Event"><button>+</button></a>
+        <div class="main_menu_header">
+            <div class="month">
+                Сегодня @DateTime.Now.Day @GetMonthName(DateTime.Now.Month)
+            </div>
+            <div class="create_event_button">
+                <a asp-action="Create" asp-controller="Event"><button>+</button></a>
+            </div>
         </div>
+
         <table class="table">
             @foreach (var item in Model.Events)
             {
                 @if (item.StartsAt.ToString().Substring(0, 10) == DateTime.Now.ToString().Substring(0, 10))
                 {
                     <tr>
-                        <td>@item.Name | @item.StartsAt.Value.Hour:@item.StartsAt.Value.Minute  - @item.FinishesAt.Value.Hour:@item.FinishesAt.Value.Minute</td>
+                        <td>@item.Name <br />| @item.StartsAt.Hour:@item.StartsAt.Minute  - @item.FinishesAt.Hour:@item.FinishesAt.Minute</td>
                         <td>
                             <div class="dropdown">
 
@@ -97,4 +108,5 @@
             }
         </table>
     </div>
+</div>
 </div>

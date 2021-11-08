@@ -6,17 +6,17 @@
 <form asp-action="create" asp-controller="Project">
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div class="form-group">
-        <label asp-for="Name">Название</label><br />
-        <input type="text" asp-for="Name" />
+        <label asp-for="Name">Название</label>
+        <input class="form-control" type="text" asp-for="Name" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Description">Описание</label>
-        <input type="text" asp-for="Description"/>
+        <input class="form-control" type="text" asp-for="Description" />
     </div>
     <div class="form-group">
         <label asp-for="NRepetitions" class="control-label">Количество повторений в неделю</label>
-        <input type="number" asp-for="NRepetitions" min="0">
+        <input class="form-control" type="number" asp-for="NRepetitions" min="0">
         <span asp-validation-for="NRepetitions" class="text-danger"></span>
     </div>
     <div class="form-group">
@@ -31,11 +31,11 @@
     </div>
     <div class="form-group">
         <label>Введите время дедлайна</label>
-        <input type="datetime-local" asp-for="Deadline" />
+        <input class="form-control" type="datetime-local" asp-for="Deadline" />
     </div>
     <div class="form-group">
         <label>Выберите иконку</label>
-        <select asp-for="IconNumber">
+        <select class="form-select" asp-for="IconNumber">
             <option disabled>Выберите смайл для проекта</option>
             <option>&#128640;</option>
             <option>&#128293;</option>

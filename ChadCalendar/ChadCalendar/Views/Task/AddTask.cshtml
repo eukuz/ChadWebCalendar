@@ -4,7 +4,7 @@
 }
 @model ChadCalendar.Models.Task
 
-<form action="/task/AddTask" method="post">
+<form class="task_height" action="/task/AddTask" method="post">
     <div class="form-group">
         <label>Название задачи</label>
         <input type="text" placeholder="" asp-for="Name">
@@ -17,7 +17,7 @@
     </div>
     <div class="form-group">
         <label>Описание</label>
-        <textarea type="text" placeholder="" asp-for="Description"></textarea>
+        <textarea class="form-control" type="text" placeholder="" asp-for="Description"></textarea>
     </div>
     <div class="form-group">
         <label>Дедлайн</label>
@@ -50,7 +50,7 @@
     </div>
     <div class="form-group">
         <label>Максимум в день</label>
-        <input type="number" placeholder="" asp-for="MaxPerDay" min="0">
+        <input class="form-control" type="number" placeholder="" asp-for="MaxPerDay" min="0">
     </div>
     <div class="form-group">
         <label>Частота</label>
