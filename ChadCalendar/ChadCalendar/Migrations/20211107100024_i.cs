@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ChadCalendar.Migrations
 {
-    public partial class Init : Migration
+    public partial class i : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -77,7 +77,7 @@ namespace ChadCalendar.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Deadline = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    IconNumber = table.Column<int>(type: "INTEGER", nullable: true)
+                    IconNumber = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -98,11 +98,10 @@ namespace ChadCalendar.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     IsCompleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     AllowedToDistribute = table.Column<bool>(type: "INTEGER", nullable: false),
-                    HoursTakes = table.Column<decimal>(type: "TEXT", nullable: false),
+                    HoursTakes = table.Column<DateTime>(type: "TEXT", nullable: false),
                     MaxPerDay = table.Column<int>(type: "INTEGER", nullable: true),
                     Deadline = table.Column<DateTime>(type: "TEXT", nullable: true),
                     PredecessorFK = table.Column<int>(type: "INTEGER", nullable: true),
-                    SuccessorFK = table.Column<int>(type: "INTEGER", nullable: true),
                     ProjectId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -136,8 +135,7 @@ namespace ChadCalendar.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_PredecessorFK",
                 table: "Tasks",
-                column: "PredecessorFK",
-                unique: true);
+                column: "PredecessorFK");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_ProjectId",

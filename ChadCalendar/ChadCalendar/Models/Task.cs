@@ -14,16 +14,16 @@ namespace ChadCalendar.Models
         [Required]
         public bool AllowedToDistribute { get; set; } = false; // избежание null
         [Required(ErrorMessage = "Поле не может быть пустым")]
-        public double? HoursTakes { get; set; }
+        public DateTime? HoursTakes { get; set; }
         public int? MaxPerDay { get; set; }
-        public DateTime? Deadline { get; set; } = DateTime.Now.AddDays(1);
+        public DateTime? Deadline { get; set; }
         public Task? Predecessor { get; set; }
         [Required]
         public Project Project { get; set; }
 
         public bool IsCorrect()
         {
-            if (NRepetitions < 0 || MaxPerDay < 0 || HoursTakes < 0 || Name == null || HoursTakes == null || Name == "")
+            if (NRepetitions < 0 || MaxPerDay < 0 || Name == null || HoursTakes == null || Name == "")
                 return false;
             else
                 return true;

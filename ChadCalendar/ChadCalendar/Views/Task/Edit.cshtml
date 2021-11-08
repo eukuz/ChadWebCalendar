@@ -21,8 +21,8 @@
         <span asp-validation-for="Name"></span>
     </div>
     <div class="form-group">
-        <label>Количество часов на задачу</label>
-        <input type="number" placeholder="" asp-for="HoursTakes" min="0">
+        <label>Время на задачу</label>
+        <input type="time" datetime="PT8H5M" asp-for="HoursTakes" min="0">
         <span asp-validation-for="HoursTakes"></span>
     </div>
     <div class="form-group">
@@ -49,7 +49,26 @@
     <div class="form-group">
         <input type="checkbox" asp-for="AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
     </div>
-
+    <div class="form-group">
+        <label>После какой задачи расположить</label>
+        <select asp-for="Predecessor.Id">
+            @if (Model.Predecessor != null)
+            {
+                <option value="@Model.Predecessor.Id">@Model.Predecessor.Name</option>
+            }
+            <option value="@null">После любой</option>
+            @if (ViewBag.TasksOfProject != null)
+            {
+                foreach (var task in ViewBag.TasksOfProject)
+                {
+                    if (task != Model.Predecessor)
+                    {
+                        <option value="@task.Id">@task.Name</option>
+                    }
+                }
+            }
+        </select>
+    </div>
     <div class="form-group">
         <label>Максимум в день</label>
         <input type="number" placeholder="" asp-for="MaxPerDay" min="0">

@@ -76,7 +76,7 @@ namespace ChadCalendar.Controllers
             ViewBag.TasksOfProject = getTasks(user); 
             if (id != null)
             {
-                Models.Task task = await db.Tasks.Include(t => t.Project).FirstOrDefaultAsync(p => p.Id == id);
+                Models.Task task = await db.Tasks.Include(t => t.Project).Include(t => t.Predecessor).FirstOrDefaultAsync(p => p.Id == id);
 
 
                 if (task != null && task.User == user)
@@ -89,11 +89,10 @@ namespace ChadCalendar.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Models.Task task)
         {
-
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             task.Accessed = DateTime.Now;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
-            //task.Predecessor = getPredecessor(task.Predecessor.Id); -предецессор редактивароение
+            task.Predecessor = getPredecessor(task.Predecessor.Id);
             ViewBag.Projects = getProjects(user);
             if (!task.IsCorrect())
             {
