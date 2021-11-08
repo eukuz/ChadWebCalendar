@@ -25,7 +25,7 @@ namespace ChadCalendar.Models
             Accessed = DateTime.Now;
             Description = task.Description;
             StartsAt = startsAt;
-            FinishesAt = startsAt.AddHours((double)task.HoursTakes);
+            FinishesAt = startsAt+task.TimeTakes;
             Frequency = task.Frequency;
             Name = task.Name;
             NRepetitions = task.NRepetitions;

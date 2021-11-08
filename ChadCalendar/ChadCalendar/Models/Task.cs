@@ -14,7 +14,7 @@ namespace ChadCalendar.Models
         [Required]
         public bool AllowedToDistribute { get; set; } = false; // избежание null
         [Required(ErrorMessage = "Поле не может быть пустым")]
-        public DateTime? HoursTakes { get; set; }
+        public TimeSpan? TimeTakes { get; set; }
         public int? MaxPerDay { get; set; }
         public DateTime? Deadline { get; set; }
         public Task? Predecessor { get; set; }
@@ -23,7 +23,7 @@ namespace ChadCalendar.Models
 
         public bool IsCorrect()
         {
-            if (NRepetitions < 0 || MaxPerDay < 0 || Name == null || HoursTakes == null || Name == "")
+            if (NRepetitions < 0 || MaxPerDay < 0 || Name == null || TimeTakes == null || Name == "")
                 return false;
             else
                 return true;
@@ -35,7 +35,7 @@ namespace ChadCalendar.Models
             Description = this.Description;
             AllowedToDistribute = true;
             Deadline = _event.FinishesAt;
-            HoursTakes = (_event.FinishesAt - _event.StartsAt).Value.TotalHours;
+            TimeTakes = _event.FinishesAt - _event.StartsAt;
             IsCompleted = false;
             MaxPerDay = 1;
             Predecessor = null;
