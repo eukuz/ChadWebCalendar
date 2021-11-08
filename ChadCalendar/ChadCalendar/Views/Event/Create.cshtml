@@ -7,7 +7,6 @@
     <div class="form-group">
         <label>Название события</label>
         <input class="form-control" type="text" placeholder="" asp-for="Name">
-        <input type="text" placeholder="" asp-for="Name">
         <span asp-validation-for="Name"></span>
     </div>
     <div class="form-group">
@@ -26,13 +25,11 @@
     <div class="form-group">
         <label>Начинается</label>
         <input class="form-control" type="datetime-local" asp-for="StartsAt" />
-        <input type="datetime-local" asp-for="StartsAt" />
         <span asp-validation-for="StartsAt"></span>
     </div>
     <div class="form-group">
         <label>Заканчивается</label>
         <input class="form-control" type="datetime-local" asp-for="FinishesAt" />
-        <input type="datetime-local" asp-for="FinishesAt" />
         <span asp-validation-for="FinishesAt"></span>
     </div>
     <div class="form-group">
@@ -48,6 +45,5 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Создать событие</button>
-    <button type="submit" class="btn btn-primary">Готово</button>
 </form>
 
