@@ -103,7 +103,6 @@ namespace ChadCalendar.Controllers
             db.Tasks.Update(task);
             await db.SaveChangesAsync();
             return Redirect("~/");
-            //return RedirectToAction("Index");
         }
         [HttpPost]
         public async Task<IActionResult> Delete(int? id)
