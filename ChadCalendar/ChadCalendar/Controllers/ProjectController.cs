@@ -96,17 +96,16 @@ namespace ChadCalendar.Controllers
             _project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             _project.Accessed = DateTime.Now;
 
-            Project project = new Project()
-            {
-                Name = _project.Name,
-                Description = _project.Description,
-                Accessed = _project.Accessed,
-                Frequency = _project.Frequency,
-                Deadline = _project.Deadline,
-                IconNumber = _project.IconNumber,
-                NRepetitions = _project.NRepetitions,
-                User = _project.User,
-            };
+
+            Project project = db.Projects.FirstOrDefault(p => p.Id == _project.Id);
+            project.Name = _project.Name;
+            project.Description = _project.Description;
+            project.Accessed = _project.Accessed;
+            project.Frequency = _project.Frequency;
+            project.Deadline = _project.Deadline;
+            project.IconNumber = _project.IconNumber;
+            project.NRepetitions = _project.NRepetitions;
+            project.User = _project.User;
 
             db.Projects.Update(project);
             await db.SaveChangesAsync();
