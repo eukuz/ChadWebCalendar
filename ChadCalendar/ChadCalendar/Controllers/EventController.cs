@@ -43,9 +43,8 @@ namespace ChadCalendar.Controllers
             _event.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             _event.Accessed = DateTime.Now;
             DateTime temp = DateTime.Now;
-            _event.StartsAt = new DateTime(temp.Year, temp.Month, temp.Day, temp.Hour, temp.Minute, 0, temp.Kind);
+
             DateTime tempTwo = (DateTime) _event.StartsAt;
-            _event.FinishesAt = tempTwo.AddMinutes(30);
             _event.NRepetitions = 1;
             if (!_event.IsCorrect())
             {
