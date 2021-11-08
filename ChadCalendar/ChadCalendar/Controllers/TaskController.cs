@@ -65,7 +65,7 @@ namespace ChadCalendar.Controllers
             }
             db.Add(task);
             db.SaveChanges();
-            return Redirect("~/Task/Index");
+            return Redirect("~/");
         }
         [Authorize]
         [HttpGet]
@@ -102,7 +102,8 @@ namespace ChadCalendar.Controllers
             }
             db.Tasks.Update(task);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return Redirect("~/");
+            //return RedirectToAction("Index");
         }
         [HttpPost]
         public async Task<IActionResult> Delete(int? id)

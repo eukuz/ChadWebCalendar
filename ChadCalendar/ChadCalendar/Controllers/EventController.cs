@@ -53,7 +53,7 @@ namespace ChadCalendar.Controllers
             }
             db.Events.Add(_event);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return Redirect("~/");
         }
 
         [HttpGet]
@@ -83,7 +83,7 @@ namespace ChadCalendar.Controllers
             }
             db.Events.Update(_event);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return Redirect("~/");
         }
 
         [Authorize]
