@@ -36,20 +36,16 @@ namespace ChadCalendar.Controllers
                 return View();
             }
 
-            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            _project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            _project.Accessed = DateTime.Now;
-
             Project project = new Project()
             {
                 Name = _project.Name,
                 Description = _project.Description,
-                Accessed = _project.Accessed,
+                Accessed = DateTime.Now,
                 Frequency = _project.Frequency,
                 Deadline = _project.Deadline,
                 IconNumber = _project.IconNumber,
                 NRepetitions = _project.NRepetitions,
-                User = _project.User,
+                User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name)
             };
 
             db.Projects.Add(project);
@@ -75,7 +71,6 @@ namespace ChadCalendar.Controllers
                     Deadline = project.Deadline,
                     IconNumber = project.IconNumber,
                     NRepetitions = project.NRepetitions,
-                    User = project.User
 
                 };
                 if (project != null && project.User == user)
@@ -92,21 +87,16 @@ namespace ChadCalendar.Controllers
                 return View();
             }
 
-            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            _project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            _project.Accessed = DateTime.Now;
+            Project project = db.Projects.FirstOrDefault(p => p.Id == _project.Id);
 
-            Project project = new Project()
-            {
-                Name = _project.Name,
-                Description = _project.Description,
-                Accessed = _project.Accessed,
-                Frequency = _project.Frequency,
-                Deadline = _project.Deadline,
-                IconNumber = _project.IconNumber,
-                NRepetitions = _project.NRepetitions,
-                User = _project.User,
-            };
+            project.Name = _project.Name;
+            project.Description = _project.Description;
+            project.Accessed = DateTime.Now;
+            project.Frequency = _project.Frequency;
+            project.Deadline = _project.Deadline;
+            project.IconNumber = _project.IconNumber;
+            project.NRepetitions = _project.NRepetitions;
+            project.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
 
             db.Projects.Update(project);
             await db.SaveChangesAsync();

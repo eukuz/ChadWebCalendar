@@ -83,7 +83,7 @@
                 @if (item.StartsAt.ToString().Substring(0, 10) == DateTime.Now.ToString().Substring(0, 10))
                 {
                     <tr>
-                        <td>@item.Name | @item.StartsAt.Hour:@item.StartsAt.Minute  - @item.FinishesAt.Hour:@item.FinishesAt.Minute</td>
+                        <td>@item.Name | @item.StartsAt.Value.Hour:@item.StartsAt.Value.Minute  - @item.FinishesAt.Value.Hour:@item.FinishesAt.Value.Minute</td>
                         <td>
                             <div class="dropdown">
 

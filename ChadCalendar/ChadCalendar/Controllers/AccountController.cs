@@ -98,30 +98,29 @@ namespace ChadCalendar.Controllers
         {
             if (model.Password != null)
             {
+
                 if (ModelState.IsValid)
                 {
 
-            if (ModelState.IsValid)
-            {
+                    User user = await db.Users.FirstOrDefaultAsync(u => u.Id == model.Id);
+                    if (user != null)
+                    {
+                        user.Login = model.Login;
+                        user.Password = model.ConfirmPassword.Length > 0 ? model.ConfirmPassword : user.Password;
+                        user.TimeZone = model.TimeZone;
+                        user.WorkingHoursFrom = model.WorkingHoursFrom;
+                        user.WorkingHoursTo = model.WorkingHoursTo;
+                        user.RemindEveryNDays = 5;
+                        user.RemindEveryNDays = model.RemindMe ? model.RemindEveryNDays : -1;
 
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Id == model.Id);
-                if (user != null)
-                {
-                    user.Login = model.Login;
-                    user.Password = model.ConfirmPassword.Length>0 ? model.ConfirmPassword :user.Password;
-                    user.TimeZone = model.TimeZone;
-                    user.WorkingHoursFrom = model.WorkingHoursFrom;
-                    user.WorkingHoursTo = model.WorkingHoursTo;
-                    user.RemindEveryNDays = 5;
-                    user.RemindEveryNDays = model.RemindMe ? model.RemindEveryNDays : -1;
-
-                    db.Users.Update(user);
-                    await db.SaveChangesAsync();
-                    await Authenticate(model.Login);
-                    return RedirectToAction("Index", "Home");
+                        db.Users.Update(user);
+                        await db.SaveChangesAsync();
+                        await Authenticate(model.Login);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                        ModelState.AddModelError("", "User does not exist! Some error happend with DB");
                 }
-                else
-                    ModelState.AddModelError("", "User does not exist! Some error happend with DB");
             }
             return View(model);
         }
