@@ -32,14 +32,14 @@
                 @foreach (var item in Model.Projects)
                 {
                     <h3>
-                        <button><a type="button" asp-action="Index" asp-controller="Home" asp-route-id="@item.Id">
+                        <button  type="button" class="btn btn-secondary"><a type="button" asp-action="Index" asp-controller="Home" asp-route-id="@item.Id">
                             @item.IconNumber
                         </a></button>
                     </h3>
                 }
                 <tr><td></td></tr>
                 <tr>
-                    <td><a asp-action="Create" asp-controller="Project"><button><h3>+</h3></button></a> </td>
+                    <td><a asp-action="Create" asp-controller="Project"><button  type="button" class="btn btn-secondary"><h3>+</h3></button></a> </td>
                 </tr>
             </table>
         </div>
@@ -61,7 +61,7 @@
                                 </ul>
                             </div>
                         </td>
-                        <td><a asp-action="AddTask" asp-controller="Task"><button>+</button></a> </td>
+                        <td><a asp-action="AddTask" asp-controller="Task"><button  type="button" class="btn btn-secondary">+</button></a> </td>
                     </tr>
                 </table>
             </div>
@@ -83,7 +83,7 @@
                 Сегодня @DateTime.Now.Day @GetMonthName(DateTime.Now.Month)
             </div>
             <div class="create_event_button">
-                <a asp-action="Create" asp-controller="Event"><button>+</button></a>
+                <a asp-action="Create" asp-controller="Event"><button  type="button" class="btn btn-secondary">+</button></a>
             </div>
         </div>
 
