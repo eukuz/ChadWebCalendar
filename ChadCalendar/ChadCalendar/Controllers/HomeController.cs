@@ -26,10 +26,13 @@ namespace ChadCalendar.Controllers
         public IActionResult Index(int? id)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            Project project = db.Projects.FirstOrDefault(p => p.Id == id);
             var model = new FooViewModel();
             if (id.HasValue)
             {
                 model.Tasks = db.Tasks.Where(t => t.Project.Id == id).ToList();
+                model.SelectProjectId = id;
+                model.SelectProjectName = project.Name;
             }
             else
             {
@@ -38,6 +41,7 @@ namespace ChadCalendar.Controllers
 
             model.Events = db.Events.Where(e => e.User == user).ToList();
             model.Projects = db.Projects.Where(p => p.User == user).ToList();
+            
             return View(model);
         }
 

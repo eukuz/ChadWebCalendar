@@ -22,9 +22,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-
-
-
 <div class="content">
     <aside class="project">
         <div class="project__menu">
@@ -51,9 +48,18 @@
                     <tr>
                         <td>
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Задачи
-                                </button>
+                                @if (Model.SelectProjectId != null)
+                                {
+                                    <a type="button" class="btn btn-outline-dark asp-action="Edit" asp-controller="Project" asp-route-id="@Model.SelectProjectId">
+                                        @Model.SelectProjectName
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a type="button" class="btn btn-outline-dark">
+                                        Выберите проект
+                                    </a>
+                                }
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     <li><a class="dropdown-item" href="#">Действие</a></li>
                                     <li><a class="dropdown-item" href="#">Другое действие</a></li>
@@ -68,11 +74,13 @@
         </header>
         <div class="tasks">
             <ul class="tasks__list list-group">
-                @foreach (var item in Model.Tasks)
+                @if (Model.SelectProjectId != null)
                 {
-                    <li class="list-group-item"><input class="checkbox_tasks" type="checkbox">@item.Name</li>
+                    foreach (var item in Model.Tasks)
+                    {
+                        <li class="list-group-item"><input class="checkbox_tasks" type="checkbox">@item.Name</li>
+                    }
                 }
-             
             </ul>
         </div>
     </div>
