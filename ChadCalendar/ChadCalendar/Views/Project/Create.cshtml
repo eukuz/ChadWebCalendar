@@ -31,22 +31,20 @@
     </div>
     <div class="form-group">
         <label>Введите время дедлайна</label>
-        <input class="form-control" type="datetime-local" asp-for="Deadline" />
+        <input type="datetime-local" asp-for="Deadline" />
     </div>
     <div class="form-group">
         <label>Выберите иконку</label>
-        <select class="form-select" asp-for="IconNumber">
-            <option disabled>Выберите смайл для проекта</option>
-            <option>&#128640;</option>
-            <option>&#128293;</option>
-            <option>&#10084;</option>
-            <option>&#129297;</option>
-            <option>&#129397;</option>
-            <option>&#129312;</option>
-            <option>&#9997;</option>
-            <option>&#128007;</option>
-            <option>&#127800;</option>
-            <option>&#127839;</option>
+        <select asp-for="IconNumber">
+            <option selected>💗</option>
+            <option>😈</option>
+            <option>😍</option>
+            <option>🤠</option>
+            <option>😀</option>
+            <option>⛹</option>
+            <option>☕</option>
+            <option>✔</option>
+            <option>⌚</option>
         </select>
     </div>
     <div class="form-group">
