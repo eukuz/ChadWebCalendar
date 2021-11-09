@@ -101,26 +101,27 @@
                 <a asp-action="Create" asp-controller="Event"><button>+</button></a>
             </div>
         </div>
-
-        <table class="table">
-            @foreach (var item in Model.Events)
-            {
-                @if (item.StartsAt.ToString().Substring(0, 10) == DateTime.Now.ToString().Substring(0, 10))
+        <div class="main_menu_body">
+            <table class="table">
+                @foreach (var item in Model.Events)
                 {
-                    <tr>
-                        <td>@item.Name <br />| @item.StartsAt.Value.Hour:@item.StartsAt.Value.Minute  - @item.FinishesAt.Value.Hour:@item.FinishesAt.Value.Minute</td>
-                        <td>
-                            <div class="dropdown">
+                    @if (item.StartsAt.ToString().Substring(0, 10) == DateTime.Now.ToString().Substring(0, 10))
+                    {
+                        <tr>
+                            <td>@item.Name <br />| @item.StartsAt.Value.Hour:@item.StartsAt.Value.Minute  - @item.FinishesAt.Value.Hour:@item.FinishesAt.Value.Minute</td>
+                            <td>
+                                <div class="dropdown">
 
-                                <a asp-action="Edit" asp-controller="Event" asp-route-id="@item.Id"><button class="dropbtn">Изменить</button></a>
+                                    <a asp-action="Edit" asp-controller="Event" asp-route-id="@item.Id"><button class="dropbtn">Изменить</button></a>
 
-                            </div>
-                        </td>
-                    </tr>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
                 }
-
-            }
-        </table>
+            </table>
+        </div>
     </div>
 </div>
 </div>
