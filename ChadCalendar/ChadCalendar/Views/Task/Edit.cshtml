@@ -36,7 +36,10 @@
     <div class="form-group">
         <label>Выберите проект для задачи</label>
         <select asp-for="Project.Id">
-            <option value="@Model.Project.Id">@Model.Project.Name</option>
+            @if (Model.Project != null)
+            {
+                <option value="@Model.Project.Id">@Model.Project.Name</option>
+            }
             @foreach (var proj in ViewBag.Projects)
             {
                 @if (proj != Model.Project)
@@ -61,7 +64,7 @@
             {
                 foreach (var task in ViewBag.TasksOfProject)
                 {
-                    if (task != Model.Predecessor)
+                    if (task != Model.Predecessor && task != Model)
                     {
                         <option value="@task.Id">@task.Name</option>
                     }
@@ -97,5 +100,13 @@
         <span asp-validation-for="Id" />
     </div>
     <button type="submit" class="btn btn-danger">Удалить задачу</button>
+</form>
+<form asp-controller="Task" asp-action="Mutatuion" method="post">
+    <div hidden="hidden">
+        <label asp-for="Id">Input Login</label><br />
+        <input asp-for="Id" />
+        <span asp-validation-for="Id" />
+    </div>
+    <button type="submit" class="btn btn-dark">Сделать событием</button>
 </form>
 

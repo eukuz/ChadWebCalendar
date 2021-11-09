@@ -42,9 +42,6 @@ namespace ChadCalendar.Controllers
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             _event.User = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             _event.Accessed = DateTime.Now;
-            DateTime temp = DateTime.Now;
-
-            DateTime tempTwo = (DateTime) _event.StartsAt;
             _event.NRepetitions = 1;
             if (!_event.IsCorrect())
             {
@@ -111,10 +108,21 @@ namespace ChadCalendar.Controllers
                 {
                     db.Events.Remove(_event);
                     await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
+                    return Redirect("~/");
                 }
             }
             return NotFound();
+        }
+        public async Task<IActionResult> Mutatuion(Models.Event _event)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            _event = await db.Events.FirstOrDefaultAsync(t => _event.Id == t.Id);
+            Models.Task task = new Models.Task(_event, null);
+            task.User = user;
+            db.Tasks.Add(task);
+            db.Events.Remove(_event);
+            await db.SaveChangesAsync();
+            return Redirect("~/");
         }
     }
 }

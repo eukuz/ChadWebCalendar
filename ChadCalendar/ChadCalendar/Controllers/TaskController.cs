@@ -92,7 +92,12 @@ namespace ChadCalendar.Controllers
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             task.Accessed = DateTime.Now;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
+            //Models.Task tempTask = task.Predecessor;
             task.Predecessor = getPredecessor(task.Predecessor.Id);
+            //if (task.Predecessor == null)
+            //{
+            //    db.Tasks.Remove(tempTask);
+            //}
             ViewBag.Projects = getProjects(user);
             if (!task.IsCorrect())
             {
@@ -100,11 +105,10 @@ namespace ChadCalendar.Controllers
                 ViewBag.TasksOfProject = getTasks(user);
                 return View(task);
             }
-            
+            //task.Predecessor = new Models.Task { Name = "mkkm", TimeTakes = (new TimeSpan(500)), Accessed = DateTime.Now, Id = null };
             db.Tasks.Update(task);
             await db.SaveChangesAsync();
             return Redirect("~/");
-            //return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -117,10 +121,28 @@ namespace ChadCalendar.Controllers
                 {
                     db.Tasks.Remove(task);
                     await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
+                    return Redirect("~/");
                 }
             }
             return NotFound();
+        }
+        public async Task<IActionResult> Mutatuion(Models.Task task)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            task = db.Tasks.FirstOrDefault(t => task.Id == t.Id); // это странное выражение нужно потому что в модели передается только Id
+            var del = db.Tasks.Where(t => t.Predecessor == task);
+            foreach (var item in del)
+            {
+                db.Tasks.Remove(item.Predecessor);
+            }
+            DateTime dt = DateTime.Now;
+            DateTime startsAt = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
+            Event _event = new Event(task, startsAt, 15);
+            _event.User = user;
+            db.Events.Add(_event);
+            db.Tasks.Remove(task);
+            await db.SaveChangesAsync();
+            return Redirect("~/");
         }
     }
 }
