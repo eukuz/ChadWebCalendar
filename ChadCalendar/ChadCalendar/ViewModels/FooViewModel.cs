@@ -10,5 +10,8 @@ namespace ChadCalendar.ViewModels
         public IEnumerable<Models.Event> Events { get; set; }
         public IEnumerable<Models.Task> Tasks { get; set; }
         public IEnumerable<Models.Project> Projects { get; set; }
+        public string SelectProjectName { get; set; } = "Проект не выбран";
+        public int? SelectProjectId { get; set; }
+
     }
 }
