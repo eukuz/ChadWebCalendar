@@ -37,7 +37,7 @@ namespace ChadCalendar.Models
             Deadline = _event.FinishesAt;
             TimeTakes = _event.FinishesAt - _event.StartsAt;
             IsCompleted = false;
-            MaxPerDay = 1;
+            MaxPerDay = 0;
             Predecessor = null;
             Project = project;
             Frequency = _event.Frequency;
