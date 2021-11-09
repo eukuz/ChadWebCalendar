@@ -2,7 +2,7 @@
     background-image: url(../img/gigachad.jpg);
     background-position: bottom;
     background-size: inherit;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(30px);
 }
 
 .login-form {

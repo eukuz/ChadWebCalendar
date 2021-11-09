@@ -223,3 +223,8 @@ body {
 .task_height{
     height: 100vh;
 }
+
+.projectNameBtn {
+    max-width: 100%;
+    word-wrap: break-word;
+}

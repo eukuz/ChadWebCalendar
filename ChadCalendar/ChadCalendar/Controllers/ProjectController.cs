@@ -50,7 +50,7 @@ namespace ChadCalendar.Controllers
 
             db.Projects.Add(project);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return Redirect("~/");
         }
 
         [HttpGet]
@@ -100,7 +100,7 @@ namespace ChadCalendar.Controllers
 
             db.Projects.Update(project);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return Redirect("~/");
         }
 
         [Authorize]
@@ -114,7 +114,7 @@ namespace ChadCalendar.Controllers
                 {
                     db.Projects.Remove(project);
                     await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
+                    return Redirect("~/");
                 }
             }
             return NotFound();

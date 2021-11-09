@@ -57,7 +57,7 @@
                             <div class="dropdown">
                                 @if (Model.SelectProjectId != null)
                                 {
-                                    <a type="button" class="btn btn-secondary" style="color: white" asp-action="Edit" asp-controller="Project" asp-route-id="@Model.SelectProjectId">
+                                    <a type="button" class="btn btn-secondary projectNameBtn" style="color: white" asp-action="Edit" asp-controller="Project" asp-route-id="@Model.SelectProjectId">
                                         @Model.SelectProjectName
                                     </a>
                                 }
