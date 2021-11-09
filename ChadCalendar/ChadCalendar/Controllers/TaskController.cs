@@ -120,7 +120,7 @@ namespace ChadCalendar.Controllers
                 {
                     db.Tasks.Remove(task);
                     await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
+                    return Redirect("~/");
                 }
             }
             return NotFound();

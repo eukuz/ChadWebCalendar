@@ -108,7 +108,7 @@ namespace ChadCalendar.Controllers
                 {
                     db.Events.Remove(_event);
                     await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
+                    return Redirect("~/");
                 }
             }
             return NotFound();
