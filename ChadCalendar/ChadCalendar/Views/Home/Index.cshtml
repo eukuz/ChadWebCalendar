@@ -12,7 +12,6 @@
     }
 }
 
-
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -28,15 +27,23 @@
             <table class="project__table">
                 @foreach (var item in Model.Projects)
                 {
-                    <h3>
-                        <button><a type="button" asp-action="Index" asp-controller="Home" asp-route-id="@item.Id">
-                            @item.IconNumber
-                        </a></button>
-                    </h3>
+                    <tr>
+                        <td>
+                            <h3>
+                                <a type="button" asp-action="Index" asp-controller="Home" asp-route-id="@item.Id">
+                                    <button>
+                                        @item.IconNumber
+                                    </button>
+                                </a>
+                            </h3>
+                        </td>
+                    </tr>  
                 }
                 <tr><td></td></tr>
                 <tr>
-                    <td><a asp-action="Create" asp-controller="Project"><button><h3>+</h3></button></a> </td>
+                    <td>
+                        <h3><a asp-action="Create" asp-controller="Project"><button>&#10133;</button></a></h3>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -50,13 +57,13 @@
                             <div class="dropdown">
                                 @if (Model.SelectProjectId != null)
                                 {
-                                    <a type="button" class="btn btn-outline-dark asp-action="Edit" asp-controller="Project" asp-route-id="@Model.SelectProjectId">
+                                    <a type="button" class="btn btn-secondary" style="color: white" asp-action="Edit" asp-controller="Project" asp-route-id="@Model.SelectProjectId">
                                         @Model.SelectProjectName
                                     </a>
                                 }
                                 else
                                 {
-                                    <a type="button" class="btn btn-outline-dark">
+                                    <a class="btn btn-secondary" style="color: white">
                                         Выберите проект
                                     </a>
                                 }
@@ -78,7 +85,7 @@
                 {
                     foreach (var item in Model.Tasks)
                     {
-                        <li class="list-group-item"><input class="checkbox_tasks" type="checkbox">@item.Name</li>
+                        <li class="list-group-item"><input type="checkbox">@item.Name <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.Id"><button>&#9881;&#65039;</button></a></li>
                     }
                 }
             </ul>
