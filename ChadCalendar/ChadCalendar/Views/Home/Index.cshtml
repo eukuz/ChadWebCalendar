@@ -74,7 +74,7 @@
                                 </ul>
                             </div>
                         </td>
-                        <td><a asp-action="AddTask" asp-controller="Task"><button>+</button></a> </td>
+                        <td><a asp-action="AddTask" asp-controller="Task"><h3><button>&#10133;</button></h3></a> </td>
                     </tr>
                 </table>
             </div>
@@ -95,10 +95,10 @@
     <div class="main_menu">
         <div class="main_menu_header">
             <div class="month">
-                Сегодня @DateTime.Now.Day @GetMonthName(DateTime.Now.Month)
+                <h3>Сегодня @DateTime.Now.Day @GetMonthName(DateTime.Now.Month)</h3>
             </div>
             <div class="create_event_button">
-                <a asp-action="Create" asp-controller="Event"><button>+</button></a>
+                <a asp-action="Create" asp-controller="Event"><h3><button>&#10133;</button></h3></a>
             </div>
         </div>
         <div class="main_menu_body">
