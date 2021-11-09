@@ -123,7 +123,7 @@ body {
 }
 
 .tasks {
-    max-height: 75.5vh;
+    max-height: 72.5vh;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -227,7 +227,7 @@ body {
     border-bottom: 1px solid lightgray;
 }
 .main_menu_body {
-    max-height: 75.5vh;
+    max-height: 74vh;
     overflow-x: hidden;
     overflow-y: auto;
 }
