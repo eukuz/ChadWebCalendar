@@ -128,7 +128,12 @@ namespace ChadCalendar.Controllers
         public async Task<IActionResult> Mutatuion(Models.Task task)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            task = db.Tasks.FirstOrDefault(t => task.Id == t.Id);
+            task = db.Tasks.FirstOrDefault(t => task.Id == t.Id); // это странное выражение нужно потому что в модели передается только Id
+            var del = db.Tasks.Where(t => t.Predecessor == task);
+            foreach (var item in del)
+            {
+                db.Tasks.Remove(item.Predecessor);
+            }
             DateTime dt = DateTime.Now;
             DateTime startsAt = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
             Event _event = new Event(task, startsAt, 15);
