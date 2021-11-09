@@ -74,7 +74,7 @@
                                 </ul>
                             </div>
                         </td>
-                        <td><a asp-action="AddTask" asp-controller="Task"><button>+</button></a> </td>
+                        <td><a asp-action="AddTask" asp-controller="Task"><h3><button>&#10133;</button></h3></a> </td>
                     </tr>
                 </table>
             </div>
@@ -95,32 +95,33 @@
     <div class="main_menu">
         <div class="main_menu_header">
             <div class="month">
-                Сегодня @DateTime.Now.Day @GetMonthName(DateTime.Now.Month)
+                <h3>Сегодня @DateTime.Now.Day @GetMonthName(DateTime.Now.Month)</h3>
             </div>
             <div class="create_event_button">
-                <a asp-action="Create" asp-controller="Event"><button>+</button></a>
+                <a asp-action="Create" asp-controller="Event"><h3><button>&#10133;</button></h3></a>
             </div>
         </div>
-
-        <table class="table">
-            @foreach (var item in Model.Events)
-            {
-                @if (item.StartsAt.ToString().Substring(0, 10) == DateTime.Now.ToString().Substring(0, 10))
+        <div class="main_menu_body">
+            <table class="table">
+                @foreach (var item in Model.Events)
                 {
-                    <tr>
-                        <td>@item.Name <br />| @item.StartsAt.Value.Hour:@item.StartsAt.Value.Minute  - @item.FinishesAt.Value.Hour:@item.FinishesAt.Value.Minute</td>
-                        <td>
-                            <div class="dropdown">
+                    @if (item.StartsAt.ToString().Substring(0, 10) == DateTime.Now.ToString().Substring(0, 10))
+                    {
+                        <tr>
+                            <td>@item.Name <br />| @item.StartsAt.Value.Hour:@item.StartsAt.Value.Minute  - @item.FinishesAt.Value.Hour:@item.FinishesAt.Value.Minute</td>
+                            <td>
+                                <div class="dropdown">
 
-                                <a asp-action="Edit" asp-controller="Event" asp-route-id="@item.Id"><button class="dropbtn">Изменить</button></a>
+                                    <a asp-action="Edit" asp-controller="Event" asp-route-id="@item.Id"><button class="dropbtn">Изменить</button></a>
 
-                            </div>
-                        </td>
-                    </tr>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
                 }
-
-            }
-        </table>
+            </table>
+        </div>
     </div>
 </div>
 </div>
