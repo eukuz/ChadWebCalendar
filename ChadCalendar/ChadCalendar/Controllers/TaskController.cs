@@ -100,11 +100,13 @@ namespace ChadCalendar.Controllers
                 ViewBag.TasksOfProject = getTasks(user);
                 return View(task);
             }
+            
             db.Tasks.Update(task);
             await db.SaveChangesAsync();
             return Redirect("~/");
             //return RedirectToAction("Index");
         }
+
         [HttpPost]
         public async Task<IActionResult> Delete(int? id)
         {

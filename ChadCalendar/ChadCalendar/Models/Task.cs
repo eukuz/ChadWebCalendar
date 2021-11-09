@@ -17,6 +17,8 @@ namespace ChadCalendar.Models
         public TimeSpan? TimeTakes { get; set; }
         public int? MaxPerDay { get; set; }
         public DateTime? Deadline { get; set; }
+        public int? PredecessorFK { get; set; }
+        [ForeignKey("PredecessorFK")]
         public Task? Predecessor { get; set; }
         [Required]
         public Project Project { get; set; }
@@ -32,7 +34,7 @@ namespace ChadCalendar.Models
         public Task(Event _event, Project project)
         {
             Accessed = DateTime.Now;
-            Description = this.Description;
+            Description = _event.Description;
             AllowedToDistribute = true;
             Deadline = _event.FinishesAt;
             TimeTakes = _event.FinishesAt - _event.StartsAt;
