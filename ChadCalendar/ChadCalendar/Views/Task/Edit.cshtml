@@ -64,7 +64,7 @@
             {
                 foreach (var task in ViewBag.TasksOfProject)
                 {
-                    if (task != Model.Predecessor)
+                    if (task != Model.Predecessor && task != Model)
                     {
                         <option value="@task.Id">@task.Name</option>
                     }
