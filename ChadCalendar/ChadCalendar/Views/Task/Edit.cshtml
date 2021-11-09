@@ -98,4 +98,12 @@
     </div>
     <button type="submit" class="btn btn-danger">Удалить задачу</button>
 </form>
+<form asp-controller="Task" asp-action="Mutatuion" method="post">
+    <div hidden="hidden">
+        <label asp-for="Id">Input Login</label><br />
+        <input asp-for="Id" />
+        <span asp-validation-for="Id" />
+    </div>
+    <button type="submit" class="btn btn-dark">Сделать событием</button>
+</form>
 

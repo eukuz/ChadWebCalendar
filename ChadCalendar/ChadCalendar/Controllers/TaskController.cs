@@ -92,7 +92,12 @@ namespace ChadCalendar.Controllers
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             task.Accessed = DateTime.Now;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
+            Models.Task tempTask = task.Predecessor;
             task.Predecessor = getPredecessor(task.Predecessor.Id);
+            if (task.Predecessor == null)
+            {
+                db.Tasks.Remove(tempTask);
+            }
             ViewBag.Projects = getProjects(user);
             if (!task.IsCorrect())
             {
@@ -100,6 +105,7 @@ namespace ChadCalendar.Controllers
                 ViewBag.TasksOfProject = getTasks(user);
                 return View(task);
             }
+            //task.Predecessor = new Models.Task { Name = "mkkm", TimeTakes = (new TimeSpan(500)), Accessed = DateTime.Now, Id = null };
             db.Tasks.Update(task);
             await db.SaveChangesAsync();
             return Redirect("~/");
@@ -118,6 +124,17 @@ namespace ChadCalendar.Controllers
                 }
             }
             return NotFound();
+        }
+        public async Task<IActionResult> Mutatuion(Models.Task task)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            task = await db.Tasks.FirstOrDefaultAsync(t => task.Id == t.Id);
+            Event _event = new Event(task, DateTime.Now, 15);
+            _event.User = user;
+            db.Events.Add(_event);
+            db.Tasks.Remove(task);
+            await db.SaveChangesAsync();
+            return Redirect("~/");
         }
     }
 }
