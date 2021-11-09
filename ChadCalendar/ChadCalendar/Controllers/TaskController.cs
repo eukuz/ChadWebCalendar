@@ -92,12 +92,12 @@ namespace ChadCalendar.Controllers
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             task.Accessed = DateTime.Now;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
-            Models.Task tempTask = task.Predecessor;
+            //Models.Task tempTask = task.Predecessor;
             task.Predecessor = getPredecessor(task.Predecessor.Id);
-            if (task.Predecessor == null)
-            {
-                db.Tasks.Remove(tempTask);
-            }
+            //if (task.Predecessor == null)
+            //{
+            //    db.Tasks.Remove(tempTask);
+            //}
             ViewBag.Projects = getProjects(user);
             if (!task.IsCorrect())
             {
@@ -128,8 +128,10 @@ namespace ChadCalendar.Controllers
         public async Task<IActionResult> Mutatuion(Models.Task task)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            task = await db.Tasks.FirstOrDefaultAsync(t => task.Id == t.Id);
-            Event _event = new Event(task, DateTime.Now, 15);
+            task = db.Tasks.FirstOrDefault(t => task.Id == t.Id);
+            DateTime dt = DateTime.Now;
+            DateTime startsAt = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
+            Event _event = new Event(task, startsAt, 15);
             _event.User = user;
             db.Events.Add(_event);
             db.Tasks.Remove(task);

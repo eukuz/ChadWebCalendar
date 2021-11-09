@@ -32,7 +32,7 @@ namespace ChadCalendar.Models
         public Task(Event _event, Project project)
         {
             Accessed = DateTime.Now;
-            Description = this.Description;
+            Description = _event.Description;
             AllowedToDistribute = true;
             Deadline = _event.FinishesAt;
             TimeTakes = _event.FinishesAt - _event.StartsAt;
