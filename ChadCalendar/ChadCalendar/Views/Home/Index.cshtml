@@ -79,38 +79,37 @@
                 {
                     foreach (var item in Model.Tasks)
                     {
-                <div
-                <li class="list-group-item">
-                    <div class="task_container">
-                    <form asp-controller="Task" asp-action="ChangeIsCompleted">
-                        <div hidden="hidden">
-                            <input value="@item.Id" asp-for="Id" />
-                        </div>
-                        <div hidden="hidden">
-                            <input value="@item.Project" asp-for="Id" />
-                        </div>
-                        <div class="task_checkbox">
-                        @if (item.IsCompleted == false)
-                        {
-                            <button type="submit">&#10003;</button>
-                        }
-                        else if (item.IsCompleted == true)
-                        {
-                            <button type="submit">&#8617;</button>
-                        }
-                            </div>
-                        <div class="task_name">
-                        @item.Name
-                            </div>
+                    <li class="list-group-item">
+                        <div class="task_container">
+                            <form asp-controller="Task" asp-action="ChangeIsCompleted">
+                                <div hidden="hidden">
+                                    <input value="@item.Id" asp-for="Id" />
+                                </div>
+                                <div hidden="hidden">
+                                    <input value="@item.Project" asp-for="Id" />
+                                </div>
+                                <div class="task_checkbox">
+                                @if (item.IsCompleted == false)
+                                {
+                                    <button type="submit">☑️</button>
+                                }
+                                else if (item.IsCompleted == true)
+                                {
+                                <button type="submit">🟦</button>
+                                }
+                                </div>
+                                <div class="task_name">
+                                @item.Name
+                                </div>
 
-                    </form>
-                        <div class="edit_task_btn">
-                    <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.Id">
-                        <button>&#9881;&#65039;</button>
-                    </a>
+                                </form>
+                                <div class="edit_task_btn">
+                                <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.Id">
+                                    <button>&#9881;&#65039;</button>
+                                </a>
                             </div>
-                    </div>
-                </li>
+                        </div>
+                     </li>
                     }
                 }
             </ul>
