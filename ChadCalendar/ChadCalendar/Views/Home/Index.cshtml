@@ -79,7 +79,21 @@
                 {
                     foreach (var item in Model.Tasks)
                     {
-                        <li class="list-group-item"><input type="checkbox">@item.Name <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.Id"><button>&#9881;&#65039;</button></a></li>
+                        <li class="list-group-item tasks">
+                            <div class="task_container">
+                                <div class="task_checkbox">
+                                    <input type="checkbox">
+                                </div>
+                                <div class="task_name">
+                                    @item.Name
+                                </div>
+                                <div class="edit_task_btn">
+                                    <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.Id">
+                                        &#9881;&#65039;
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
                     }
                 }
             </ul>
