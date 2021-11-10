@@ -1,31 +1,31 @@
 ﻿@{
     ViewData["Title"] = "Изменение события";
 }
-@model ChadCalendar.Models.Event
+@model ChadCalendar.ViewModels.EditEventViewModel
 
 <form action="/event/edit" method="post">
     <div hidden="hidden">
-        <label asp-for="Id">Input Login</label><br />
-        <input asp-for="Id" />
-        <span asp-validation-for="Id" />
+        <label asp-for="_event.Id">Input Login</label><br />
+        <input asp-for="_event.Id" />
+        <span asp-validation-for="_event.Id" />
     </div>
     <div hidden="hidden">
-        <label asp-for="Accessed">Input Accessed</label><br />
-        <input asp-for="Accessed" />
-        <span asp-validation-for="Accessed" />
+        <label asp-for="_event.Accessed">Input Accessed</label><br />
+        <input asp-for="_event.Accessed" />
+        <span asp-validation-for="_event.Accessed" />
     </div>
     <div class="form-group">
         <label>Название события</label>
-        <input type="text" placeholder="" asp-for="Name">
-        <span asp-validation-for="Name"></span>
+        <input type="text" placeholder="" asp-for="_event.Name">
+        <span asp-validation-for="_event.Name"></span>
     </div>
     <div class="form-group">
         <label>Описание</label>
-        <textarea type="text" placeholder="" asp-for="Description"></textarea>
+        <textarea type="text" placeholder="" asp-for="_event.Description"></textarea>
     </div>
     <div class="form-group">
         <label>Частота</label>
-        <select asp-for="Frequency">
+        <select asp-for="_event.Frequency">
             <option>Никогда</option>
             <option>Каждый день</option>
             <option>Каждую неделю</option>
@@ -34,17 +34,17 @@
     </div>
     <div class="form-group">
         <label>Начинается</label>
-        <input type="datetime-local" asp-for="StartsAt" />
-        <span asp-validation-for="StartsAt"></span>
+        <input type="datetime-local" asp-for="_event.StartsAt" />
+        <span asp-validation-for="_event.StartsAt"></span>
     </div>
     <div class="form-group">
         <label>Заканчивается</label>
-        <input type="datetime-local" asp-for="FinishesAt" />
-        <span asp-validation-for="FinishesAt"></span>
+        <input type="datetime-local" asp-for="_event.FinishesAt" />
+        <span asp-validation-for="_event.FinishesAt"></span>
     </div>
     <div class="form-group">
         <label>Напомнить за</label>
-        <input type="number" asp-for="RemindNMinutesBefore" min="0">
+        <input type="number" asp-for="_event.RemindNMinutesBefore" min="0">
         <label>минут</label>
     </div>
     <div class="form-group">
@@ -59,17 +59,27 @@
 
 <form asp-controller="Event" asp-action="Delete">
     <div hidden="hidden">
-        <label asp-for="Id">Input Login</label><br />
-        <input asp-for="Id" />
-        <span asp-validation-for="Id" />
+        <label asp-for="_event.Id">Input Login</label><br />
+        <input asp-for="_event.Id" />
+        <span asp-validation-for="_event.Id" />
     </div>
     <button type="submit" class="btn btn-danger">Удалить событие</button>
 </form>
-<form asp-controller="Event" asp-action="Mutatuion" method="post">
-    <div hidden="hidden">
-        <label asp-for="Id">Input Login</label><br />
-        <input asp-for="Id" />
-        <span asp-validation-for="Id" />
+
+    <div>
+        <div class="btn btn-dark">
+            <a class="dropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                Сделать задачей в проекте
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                @foreach (var proj in ViewBag.Projects)
+                {
+                <form asp-controller="Event" asp-action="Mutatuion" method="post">
+                    <input hidden="hidden" asp-for="_event.Id" />
+                    <input hidden="hidden" asp-for="projectIDforMutation" type="number" value="@proj.Id" id="projectID">
+                    <button class ="btn btn-primary" type="submit" value="@proj.Id">@proj.Name</button>
+                </form>
+                }
+                </div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-dark">Сделать задачей</button>
-</form>

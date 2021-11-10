@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using ChadCalendar.ViewModels;
 
 namespace ChadCalendar.Controllers
 {
@@ -57,12 +58,13 @@ namespace ChadCalendar.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Projects = db.Projects.Where(p => p.User.Login == User.Identity.Name);
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             if (id != null)
             {
                 Event _event = await db.Events.FirstOrDefaultAsync(p => p.Id == id);
                 if (_event != null && _event.User == user)
-                    return View(_event);
+                    return View(new EditEventViewModel { _event= _event, projectIDforMutation = -1 });
             }
             return NotFound();
         }
@@ -76,7 +78,7 @@ namespace ChadCalendar.Controllers
             if (!_event.IsCorrect())
             {
                 ViewBag.Error = true;
-                return View(_event);
+                return View(new EditEventViewModel { _event = _event, projectIDforMutation = -1 });
             }
             db.Events.Update(_event);
             await db.SaveChangesAsync();
@@ -113,11 +115,11 @@ namespace ChadCalendar.Controllers
             }
             return NotFound();
         }
-        public async Task<IActionResult> Mutatuion(Models.Event _event)
+        public async Task<IActionResult> Mutatuion(Models.Event _event, int projectIDforMutation)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             _event = await db.Events.FirstOrDefaultAsync(t => _event.Id == t.Id);
-            Models.Task task = new Models.Task(_event, null);
+            Models.Task task = new Models.Task(_event, db.Projects.FirstOrDefault(p=> p.Id == projectIDforMutation));
             task.User = user;
             db.Tasks.Add(task);
             db.Events.Remove(_event);
