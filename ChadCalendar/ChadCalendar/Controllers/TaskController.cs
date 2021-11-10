@@ -112,6 +112,14 @@ namespace ChadCalendar.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> ChangeIsCompleted(int? id)
+        {
+            Models.Task task = db.Tasks.Include(t => t.Project).FirstOrDefault(t => t.Id == id);
+            task.IsCompleted = !task.IsCompleted;
+            db.Tasks.FirstOrDefault(t => t.Id == id);
+            db.SaveChanges();
+            return Redirect($"~/Home/Index/{task.Project.Id}");
+        }
         public async Task<IActionResult> Delete(int? id)
         {
             if (id != null)
@@ -119,11 +127,6 @@ namespace ChadCalendar.Controllers
                 Models.Task task = await db.Tasks.FirstOrDefaultAsync(p => p.Id == id);
                 if (task != null)
                 {
-                    var del = db.Tasks.Where(t => t.Predecessor == task);
-                    foreach (var item in del)
-                    {
-                        db.Tasks.Remove(item.Predecessor);
-                    }
                     db.Tasks.Remove(task);
                     await db.SaveChangesAsync();
                     return Redirect("~/");

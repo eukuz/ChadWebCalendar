@@ -85,12 +85,28 @@
                 {
                     foreach (var item in Model.Tasks)
                     {
-                        <form asp-controller="Task" asp-action="Delete">
-                            <div hidden="hidden">
-                                <input value="@item.Id" asp-for="Id"/>
-                            </div>
-                            <li class="list-group-item"><button type="submit">&#10003;</button>@item.Name <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.Id"><button>&#9881;&#65039;</button></a></li>
-                        </form>
+                <li class="list-group-item">
+                    <form asp-controller="Task" asp-action="ChangeIsCompleted">
+                        <div hidden="hidden">
+                            <input value="@item.Id" asp-for="Id" />
+                        </div>
+                        <div hidden="hidden">
+                            <input value="@item.Project" asp-for="Id" />
+                        </div>
+                        @if (item.IsCompleted == false)
+                        {
+                            <button type="submit">&#10003;</button>
+                        }
+                        else if (item.IsCompleted == true)
+                        {
+                            <button type="submit">&#8617;</button>
+                        }
+                        @item.Name
+                        <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.Id">
+                            <button>&#9881;&#65039;</button>
+                        </a>
+                    </form>
+                </li>
                     }
                 }
             </ul>
