@@ -89,17 +89,17 @@
                                     <input value="@item.Project" asp-for="Id" />
                                 </div>
                                 <div class="task_checkbox">
-                                    @if (item.IsCompleted == false)
+                                    @if (item.IsCompleted == true)
                                     {
                                         <button type="submit">☑️</button>
                                     }
-                                    else if (item.IsCompleted == true)
+                                    else if (item.IsCompleted == false)
                                     {
                                         <button type="submit">🟦</button>
                                     }
                                 </div>
                                 <div class="task_name">
-                                    @if (item.IsCompleted == true)
+                                    @if (item.IsCompleted == false)
                                     {
                                         @item.Name
                                     }
