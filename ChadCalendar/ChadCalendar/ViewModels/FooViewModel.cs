@@ -12,6 +12,6 @@ namespace ChadCalendar.ViewModels
         public IEnumerable<Models.Project> Projects { get; set; }
         public string SelectProjectName { get; set; } = "Проект не выбран";
         public int? SelectProjectId { get; set; }
-
+        public int? Id { get; set; } // не трогайте поле без надобности, используется в Home - Index для передачи Id при завершении задачи
     }
 }

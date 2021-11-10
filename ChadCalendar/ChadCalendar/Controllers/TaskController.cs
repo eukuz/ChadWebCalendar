@@ -56,7 +56,7 @@ namespace ChadCalendar.Controllers
             task.Predecessor = getPredecessor(task.Predecessor.Id);
             task.Accessed = DateTime.Now;
             task.NRepetitions = 1;
-            task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
+            task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id); // это странное выражение нужно потому что в модели передается только Id
             if (!task.IsCorrect())
             {
                 ViewBag.Error = true;
@@ -91,7 +91,7 @@ namespace ChadCalendar.Controllers
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
             task.Accessed = DateTime.Now;
-            task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
+            task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id); // это странное выражение нужно потому что в модели передается только Id
             //Models.Task tempTask = task.Predecessor;
             task.Predecessor = getPredecessor(task.Predecessor.Id);
             //if (task.Predecessor == null)
@@ -119,6 +119,11 @@ namespace ChadCalendar.Controllers
                 Models.Task task = await db.Tasks.FirstOrDefaultAsync(p => p.Id == id);
                 if (task != null)
                 {
+                    var del = db.Tasks.Where(t => t.Predecessor == task);
+                    foreach (var item in del)
+                    {
+                        db.Tasks.Remove(item.Predecessor);
+                    }
                     db.Tasks.Remove(task);
                     await db.SaveChangesAsync();
                     return Redirect("~/");
