@@ -57,14 +57,8 @@
                             <div class="dropdown">
                                 @if (Model.SelectProjectId != null)
                                 {
-                                    <a type="button" class="btn btn-secondary" style="color: white" asp-action="Edit" asp-controller="Project" asp-route-id="@Model.SelectProjectId">
+                                    <a type="button" class="btn btn-secondary projectNameBtn" style="color: white" asp-action="Edit" asp-controller="Project" asp-route-id="@Model.SelectProjectId">
                                         @Model.SelectProjectName
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a class="btn btn-secondary" style="color: white">
-                                        Выберите проект
                                     </a>
                                 }
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -85,7 +79,9 @@
                 {
                     foreach (var item in Model.Tasks)
                     {
+                <div
                 <li class="list-group-item">
+                    <div class="task_container">
                     <form asp-controller="Task" asp-action="ChangeIsCompleted">
                         <div hidden="hidden">
                             <input value="@item.Id" asp-for="Id" />
@@ -93,6 +89,7 @@
                         <div hidden="hidden">
                             <input value="@item.Project" asp-for="Id" />
                         </div>
+                        <div class="task_checkbox">
                         @if (item.IsCompleted == false)
                         {
                             <button type="submit">&#10003;</button>
@@ -101,11 +98,18 @@
                         {
                             <button type="submit">&#8617;</button>
                         }
+                            </div>
+                        <div class="task_name">
                         @item.Name
+                            </div>
+
                     </form>
+                        <div class="edit_task_btn">
                     <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.Id">
                         <button>&#9881;&#65039;</button>
                     </a>
+                            </div>
+                    </div>
                 </li>
                     }
                 }

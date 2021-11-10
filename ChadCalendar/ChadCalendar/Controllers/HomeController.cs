@@ -26,22 +26,26 @@ namespace ChadCalendar.Controllers
         public IActionResult Index(int? id)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+            Project firstProject = db.Projects.FirstOrDefault(p => p.User.Login == User.Identity.Name);
             Project project = db.Projects.FirstOrDefault(p => p.Id == id);
             var model = new FooViewModel();
-            if (id.HasValue)
+            if (firstProject != null && project == null)
+            {
+                id = firstProject.Id;
+                model.Tasks = db.Tasks.Where(t => t.Project.Id == id).ToList();
+                model.SelectProjectId = id;
+                model.SelectProjectName = firstProject.Name;
+                id = null;
+            }
+            if (project != null)
             {
                 model.Tasks = db.Tasks.Where(t => t.Project.Id == id).ToList();
                 model.SelectProjectId = id;
                 model.SelectProjectName = project.Name;
             }
-            else
-            {
-                model.Tasks = db.Tasks.Where(t => t.User == user).ToList();
-            }
-
             model.Events = db.Events.Where(e => e.User == user).ToList();
             model.Projects = db.Projects.Where(p => p.User == user).ToList();
-            
+
             return View(model);
         }
 

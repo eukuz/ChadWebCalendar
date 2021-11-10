@@ -223,11 +223,40 @@ body {
 .task_height{
     height: 100vh;
 }
-.main_menu_header{
-    border-bottom: 1px solid lightgray;
+
+.projectNameBtn {
+    max-width: 100%;
+    word-wrap: break-word;
 }
-.main_menu_body {
-    max-height: 74vh;
-    overflow-x: hidden;
-    overflow-y: auto;
+
+.task_container {
+    display: flex;
+}
+
+.task_checkbox {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+    zoom: 1.2;
+}
+
+.edit_task_btn {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+}
+
+.edit_task_btn a {
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+.task_name {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 160px;
+    word-wrap: break-word;
+    text-align: center;
 }
