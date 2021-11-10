@@ -102,10 +102,10 @@
                             <button type="submit">&#8617;</button>
                         }
                         @item.Name
-                        <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.Id">
-                            <button>&#9881;&#65039;</button>
-                        </a>
                     </form>
+                    <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.Id">
+                        <button>&#9881;&#65039;</button>
+                    </a>
                 </li>
                     }
                 }
