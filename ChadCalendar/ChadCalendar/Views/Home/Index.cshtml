@@ -89,17 +89,23 @@
                                     <input value="@item.Project" asp-for="Id" />
                                 </div>
                                 <div class="task_checkbox">
-                                @if (item.IsCompleted == false)
-                                {
-                                    <button type="submit">☑️</button>
-                                }
-                                else if (item.IsCompleted == true)
-                                {
-                                <button type="submit">🟦</button>
-                                }
+                                    @if (item.IsCompleted == false)
+                                    {
+                                        <button type="submit">☑️</button>
+                                    }
+                                    else if (item.IsCompleted == true)
+                                    {
+                                        <button type="submit">🟦</button>
+                                    }
                                 </div>
                                 <div class="task_name">
-                                @item.Name
+                                    @if (item.IsCompleted == true)
+                                    {
+                                        @item.Name
+                                    }
+                                    else {
+                                        <s>@item.Name</s>
+                                    }
                                 </div>
 
                                 </form>
@@ -134,7 +140,7 @@
                         <tr>
                             <td>@item.Name <br />| @item.StartsAt.Value.Hour:@item.StartsAt.Value.Minute  - @item.FinishesAt.Value.Hour:@item.FinishesAt.Value.Minute</td>
                             <td>
-                                <div class="dropdown">
+                                <div class="dropdown event_edit_btn">
 
                                     <a asp-action="Edit" asp-controller="Event" asp-route-id="@item.Id"><button class="dropbtn">Изменить</button></a>
 

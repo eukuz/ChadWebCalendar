@@ -104,7 +104,7 @@ body {
     display: flex;
     flex-direction: column;
     border: 1px solid lightgray;
-    width: 250px;
+    width: 300px;
 }
 .panel {
 }
@@ -155,6 +155,10 @@ body {
     display: inline-block;
 }
 
+.dropdown a {
+    width: 100%;
+}
+
 .dropdown-content {
     display: none;
     position: absolute;
@@ -185,8 +189,8 @@ body {
 /**/
 .main_menu {
     border: 1px solid lightgray;
-    max-width: 660px;
-    min-width: 660px;
+    max-width: 600px;
+    min-width: 600px;
     height: 80vh;
 }
 .table td{
@@ -254,9 +258,13 @@ body {
 }
 
 .task_name {
-    margin-left: 20px;
+    margin-left: 55px;
     margin-right: 20px;
-    width: 160px;
+    width: 150px;
     word-wrap: break-word;
     text-align: center;
+}
+
+.event_edit_btn {
+    left: 75%;
 }
