@@ -52,6 +52,7 @@ namespace BlazorChadCalendar
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<Data.Services.TaskService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
