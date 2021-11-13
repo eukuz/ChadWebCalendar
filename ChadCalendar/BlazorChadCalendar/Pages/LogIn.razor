@@ -44,16 +44,15 @@
             }
 
         }
-    }
 
-    private async System.Threading.Tasks.Task Authenticate(string login)
+    }
+    @*private async System.Threading.Tasks.Task Authenticate(string login)
     {
         var claims = new List<Claim>
-
                 new Claim(ClaimsIdentity.DefaultNameClaimType, login)
             };
         ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
         //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
-    }
+    }*@
 
 }
