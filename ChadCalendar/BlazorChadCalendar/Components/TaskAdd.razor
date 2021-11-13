@@ -1,5 +1,5 @@
 ﻿@using BlazorChadCalendar.Data.Services 
-@inject TaskService taskService
+@inject TaskService taskServiceStatic
 
 <div class="form-group">
     <label>Название задачи</label>
@@ -35,9 +35,9 @@
     <label>После какой задачи расположить</label>
     <select asp-for="Predecessor.Id">
         <option value="@null">После любой</option>
-        @if (ViewBag.TasksOfProject != null)
+        @if (userProjects != null)
         {
-            foreach (var task in ViewBag.TasksOfProject)
+            foreach (var task in userProjects)
             {
                 <option value="@task.Id">@task.Name</option>
             }
@@ -69,9 +69,10 @@
 
 
 @code {
+    Data.Services.TaskService taskService = new Data.Services.TaskService();
     Data.Task task = new Data.Task();
     DateTime tempDT;
-    List<Data.Project> userProjects = taskService.GetTasks(new Data.User());
+    List<Data.Project> userProjects;
     bool isValidationError = false;
     void addTask()
     {
@@ -79,5 +80,6 @@
         {
             task.TimeTakes = tempDT.TimeOfDay;
         }
+        //userProjects = (List<Data.Project>)taskService.GetProjects(new Data.User()); - вот эту поебень надо засунуть в OnInitialization (хз как правильно посмотреть в фетчдата)
     }
 }
