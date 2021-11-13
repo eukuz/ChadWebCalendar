@@ -1,0 +1,16 @@
+﻿@using BlazorChadCalendar.Data
+@inject TaskService taskService
+@foreach (var task in taskService.GetTasks())
+{
+    <h3>@task.Name</h3>
+    <h2>@task.Id</h2>
+}
+<input placeholder="Something todo" @bind="name"/>
+<button @onclick="addTask">Add task</button>
+@code {
+    string name;
+    private void addTask()
+    {
+        taskService.AddTask(new Data.Task { Name = name });
+    }
+}

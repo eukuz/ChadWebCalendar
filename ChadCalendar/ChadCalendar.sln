@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChadCalendar", "ChadCalendar\ChadCalendar.csproj", "{EE9E9119-24EC-4A31-8B22-A4D0111006D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorChadCalendar", "BlazorChadCalendar\BlazorChadCalendar.csproj", "{B9F9E921-26CF-49D4-BD7A-165E059DA4FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorChadCalendar", "BlazorChadCalendar\BlazorChadCalendar.csproj", "{B9F9E921-26CF-49D4-BD7A-165E059DA4FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
