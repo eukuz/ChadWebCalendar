@@ -1,0 +1,59 @@
+﻿@using BlazorChadCalendar.Data;
+@using Microsoft.EntityFrameworkCore;
+@using System.Security.Claims;
+@using Microsoft.AspNetCore.Authentication;
+@using Microsoft.AspNetCore.Authentication.Cookies;
+@using Microsoft.AspNetCore.Authorization;
+
+
+@page "/login"
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/login.css" />
+</head>
+
+<h2 style="color: white; text-align:center; padding-top: 10%">Войдите в аккаунт</h2>
+
+<input type="text" class="form-control" placeholder="Логин" @bind="Login">
+<input type="password" class="form-control" placeholder="Пароль" @bind="Password">
+<button value="Логин" class="btn btn-light" @onclick="Auth" />
+
+
+
+
+<a class="btn btn-light">Регистрация</a>
+
+
+@code {
+    private string Login;
+    private string Password;
+
+    private void Auth()
+    {
+
+        using (ApplicationContext db = new ApplicationContext())
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == Login && u.Password == Password);
+            if (user != null)
+            {
+                //await Authenticate(Login);
+
+                //}
+            }
+
+        }
+    }
+
+    private async System.Threading.Tasks.Task Authenticate(string login)
+    {
+        var claims = new List<Claim>
+
+                new Claim(ClaimsIdentity.DefaultNameClaimType, login)
+            };
+        ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+        //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+    }
+
+}
