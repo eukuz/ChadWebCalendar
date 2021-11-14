@@ -59,12 +59,14 @@
 
 @code {
     Data.Task task = new Data.Task();
+    Data.User user;
     DateTime tempDT;
     IEnumerable<Data.Project> userProjects;
     bool isValidationError = false;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        userProjects = taskService.GetProjects(new Data.User());
+        user = taskService.GetUser();
+        userProjects = taskService.GetProjects(user);
         task.Project = new Data.Project();
     }
     void addTask()

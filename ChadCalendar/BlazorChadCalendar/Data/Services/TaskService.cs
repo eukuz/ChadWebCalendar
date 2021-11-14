@@ -35,7 +35,7 @@ namespace BlazorChadCalendar.Data.Services
             task.Accessed = DateTime.Now;
             task.NRepetitions = 1;
             task.Predecessor = GetPredecessor(91);
-            task.Project = db.Projects.FirstOrDefault(p => p.Id == 20/*task.Project.Id*/); // это странное выражение нужно потому что в модели передается только Id
+            task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id); // это странное выражение нужно потому что в модели передается только Id
             db.Add(task);
             db.SaveChanges();
         }
