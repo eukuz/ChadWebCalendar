@@ -57,7 +57,7 @@ namespace BlazorChadCalendar.Data.Services
 }
 
 
-//34 строчка в TaskAdd (вырезано т.к дает ошибку)
+//34 строчка в TaskAdd and TaskEdit (вырезано т.к дает ошибку)
 //< div class= "form-group" >
  
 //     < label > После какой задачи расположить</label>

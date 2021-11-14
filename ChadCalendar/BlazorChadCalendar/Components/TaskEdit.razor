@@ -1,6 +1,6 @@
 ﻿@using BlazorChadCalendar.Data.Services
 @inject TaskService taskService
-
+@inject NavigationManager NavigationManager
 <div class="form-group">
     <label>Название задачи</label>
     <input type="text" placeholder="" @bind="task.Name">
@@ -81,5 +81,6 @@
         }
         taskService.Edit(task);
         OnInitializedAsync();
+        NavigationManager.NavigateTo("/");
     }
 }
