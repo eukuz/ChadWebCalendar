@@ -1,15 +1,13 @@
-﻿@using BlazorChadCalendar.Data.Services 
-@inject TaskService taskServiceStatic
+﻿@using BlazorChadCalendar.Data.Services
+@inject TaskService taskService
 
 <div class="form-group">
     <label>Название задачи</label>
     <input type="text" placeholder="" @bind="task.Name">
-    <span asp-validation-for="Name"></span>
 </div>
 <div class="form-group">
     <label>Время на задачу</label>
     <input type="time" @bind="tempDT" min="0">
-    <span asp-validation-for="task.TimeTakes"></span>
 </div>
 <div class="form-group">
     <label>Описание</label>
@@ -21,13 +19,16 @@
 </div>
 <div class="form-group">
     <label>Выберите проект для задачи</label>
-    <select @bind="task.Project">
-        @foreach (var proj in userProjects)
-        {
-            <option value="@proj">@proj.Name</option>
-        }
-    </select>
-</div>
+    @if (userProjects != null)
+    {
+        <select @bind="task.Project.Id">
+            @foreach (var proj in userProjects)
+            {
+                <option value="@proj.Id">@proj.Name</option>
+            } 
+        </select>
+    }
+    </div>
 <div class="form-group">
     <input type="checkbox" @bind="task.AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
 </div>
@@ -52,19 +53,19 @@
         <label>Проверьте правильность заполнения полей</label>
     }
 </div>
-<button type="submit" class="btn btn-primary">Готово</button>
+<button @onclick="addTask" class="btn btn-primary">Готово</button>
 
 
 
 @code {
-    Data.Services.TaskService taskService = new Data.Services.TaskService();
     Data.Task task = new Data.Task();
     DateTime tempDT;
-    List<Data.Project> userProjects;
+    IEnumerable<Data.Project> userProjects;
     bool isValidationError = false;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        userProjects = (List<Data.Project>) taskService.GetProjects(new Data.User());
+        userProjects = taskService.GetProjects(new Data.User());
+        task.Project = new Data.Project();
     }
     void addTask()
     {
@@ -72,5 +73,8 @@
         {
             task.TimeTakes = tempDT.TimeOfDay;
         }
+        taskService.AddTask(task);
+        task = new Data.Task();
+        OnInitializedAsync();
     }
 }

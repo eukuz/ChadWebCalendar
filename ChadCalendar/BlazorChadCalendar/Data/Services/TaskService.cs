@@ -23,6 +23,18 @@ namespace BlazorChadCalendar.Data.Services
             else
                 return null;
         }
+        public void AddTask(Data.Task task)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+            task.User = user;
+            //task.Predecessor = getPredecessor(task.Predecessor.Id);
+            task.Accessed = DateTime.Now;
+            task.NRepetitions = 1;
+            task.Predecessor = GetPredecessor(91);
+            task.Project = db.Projects.FirstOrDefault(p => p.Id == 20/*task.Project.Id*/); // это странное выражение нужно потому что в модели передается только Id
+            db.Add(task);
+            db.SaveChanges();
+        }
     }
 }
 
