@@ -23,6 +23,10 @@ namespace BlazorChadCalendar.Data.Services
             else
                 return null;
         }
+        public Data.User GetUser()
+        {
+            return db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+        }
         public void AddTask(Data.Task task)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
