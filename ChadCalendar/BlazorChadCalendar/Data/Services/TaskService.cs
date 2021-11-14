@@ -12,6 +12,10 @@ namespace BlazorChadCalendar.Data.Services
         {
             return db.Projects.Where(proj => proj.User == user);
         }
+        public Data.Task GetTask(int? id)
+        {
+            return db.Tasks.FirstOrDefault(t => t.Id == id);
+        }
         public IEnumerable<Data.Task> GetTasks(User user)
         {
             return db.Tasks.Where(task => task.User == user);
@@ -38,6 +42,16 @@ namespace BlazorChadCalendar.Data.Services
             task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id); // это странное выражение нужно потому что в модели передается только Id
             db.Add(task);
             db.SaveChanges();
+        }
+        public async void Edit(Data.Task task)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+            task.Accessed = DateTime.Now;
+            task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id); // это странное выражение нужно потому что в модели передается только Id
+            //Models.Task tempTask = task.Predecessor;
+            task.Predecessor = GetPredecessor(91/*task.Predecessor.Id*/);
+            db.Tasks.Update(task);
+            await db.SaveChangesAsync();
         }
     }
 }

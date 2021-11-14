@@ -1,5 +1,85 @@
-﻿<h3>TaskEdit</h3>
+﻿@using BlazorChadCalendar.Data.Services
+@inject TaskService taskService
+
+<div class="form-group">
+    <label>Название задачи</label>
+    <input type="text" placeholder="" @bind="task.Name">
+</div>
+<div class="form-group">
+    <label>Время на задачу</label>
+    <input type="text" @bind="tempDT" min="0">
+</div>
+<div class="form-group">
+    <label>Описание</label>
+    <textarea class="form-control" type="text" placeholder="" @bind="task.Description"></textarea>
+</div>
+<div class="form-group">
+    <label>Дедлайн</label>
+    <input type="datetime-local" @bind="task.Deadline" />
+</div>
+<div class="form-group">
+    <label>Выберите проект для задачи</label>
+    @if (userProjects != null)
+    {
+        <select @bind="task.Project.Id">
+            @foreach (var proj in userProjects)
+            {
+                <option value="@proj.Id">@proj.Name</option>
+            }
+        </select>
+    }
+</div>
+<div class="form-group">
+    <input type="checkbox" @bind="task.AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
+</div>
+
+<div class="form-group">
+    <label>Максимум в день</label>
+    <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
+</div>
+<div class="form-group">
+    <label>Частота</label>
+    <select @bind="task.Frequency">
+        <option disabled>Частота</option>
+        <option>Никогда</option>
+        <option>Каждый день</option>
+        <option>Каждую неделю</option>
+        <option>Каждый месяц</option>
+    </select>
+</div>
+<div class="form-group">
+    @if (isValidationError)
+    {
+        <label>Проверьте правильность заполнения полей</label>
+    }
+</div>
+<button @onclick="updateTask" class="btn btn-primary">Готово</button>
+
+
 
 @code {
-
+    [Parameter]
+    public int taskId { get; set; }
+    Data.Task task;
+    Data.User user;
+    TimeSpan? tempDT;
+    IEnumerable<Data.Project> userProjects;
+    bool isValidationError = false;
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        task = taskService.GetTask(taskId);
+        tempDT = task.TimeTakes;
+        user = taskService.GetUser();
+        userProjects = taskService.GetProjects(user);
+        task.Project = new Data.Project();
+    }
+    void updateTask()
+    {
+        if (tempDT != null)
+        {
+            task.TimeTakes = tempDT;
+        }
+        taskService.Edit(task);
+        OnInitializedAsync();
+    }
 }
