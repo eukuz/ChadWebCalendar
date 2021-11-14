@@ -29,21 +29,9 @@
     </select>
 </div>
 <div class="form-group">
-    <input type="checkbox" asp-for="AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
+    <input type="checkbox" @bind="task.AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
 </div>
-<div class="form-group">
-    <label>После какой задачи расположить</label>
-    <select asp-for="Predecessor.Id">
-        <option value="@null">После любой</option>
-        @if (userProjects != null)
-        {
-            foreach (var task in userProjects)
-            {
-                <option value="@task.Id">@task.Name</option>
-            }
-        }
-    </select>
-</div>
+
 <div class="form-group">
     <label>Максимум в день</label>
     <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
@@ -74,12 +62,15 @@
     DateTime tempDT;
     List<Data.Project> userProjects;
     bool isValidationError = false;
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        userProjects = (List<Data.Project>) taskService.GetProjects(new Data.User());
+    }
     void addTask()
     {
         if (tempDT != null)
         {
             task.TimeTakes = tempDT.TimeOfDay;
         }
-        //userProjects = (List<Data.Project>)taskService.GetProjects(new Data.User()); - вот эту поебень надо засунуть в OnInitialization (хз как правильно посмотреть в фетчдата)
     }
 }

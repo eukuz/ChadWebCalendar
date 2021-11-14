@@ -25,3 +25,20 @@ namespace BlazorChadCalendar.Data.Services
         }
     }
 }
+
+
+//34 строчка в TaskAdd (вырезано т.к дает ошибку)
+//< div class= "form-group" >
+ 
+//     < label > После какой задачи расположить</label>
+//    <select @bind="task.Predecessor.Id">
+//        <option value="@null">После любой</option>
+//        @if (userProjects != null)
+//        {
+//    foreach (var task in userProjects)
+//    {
+//                < option value = "@task.Id" > @task.Name </ option >
+//            }
+//}
+//    </ select >
+//</ div >
