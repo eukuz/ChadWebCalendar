@@ -1,26 +1,16 @@
 ﻿@page "/counter"
-@*@attribute [Authorize]*@
-@inject AuthenticationStateProvider Provider
+
 <h1>Counter</h1>
 
-<p>Current count: @currentCount </p>
+<p>Current count: @currentCount</p>
 
-<span>@userName</span>
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 @code {
     private int currentCount = 0;
-    private string userName = "Anon";
 
     private void IncrementCount()
     {
         currentCount++;
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var state = await Provider.GetAuthenticationStateAsync();
-        userName = state?.User?.Identity?.Name ?? "Sorry";
-
     }
 }
