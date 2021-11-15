@@ -15,7 +15,7 @@
 </div>
 <div class="form-group">
     <label>Дедлайн</label>
-    <input type="datetime-local" @bind="task.Deadline" />
+    <input type="datetime-local" @bind-value="task.Deadline" />
 </div>
 <div class="form-group">
     <label>Выберите проект для задачи</label>
@@ -36,53 +36,70 @@
 <div class="form-group">
     <input type="checkbox" @bind="task.AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
 </div>
-
-<div class="form-group">
-    <label>Максимум в день</label>
-    <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
-</div>
-<div class="form-group">
-    <label>Частота</label>
-    <select @bind="task.Frequency">
-        <option disabled>Частота</option>
-        <option>Никогда</option>
-        <option>Каждый день</option>
-        <option>Каждую неделю</option>
-        <option>Каждый месяц</option>
-    </select>
-</div>
-<div class="form-group">
-    @if (isValidationError)
-    {
-        <label>Проверьте правильность заполнения полей</label>
-    }
-</div>
-<button @onclick="addTask" class="btn btn-primary">Готово</button>
-
-
-
-@code {
-    int projectId = 0;
-    Data.Task task = new Data.Task();
-    Data.User user;
-    TimeSpan? tempDT;
-    IEnumerable<Data.Project> userProjects;
-    bool isValidationError = false;
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
-    {
-        tempDT = TimeSpan.Parse("00:00:00"); // инициализация для здравого показа
-        user = taskService.GetUser();
-        userProjects = taskService.GetProjects(user);
-    }
-    void addTask()
-    {
-        if (tempDT != null)
+<div class= "form-group" >
+    <label> После какой задачи расположить</label>
+    <select @bind="predecessorIdstr">
+        <option value="После любой">После любой</option>
+        @if (userTasks != null)
         {
-            task.TimeTakes = tempDT;
+            foreach (var task in userTasks)
+            {
+                <option value="@task.Id.ToString()" > @task.Name </option>
+            }
         }
-        taskService.AddTask(task, projectId);
-        task = new Data.Task();
-        OnInitializedAsync();
-        NavigationManager.NavigateTo("/");
+    </select>
+    </div >
+    <div class="form-group">
+        <label>Максимум в день</label>
+        <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
+    </div>
+    <div class="form-group">
+        <label>Частота</label>
+        <select @bind="task.Frequency">
+            <option disabled>Частота</option>
+            <option>Никогда</option>
+            <option>Каждый день</option>
+            <option>Каждую неделю</option>
+            <option>Каждый месяц</option>
+        </select>
+    </div>
+    <div class="form-group">
+        @if (isValidationError)
+        {
+            <label>Проверьте правильность заполнения полей</label>
+        }
+    </div>
+    <button @onclick="addTask" class="btn btn-primary">Готово</button>
+
+
+
+    @code {
+        string predecessorIdstr = "После любой";
+        int projectId = 0;
+        Data.Task task = new Data.Task();
+        Data.User user;
+        TimeSpan? tempDT;
+        IEnumerable<Data.Project> userProjects;
+        IEnumerable<Data.Task> userTasks;
+        bool isValidationError = false;
+        protected override async System.Threading.Tasks.Task OnInitializedAsync()
+        {
+            tempDT = TimeSpan.Parse("00:00:00"); // инициализация для здравого показа
+            user = taskService.GetUser();
+            userTasks = taskService.GetTasks(user);
+            userProjects = taskService.GetProjects(user);
+        }
+        void addTask()
+        {
+            if (tempDT != null)
+            {
+                task.TimeTakes = tempDT;
+            }
+            if (predecessorIdstr != "После любой")
+                task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
+            taskService.AddTask(task, projectId);
+            task = new Data.Task();
+            OnInitializedAsync();
+            NavigationManager.NavigateTo("/");
+        }
     }
-}
