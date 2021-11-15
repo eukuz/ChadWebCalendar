@@ -24,7 +24,7 @@
 
     private string Login;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async System.Threading.Tasks.Task OnAfterRenderAsync(bool firstRender)
     {
         var authState = await AuthState.GetAuthenticationStateAsync();
         Login = authState.User.Identity.Name;

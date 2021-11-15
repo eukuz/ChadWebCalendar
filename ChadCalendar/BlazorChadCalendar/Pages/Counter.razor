@@ -17,7 +17,7 @@
         currentCount++;
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         var state = await Provider.GetAuthenticationStateAsync();
         userName = state?.User?.Identity?.Name ?? "Sorry";
