@@ -1,0 +1,63 @@
+﻿@using BlazorChadCalendar.Data.Services
+@inject ProjectService projectService
+@inject NavigationManager NavigationManager
+
+<form asp-action="create" asp-controller="Project">
+<div class="validation" asp-validation-summary="ModelOnly"></div>
+<div class="form-group">
+    <label asp-for="Name">Название</label>
+    <input type="text" placeholder="" @bind="project.Name">
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Description">Описание</label>
+    <textarea class="form-control" type="text" placeholder="" @bind="project.Description"></textarea>
+</div>
+<div class="form-group">
+    <label asp-for="NRepetitions" class="control-label">Количество повторений в неделю</label>
+    <input class="form-control" type="number" asp-for="NRepetitions" min="0" @bind="project.NRepetitions">
+    <span asp-validation-for="NRepetitions" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label>Частота</label>
+    <select @bind="project.Frequency" class="form-select" aria-label="Default select example">
+        <option selected>никогда</option>
+        <option>день</option>
+        <option>неделю</option>
+        <option>месяц</option>
+    </select>
+</div>
+<div class="form-group">
+    <label>Введите время дедлайна</label>
+    <input type="datetime-local" @bind="project.Deadline" />
+</div>
+<div class="form-group">
+    <label>Выберите иконку</label>
+    <select @bind="project.IconNumber">
+        <option selected>💗</option>
+        <option>😈</option>
+        <option>😍</option>
+        <option>🤠</option>
+        <option>😀</option>
+        <option>⛹</option>
+        <option>☕</option>
+        <option>⌚</option>
+    </select>
+</div>
+    <button @onclick="addProject" class="btn btn-primary">Готово</button>
+</form>
+
+
+
+@code {
+    private Data.Project project = new Data.Project();
+    private Data.User user;
+
+    void addProject()
+    {
+        projectService.CreateProject(project);
+        project = new Data.Project();
+        OnInitializedAsync();
+        NavigationManager.NavigateTo("/");
+    }
+}
