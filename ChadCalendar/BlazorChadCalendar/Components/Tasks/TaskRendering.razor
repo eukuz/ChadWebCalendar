@@ -1,0 +1,18 @@
+﻿@inject Data.Services.TaskService taskService
+@inject NavigationManager NavigationManager
+@foreach (var task in taskService.GetTasks(user))
+{
+    <p>@task.Name</p>
+    <button @onclick="( () => redirectToEdit(task.Id))">Изменить</button>
+}
+@code {
+    Data.User user;
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        user = taskService.GetUser();
+    }
+    void redirectToEdit(int? id)
+    {
+        NavigationManager.NavigateTo($"/taskedit/{id}");
+    }
+}

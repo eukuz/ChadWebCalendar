@@ -1,13 +1,13 @@
 ﻿@using BlazorChadCalendar.Data.Services
 @inject TaskService taskService
-
+@inject NavigationManager NavigationManager
 <div class="form-group">
     <label>Название задачи</label>
     <input type="text" placeholder="" @bind="task.Name">
 </div>
 <div class="form-group">
     <label>Время на задачу</label>
-    <input type="time" @bind="tempDT" min="0">
+    <input type="text" @bind="tempDT" min="0">
 </div>
 <div class="form-group">
     <label>Описание</label>
@@ -21,14 +21,18 @@
     <label>Выберите проект для задачи</label>
     @if (userProjects != null)
     {
-        <select @bind="task.Project.Id">
+        @if (task.Project == null)
+        {
+            task.Project = new Data.Project { Id = 0 };
+        }
+        <select @bind="projectId">
             @foreach (var proj in userProjects)
             {
                 <option value="@proj.Id">@proj.Name</option>
-            } 
+            }
         </select>
     }
-    </div>
+</div>
 <div class="form-group">
     <input type="checkbox" @bind="task.AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
 </div>
@@ -58,25 +62,27 @@
 
 
 @code {
+    int projectId = 0;
     Data.Task task = new Data.Task();
     Data.User user;
-    DateTime tempDT;
+    TimeSpan? tempDT;
     IEnumerable<Data.Project> userProjects;
     bool isValidationError = false;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        tempDT = TimeSpan.Parse("00:00:00"); // инициализация для здравого показа
         user = taskService.GetUser();
         userProjects = taskService.GetProjects(user);
-        task.Project = new Data.Project();
     }
     void addTask()
     {
         if (tempDT != null)
         {
-            task.TimeTakes = tempDT.TimeOfDay;
+            task.TimeTakes = tempDT;
         }
-        taskService.AddTask(task);
+        taskService.AddTask(task, projectId);
         task = new Data.Task();
         OnInitializedAsync();
+        NavigationManager.NavigateTo("/");
     }
 }
