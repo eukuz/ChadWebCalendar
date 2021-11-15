@@ -8,6 +8,16 @@ namespace BlazorChadCalendar.Data.Services
     public class TaskService
     {
         ApplicationContext db = new ApplicationContext();
+        private void removeDependencies(Data.Task task)
+        {
+            var PredecessorDependecies = db.Tasks.Where(t => t.Predecessor == task);
+            foreach (var item in PredecessorDependecies)
+            {
+                item.Predecessor = null;
+                db.Tasks.Update(item);
+                db.SaveChanges();
+            }
+        }
         public IEnumerable<Project> GetProjects(User user)
         {
             return db.Projects.Where(proj => proj.User == user);
@@ -52,6 +62,16 @@ namespace BlazorChadCalendar.Data.Services
             task.Predecessor = GetPredecessor(91/*task.Predecessor.Id*/);
             db.Tasks.Update(task);
             await db.SaveChangesAsync();
+        }
+        public async void Delete(Data.Task task)
+        {
+            if (task != null)
+            {
+                task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
+                removeDependencies(task);
+                db.Tasks.Remove(task);
+                await db.SaveChangesAsync();
+            }
         }
     }
 }
