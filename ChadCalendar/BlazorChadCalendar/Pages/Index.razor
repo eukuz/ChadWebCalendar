@@ -1,7 +1,33 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+<h1>Index</h1>
 
-Welcome to your new app.
+<AuthorizeView>
+    <Authorized>
+        <a href="Identity/Account/Manage">Hello, @Login!</a>
+        <form method="post" action="Identity/Account/LogOut">
+            <button type="submit" class="nav-link btn btn-link">Log out</button>
+        </form>
+    </Authorized>
+    <NotAuthorized>
+        <a href="Identity/Account/Manage">Hello, @Login!</a>
+        <a href="Identity/Account/Register">Register</a>
+        <a href="/login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
 
+@code{
+    [CascadingParameter] public Task<AuthenticationState> AuthTask { get; set; }
+
+    [Inject] private CustomAuthStateProvider AuthState { get; set; }
+    private System.Security.Claims.ClaimsPrincipal user;
+
+    private string Login;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var authState = await AuthState.GetAuthenticationStateAsync();
+        Login = authState.User.Identity.Name;
+    }
+}
 <TableListTasks />
