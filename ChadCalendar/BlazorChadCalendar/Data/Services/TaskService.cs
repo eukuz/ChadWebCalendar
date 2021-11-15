@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorChadCalendar.Data.Services
 {
@@ -24,7 +25,7 @@ namespace BlazorChadCalendar.Data.Services
         }
         public Data.Task GetTask(int? id)
         {
-            return db.Tasks.FirstOrDefault(t => t.Id == id);
+            return db.Tasks.Include(t => t.Project).Include(t => t.Predecessor).FirstOrDefault(t => t.Id == id);
         }
         public IEnumerable<Data.Task> GetTasks(User user)
         {
@@ -41,7 +42,7 @@ namespace BlazorChadCalendar.Data.Services
         {
             return db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
         }
-        public void AddTask(Data.Task task)
+        public void AddTask(Data.Task task, int projectId)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
             task.User = user;
@@ -49,15 +50,15 @@ namespace BlazorChadCalendar.Data.Services
             task.Accessed = DateTime.Now;
             task.NRepetitions = 1;
             task.Predecessor = GetPredecessor(91);
-            task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id); // это странное выражение нужно потому что в модели передается только Id
+            task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId); // это странное выражение нужно потому что в модели передается только Id
             db.Add(task);
             db.SaveChanges();
         }
-        public async void Edit(Data.Task task)
+        public async void Edit(Data.Task task, int projectId)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
             task.Accessed = DateTime.Now;
-            task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id); // это странное выражение нужно потому что в модели передается только Id
+            task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId); // это странное выражение нужно потому что в модели передается только Id
             //Models.Task tempTask = task.Predecessor;
             task.Predecessor = GetPredecessor(91/*task.Predecessor.Id*/);
             db.Tasks.Update(task);

@@ -21,14 +21,18 @@
     <label>Выберите проект для задачи</label>
     @if (userProjects != null)
     {
-    <select @bind="task.Project.Id">
-        @foreach (var proj in userProjects)
+        @if (task.Project == null)
         {
-            <option value="@proj.Id">@proj.Name</option>
+            task.Project = new Data.Project { Id = 0 };
         }
-    </select>
+        <select @bind="projectId">
+            @foreach (var proj in userProjects)
+            {
+                <option value="@proj.Id">@proj.Name</option>
+            }
+        </select>
     }
-    </div>
+</div>
 <div class="form-group">
     <input type="checkbox" @bind="task.AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
 </div>
@@ -58,6 +62,7 @@
 
 
 @code {
+    int projectId = 0;
     Data.Task task = new Data.Task();
     Data.User user;
     TimeSpan? tempDT;
@@ -68,7 +73,6 @@
         tempDT = TimeSpan.Parse("00:00:00"); // инициализация для здравого показа
         user = taskService.GetUser();
         userProjects = taskService.GetProjects(user);
-        task.Project = new Data.Project();
     }
     void addTask()
     {
@@ -76,7 +80,7 @@
         {
             task.TimeTakes = tempDT;
         }
-        taskService.AddTask(task);
+        taskService.AddTask(task, projectId);
         task = new Data.Task();
         OnInitializedAsync();
         NavigationManager.NavigateTo("/");
