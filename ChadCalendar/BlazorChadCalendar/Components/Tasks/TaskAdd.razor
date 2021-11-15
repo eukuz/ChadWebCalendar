@@ -21,7 +21,11 @@
     <label>Выберите проект для задачи</label>
     @if (userProjects != null)
     {
-        <select @bind="task.Project.Id">
+        @if (task.Project == null)
+        {
+            task.Project = new Data.Project { Id = 0 };
+        }
+        <select @bind="projectId">
             @foreach (var proj in userProjects)
             {
                 <option value="@proj.Id">@proj.Name</option>
@@ -53,33 +57,31 @@
         <label>Проверьте правильность заполнения полей</label>
     }
 </div>
-<button @onclick="updateTask" class="btn btn-primary">Готово</button>
+<button @onclick="addTask" class="btn btn-primary">Готово</button>
 
 
 
 @code {
-    [Parameter]
-    public int taskId { get; set; }
-    Data.Task task;
+    int projectId = 0;
+    Data.Task task = new Data.Task();
     Data.User user;
     TimeSpan? tempDT;
     IEnumerable<Data.Project> userProjects;
     bool isValidationError = false;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        task = taskService.GetTask(taskId);
-        tempDT = task.TimeTakes;
+        tempDT = TimeSpan.Parse("00:00:00"); // инициализация для здравого показа
         user = taskService.GetUser();
         userProjects = taskService.GetProjects(user);
-        task.Project = new Data.Project();
     }
-    void updateTask()
+    void addTask()
     {
         if (tempDT != null)
         {
             task.TimeTakes = tempDT;
         }
-        taskService.Edit(task);
+        taskService.AddTask(task, projectId);
+        task = new Data.Task();
         OnInitializedAsync();
         NavigationManager.NavigateTo("/");
     }
