@@ -1,6 +1,7 @@
 ﻿@page "/counter"
 @*@attribute [Authorize]*@
 @inject AuthenticationStateProvider Provider
+@*@inject CustomAuthStateProvider Provider*@
 <h1>Counter</h1>
 
 <p>Current count: @currentCount </p>
@@ -17,7 +18,7 @@
         currentCount++;
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         var state = await Provider.GetAuthenticationStateAsync();
         userName = state?.User?.Identity?.Name ?? "Sorry";
