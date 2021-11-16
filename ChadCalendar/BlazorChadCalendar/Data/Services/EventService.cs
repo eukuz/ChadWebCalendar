@@ -61,5 +61,19 @@ namespace BlazorChadCalendar.Data.Services
                 }
             }
         }
+        public async void Mutatuion(Data.Event _event, int? projectIDforMutation)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+            _event = await db.Events.FirstOrDefaultAsync(t => _event.Id == t.Id);
+            Data.Task task;
+            if (projectIDforMutation != null)
+                task = new Data.Task(_event, db.Projects.FirstOrDefault(p => p.Id == projectIDforMutation));
+            else
+                task = new Data.Task(_event, db.Projects.FirstOrDefault(p => p.Id != null));
+            task.User = user;
+            db.Tasks.Add(task);
+            db.Events.Remove(_event);
+            await db.SaveChangesAsync();
+        }
     }
 }

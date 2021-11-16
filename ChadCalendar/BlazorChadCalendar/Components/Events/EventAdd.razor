@@ -51,6 +51,8 @@
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         _event = new Data.Event();
+        _event.StartsAt = DateTime.Now;
+        _event.FinishesAt = _event.StartsAt?.AddMinutes(10);
     }
     void addEvent()
     {
