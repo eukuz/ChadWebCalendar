@@ -14,6 +14,15 @@ namespace BlazorChadCalendar.Data.Services
         {
             return db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
         }
+        public IEnumerable<Data.Event> GetEvents(int? userId)
+        {
+            if (userId != null)
+            {
+                return db.Events.Where(e => e.User.Id == userId);
+            }
+            else
+                return null;
+        }
         public async void Create(Event _event)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == tempLogin/*User.Identity.Name*/);
