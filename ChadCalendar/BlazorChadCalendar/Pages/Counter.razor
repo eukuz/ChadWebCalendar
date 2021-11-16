@@ -18,10 +18,17 @@
         currentCount++;
     }
 
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    protected override async System.Threading.Tasks.Task OnAfterRenderAsync(bool firstRender)
     {
-        var state = await Provider.GetAuthenticationStateAsync();
-        userName = state?.User?.Identity?.Name ?? "Sorry";
+
+        if (firstRender)
+        {
+            var state = await Provider.GetAuthenticationStateAsync();
+            userName = state?.User?.Identity?.Name ?? "Sorry";
+
+
+            StateHasChanged();
+        }
 
     }
 }

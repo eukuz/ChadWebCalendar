@@ -58,7 +58,6 @@ namespace BlazorChadCalendar
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<Data.Services.TaskService>();
             services.AddSingleton<Data.Services.EventService>();
         }
