@@ -74,6 +74,19 @@ namespace BlazorChadCalendar.Data.Services
                 await db.SaveChangesAsync();
             }
         }
+        public async void Mutatuion(int? id)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+            Data.Task task = db.Tasks.FirstOrDefault(t => id == t.Id); // это странное выражение нужно потому что в модели передается только Id
+            removeDependencies(task); // избавляемся от зависимостей
+            DateTime dt = DateTime.Now;
+            DateTime startsAt = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
+            Event _event = new Event(task, startsAt, 15);
+            _event.User = user;
+            db.Events.Add(_event);
+            db.Tasks.Remove(task);
+            await db.SaveChangesAsync();
+        }
     }
 }
 

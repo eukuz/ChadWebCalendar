@@ -1,0 +1,63 @@
+﻿@using BlazorChadCalendar.Data.Services
+@inject EventService eventService
+@inject NavigationManager NavigationManager
+
+
+<div class="form-group">
+    <label>Название события</label>
+    <input class="form-control" type="text" placeholder="" @bind="_event.Name">
+</div>
+<div class="form-group">
+    <label>Описание</label>
+    <textarea class="form-control" type="text" placeholder="" @bind="_event.Description"></textarea>
+</div>
+<div class="form-group">
+    <label>Частота</label>
+    <select @bind="_event.Frequency">
+        <option>Никогда</option>
+        <option>Каждый день</option>
+        <option>Каждую неделю</option>
+        <option>Каждый месяц</option>
+    </select>
+</div>
+<div class="form-group">
+    <label>Начинается</label>
+    <input class="form-control" type="datetime-local" @bind="_event.StartsAt" />
+</div>
+<div class="form-group">
+    <label>Заканчивается</label>
+    <input class="form-control" type="datetime-local" @bind="_event.FinishesAt" />
+    <span asp-validation-for="FinishesAt"></span>
+</div>
+<div class="form-group">
+    <label>Напомнить за</label>
+    <input class="form-control" type="number" @bind="_event.RemindNMinutesBefore" min="0">
+    <label>минут</label>
+</div>
+<div class="form-group">
+    @if (isHaveError)
+    {
+        <label>Введенные данные некорректны, попробуйте еще раз</label>
+    }
+</div>
+
+<button @onclick="addEvent" class="btn btn-primary">Готово</button>
+
+
+
+@code {
+    Data.Event _event;
+    bool isHaveError = false;
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        _event = new Data.Event();
+        _event.StartsAt = DateTime.Now;
+        _event.FinishesAt = _event.StartsAt?.AddMinutes(10);
+    }
+    void addEvent()
+    {
+        eventService.Create(_event);
+        OnInitializedAsync();
+        NavigationManager.NavigateTo("/");
+    }
+}
