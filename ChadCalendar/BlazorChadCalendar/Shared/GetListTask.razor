@@ -1,0 +1,121 @@
+﻿@using Task = BlazorChadCalendar.Data.Task
+<h3>Task</h3>
+
+<div class row="row">
+    <table class="table table-striped" >
+        <thead class="thead-light">
+        <tr>
+            
+        </tr>
+        </thead>
+        @* <tbody> *@
+        @* @foreach (var item in ListTask) *@
+        @* { *@
+        @*     /*<tr> *@
+        @*         <div class="form-check" > *@
+        @*           <input class="form-check-input" type="checkbox" value="" id="@(item.IsCompleted != null && (bool)item.IsCompleted ? "flexCheckChecked" : "flexCheckDefault")" checked=@(item.IsCompleted != null && (bool)item.IsCompleted ? true : false) > *@
+        @*           <label class="form-check-label" for="@(item.IsCompleted != null && (bool)item.IsCompleted ? "flexCheckChecked" : "flexCheckDefault")"> *@
+        @*               @item.Name *@
+        @*           </label> *@
+        @*           <button> *@
+        @*               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16"> *@
+        @*                   <path fill-rule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z"/> *@
+        @*               </svg> *@
+        @*           </button> *@
+        @*         </div> *@
+        @*     </tr>*/ *@
+        @*      *@
+        @*      *@
+        @* } *@
+        @* </tbody>  *@
+        @foreach (var item in ListTask)
+        {
+            <tbody>
+            <tr>
+                <td>
+                    <input type="checkbox" @bind="@item.IsCompleted"/>
+                </td>
+                <td>
+                    <div>
+                        @item.Name
+                    </div>
+                </td>
+                <td>
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16"> 
+                            <path fill-rule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z"/> 
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        }
+    </table>
+</div>
+
+@code {
+
+    private List<Task> ListTask = new List<Task>()
+    {
+        new Task()
+        {
+            Name = "Помыть кота",
+            IsCompleted = false,
+            Description = "Начисто",
+            MaxPerDay = 1,
+
+        },
+        new Task()
+        {
+            Name = "Сделать домашку",
+            IsCompleted = true,
+            Description = "по матану",
+            MaxPerDay = 1,
+
+        },
+        new Task()
+        {
+            Name = "созвон по проекту",
+            IsCompleted = false,
+            Description = "барс",
+            MaxPerDay = 1,
+
+        }
+
+
+    }; //{ get; set; }
+    
+
+    // protected async override System.Threading.Tasks.Task OnInitializedAsync()
+    // {
+    //ListTask = new List<Task>()
+    // {
+    //     new Task()
+    //     {
+    //         Name = "Помыть кота",
+    //         IsCompleted = false,
+    //         Description = "Начисто",
+    //         MaxPerDay = 1,
+    //
+    //     },
+    //     new Task()
+    //     {
+    //         Name = "Сделать домашку",
+    //         IsCompleted = true,
+    //         Description = "по матану",
+    //         MaxPerDay = 1,
+    //
+    //     },
+    //     new Task()
+    //     {
+    //         Name = "созвон по проекту",
+    //         IsCompleted = false,
+    //         Description = "барс",
+    //         MaxPerDay = 1,
+    //
+    //     }
+    //
+    // };
+    //}
+
+}
