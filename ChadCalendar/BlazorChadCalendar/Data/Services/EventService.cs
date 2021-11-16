@@ -14,6 +14,13 @@ namespace BlazorChadCalendar.Data.Services
         {
             return db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
         }
+        public Data.Event GetEventById(int? id)
+        {
+            if (id != null)
+                return db.Events.FirstOrDefault(e => e.Id == id);
+            else
+                return null;
+        }
         public IEnumerable<Data.Event> GetEvents(int? userId)
         {
             if (userId != null)
@@ -40,6 +47,18 @@ namespace BlazorChadCalendar.Data.Services
                 Event _event = await db.Events.Include(e => e.User).FirstOrDefaultAsync(p => p.Id == id);
                 db.Events.Update(_event);
                 await db.SaveChangesAsync();
+            }
+        }
+        public async void Delete(int? id)
+        {
+            if (id != null)
+            {
+                Event _event = await db.Events.FirstOrDefaultAsync(p => p.Id == id);
+                if (_event != null)
+                {
+                    db.Events.Remove(_event);
+                    await db.SaveChangesAsync();
+                }
             }
         }
     }
