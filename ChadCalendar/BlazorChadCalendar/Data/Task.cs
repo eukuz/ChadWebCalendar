@@ -19,7 +19,7 @@ namespace BlazorChadCalendar.Data
         public DateTime? Deadline { get; set; }
         public int? PredecessorFK { get; set; }
         [ForeignKey("PredecessorFK")]
-        public Task? Predecessor { get; set; }
+        public Task Predecessor { get; set; }
         [Required]
         public Project Project { get; set; }
 
