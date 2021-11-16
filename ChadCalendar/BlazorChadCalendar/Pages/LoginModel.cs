@@ -1,4 +1,5 @@
-﻿using BlazorChadCalendar.Infrastructure;
+﻿using BlazorChadCalendar.Data;
+using BlazorChadCalendar.Infrastructure;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -18,17 +19,25 @@ namespace BlazorChadCalendar.Pages
             LoginData = new LoginViewModel();
         }
         public LoginViewModel LoginData { get; set; }
-        protected async Task LoginAsync()
+        protected async System.Threading.Tasks.Task LoginAsync()
         {
-            var token = new SecurityToken
+            User user;
+            using (ApplicationContext db = new ApplicationContext())
             {
-                AccessToken = LoginData.Password,
-                UserName = LoginData.Login,
-                ExpiredAt = DateTime.UtcNow.AddDays(3)
-            };
-            await LocalStorageService.SetAsync(nameof(SecurityToken), token);
-            CustomAuthStateProvider.NotifyAuthenticationStateChanged();
-            NavigationManager.NavigateTo("/",true);
+                user = db.Users.FirstOrDefault(u => u.Login == LoginData.Login&& u.Password == LoginData.Password);
+            }
+            if (user != null)
+            {
+                var token = new SecurityToken
+                {
+                    AccessToken = LoginData.Password,
+                    UserName = LoginData.Login,
+                    ExpiredAt = DateTime.UtcNow.AddDays(3)
+                };
+                await LocalStorageService.SetAsync(nameof(SecurityToken), token);
+                CustomAuthStateProvider.NotifyAuthenticationStateChanged();
+                NavigationManager.NavigateTo("/", true);
+            }
         }
     }
     public class LoginViewModel

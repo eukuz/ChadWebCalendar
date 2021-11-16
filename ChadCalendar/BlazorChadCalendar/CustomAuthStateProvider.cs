@@ -39,15 +39,7 @@ namespace BlazorChadCalendar
                 return CreateAnonymus();
             }
 
-            //User user;
-            //using (ApplicationContext db = new ApplicationContext())
-            //{
-            //    user = db.Users.FirstOrDefault(u => u.Login == token.UserName && u.Password == token.AccessToken);
-            //}
-            //if(user== null)
-            //{
-            //    return CreateAnonymus();
-            //}
+   
 
             var claims = new List<Claim>() {
                 new Claim(ClaimTypes.Name,token.UserName),

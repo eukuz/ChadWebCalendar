@@ -10,7 +10,7 @@ namespace BlazorChadCalendar.Data
     {
        
         [Required]
-        public bool? IsCompleted { get; set; } = false; // false т.к при создании Task задача еще не выполнена
+        public bool IsCompleted { get; set; } = false; // false т.к при создании Task задача еще не выполнена
         [Required]
         public bool AllowedToDistribute { get; set; } = false; // избежание null
         [Required(ErrorMessage = "Поле не может быть пустым")]
