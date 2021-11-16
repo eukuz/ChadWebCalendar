@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Http;
 using System.Net.Http;
 using BlazorChadCalendar.Infrastructure;
 using Microsoft.AspNetCore.Components.Authorization;
-using Radzen;
 
 namespace BlazorChadCalendar
 {
@@ -58,7 +57,6 @@ namespace BlazorChadCalendar
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<Data.Services.TaskService>();
             services.AddSingleton<Data.Services.EventService>();
         }
