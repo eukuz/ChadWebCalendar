@@ -9,7 +9,11 @@
 </RadzenScheduler>
 
 
-<h1>Events</h1>
+<h1>Events: </h1>
+@foreach (var item in DataItems)
+{
+    <h3>@item.Text</h3>
+}
 
 @code {
     class DataItem
