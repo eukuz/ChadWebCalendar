@@ -23,6 +23,10 @@ namespace BlazorChadCalendar.Data.Services
         {
             return db.Projects.Where(proj => proj.User == user);
         }
+        public Data.Project GetFirstProject()
+        {
+            return db.Projects.FirstOrDefault(p => p.Id != null);
+        }
         public Data.Task GetTask(int? id)
         {
             return db.Tasks.Include(t => t.Project).Include(t => t.Predecessor).FirstOrDefault(t => t.Id == id);
@@ -42,7 +46,7 @@ namespace BlazorChadCalendar.Data.Services
         {
             return db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
         }
-        public void AddTask(Data.Task task, int projectId)
+        public void AddTask(Data.Task task, int? projectId)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
             task.User = user;

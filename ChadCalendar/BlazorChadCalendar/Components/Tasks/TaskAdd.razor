@@ -21,14 +21,10 @@
     <label>Выберите проект для задачи</label>
     @if (userProjects != null)
     {
-        @if (task.Project == null)
-        {
-            task.Project = new Data.Project { Id = 0 };
-        }
         <select @bind="projectId">
             @foreach (var proj in userProjects)
             {
-                <option value="@proj.Id">@proj.Name</option>
+                    <option value="@proj.Id">@proj.Name</option>
             }
         </select>
     }
@@ -75,9 +71,10 @@
 
     @code {
         string predecessorIdstr = "После любой";
-        int projectId = 0;
+        int? projectId = 0;
         Data.Task task = new Data.Task();
         Data.User user;
+        Data.Project firstProject;
         TimeSpan? tempDT;
         IEnumerable<Data.Project> userProjects;
         IEnumerable<Data.Task> userTasks;
@@ -90,6 +87,8 @@
             user = taskService.GetUser();
             userTasks = taskService.GetTasks(user);
             userProjects = taskService.GetProjects(user);
+            firstProject = taskService.GetFirstProject();
+            projectId = firstProject.Id;
         }
         void addTask()
         {
