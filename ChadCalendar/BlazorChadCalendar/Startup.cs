@@ -59,6 +59,7 @@ namespace BlazorChadCalendar
             services.AddServerSideBlazor();
             services.AddSingleton<Data.Services.TaskService>();
             services.AddSingleton<Data.Services.EventService>();
+            services.AddSingleton<Data.Services.ProjectService>();
 
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();
