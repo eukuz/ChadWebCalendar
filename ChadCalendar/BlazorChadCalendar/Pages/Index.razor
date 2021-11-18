@@ -23,9 +23,30 @@
 <a href="/login">Log in</a>
 
 
+<div style="display:flex">
+    <div>
+        <div style="display:flex">
+            <input class="btn btn-primary" color="" type="button" value="Input">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 проект
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+            <input class="btn btn-primary" type="button" value="+">
+        </div>
+        <TaskRendering/>
+    </div>
+    <div>
+        <Scheduler></Scheduler>
+    </div>
+</div>
 
-<TaskRendering/>
-<Scheduler></Scheduler>
+
 
 @code{
     [CascadingParameter] public Task<AuthenticationState> AuthTask { get; set; }
