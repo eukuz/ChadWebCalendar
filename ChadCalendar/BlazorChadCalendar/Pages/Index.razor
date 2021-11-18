@@ -22,12 +22,10 @@
 <a href="/register">Register</a>
 <a href="/login">Log in</a>
 
-<ul>
-    @foreach (var task in Tasks)
-    {
-        <li>@task.Name;</li>
-    }
-</ul>
+
+
+<TaskRendering/>
+<Scheduler></Scheduler>
 
 @code{
     [CascadingParameter] public Task<AuthenticationState> AuthTask { get; set; }
@@ -54,10 +52,6 @@
         }
 
     }
-
-
 }
 
-@*<TableListTasks />*@
-<GetListTask/>
-<Scheduler></Scheduler>
+
