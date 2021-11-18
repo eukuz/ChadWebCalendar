@@ -1,6 +1,4 @@
-using System;
-
-namespace ChadWebCalendar.Models
+namespace ChadWebCalendar.Data.Models
 {
     public class ErrorViewModel
     {

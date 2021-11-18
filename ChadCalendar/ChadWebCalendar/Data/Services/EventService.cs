@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ChadWebCalendar.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChadWebCalendar.Data.Services
@@ -11,18 +10,18 @@ namespace ChadWebCalendar.Data.Services
     {
         ApplicationContext db = new ApplicationContext();
         string tempLogin = "defourtend";
-        public User GetUser()
+        public Data.User GetUser()
         {
             return db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
         }
-        public Event GetEventById(int? id)
+        public Data.Event GetEventById(int? id)
         {
             if (id != null)
                 return db.Events.FirstOrDefault(e => e.Id == id);
             else
                 return null;
         }
-        public IEnumerable<Event> GetEvents(int? userId)
+        public IEnumerable<Data.Event> GetEvents(int? userId)
         {
             if (userId != null)
             {
@@ -62,15 +61,15 @@ namespace ChadWebCalendar.Data.Services
                 }
             }
         }
-        public async void Mutatuion(Event _event, int? projectIDforMutation)
+        public async void Mutatuion(Data.Event _event, int? projectIDforMutation)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
             _event = await db.Events.FirstOrDefaultAsync(t => _event.Id == t.Id);
-            ChadWebCalendar.Data.Task task;
+            Data.Task task;
             if (projectIDforMutation != null)
-                task = new ChadWebCalendar.Data.Task(_event, db.Projects.FirstOrDefault(p => p.Id == projectIDforMutation));
+                task = new Data.Task(_event, db.Projects.FirstOrDefault(p => p.Id == projectIDforMutation));
             else
-                task = new ChadWebCalendar.Data.Task(_event, db.Projects.FirstOrDefault(p => p.Id != null));
+                task = new Data.Task(_event, db.Projects.FirstOrDefault(p => p.Id != null));
             task.User = user;
             db.Tasks.Add(task);
             db.Events.Remove(_event);

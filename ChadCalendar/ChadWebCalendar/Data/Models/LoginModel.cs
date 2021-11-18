@@ -1,14 +1,10 @@
 ﻿using Blazored.LocalStorage;
-using ChadWebCalendar.Data;
 using ChadWebCalendar.Data.Services;
 using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace ChadWebCalendar.Models
+namespace ChadWebCalendar.Data.Models
 {
     public class LoginModel : ComponentBase
     {

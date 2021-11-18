@@ -1,21 +1,17 @@
 using Blazored.LocalStorage;
+using Blazored.Modal;
 using ChadWebCalendar.Data;
 using ChadWebCalendar.Data.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Radzen;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace ChadWebCalendar
 {
@@ -43,6 +39,16 @@ namespace ChadWebCalendar
             services.AddScoped<IAccountService, AccountService>();
             services.AddBlazoredLocalStorage();
             services.AddAuthorizationCore();
+
+            services.AddSingleton<Data.Services.TaskService>();
+            services.AddSingleton<Data.Services.EventService>();
+            services.AddSingleton<Data.Services.ProjectService>();
+
+            services.AddScoped<DialogService>();
+            services.AddScoped<NotificationService>();
+            services.AddScoped<TooltipService>();
+            services.AddScoped<ContextMenuService>();
+            services.AddBlazoredModal();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
