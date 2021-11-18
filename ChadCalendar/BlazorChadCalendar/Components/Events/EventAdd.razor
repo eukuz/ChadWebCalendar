@@ -22,11 +22,11 @@
 </div>
 <div class="form-group">
     <label>Начинается</label>
-    <input class="form-control" type="datetime-local" @bind="_event.StartsAt" />
+    <input class="form-control" type="datetime-local" @bind="_event.StartsAt" @bind:format="yyyy-MM-ddTHH:mm"/>
 </div>
 <div class="form-group">
     <label>Заканчивается</label>
-    <input class="form-control" type="datetime-local" @bind="_event.FinishesAt" />
+    <input class="form-control" type="datetime-local" @bind="_event.FinishesAt" @bind:format="yyyy-MM-ddTHH:mm"/>
     <span asp-validation-for="FinishesAt"></span>
 </div>
 <div class="form-group">

@@ -1,93 +1,100 @@
 ﻿@using BlazorChadCalendar.Data.Services
 @inject TaskService taskService
 @inject NavigationManager NavigationManager
-<div class="form-group">
-    <label>Название задачи</label>
-    <input type="text" placeholder="" @bind="task.Name">
-</div>
-<div class="form-group">
-    <label>Время на задачу</label>
-    <input type="text" @bind="tempDT" min="0">
-</div>
-<div class="form-group">
-    <label>Описание</label>
-    <textarea class="form-control" type="text" placeholder="" @bind="task.Description"></textarea>
-</div>
-<div class="form-group">
-    <label>Дедлайн</label>
-    <input type="datetime-local" @bind-value="task.Deadline" />
-</div>
-<div class="form-group">
-    <label>Выберите проект для задачи</label>
-    @if (userProjects != null)
-    {
-        @if (task.Project == null)
-        {
-            task.Project = new Data.Project { Id = 0 };
-        }
-        <select @bind="projectId">
-            @foreach (var proj in userProjects)
+<EditForm Model="@task">
+    <DataAnnotationsValidator />
+    <ValidationSummary></ValidationSummary>
+    <div class="form-group">
+        <label for="Name">Название задачи</label>
+        <InputText type="text" placeholder="" @bind-Value=task.Name id="Name" />
+        <ValidationMessage For="() => task" />
+    </div>
+        <div class="form-group">
+            <label>Время на задачу</label>
+            <input type="text" @bind="tempDT" min="0">
+        </div>
+        <div class="form-group">
+            <label>Описание</label>
+            <textarea class="form-control" type="text" placeholder="" @bind="task.Description"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Дедлайн</label>
+            <input class="form-control" type="datetime-local" @bind="task.Deadline" @bind:format="yyyy-MM-ddTHH:mm" />
+        </div>
+        <div class="form-group">
+            <label>Выберите проект для задачи</label>
+            @if (userProjects != null)
             {
-                <option value="@proj.Id">@proj.Name</option>
+                <select @bind="projectId">
+                    @foreach (var proj in userProjects)
+                    {
+                        <option value="@proj.Id">@proj.Name</option>
+                    }
+                </select>
             }
-        </select>
-    }
-</div>
-<div class="form-group">
-    <input type="checkbox" @bind="task.AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
-</div>
-<div class= "form-group" >
-    <label> После какой задачи расположить</label>
-    <select @bind="predecessorIdstr">
-        <option value="После любой">После любой</option>
-        @if (userTasks != null)
-        {
-            foreach (var task in userTasks)
+        </div>
+        <div class="form-group">
+            <input type="checkbox" @bind="task.AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
+        </div>
+        <div class="form-group">
+            <label> После какой задачи расположить</label>
+            <select @bind="predecessorIdstr">
+                <option value="После любой">После любой</option>
+                @if (userTasks != null)
+                {
+                    foreach (var task in userTasks)
+                    {
+                        <option value="@task.Id.ToString()"> @task.Name </option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Максимум в день</label>
+            <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
+        </div>
+        <div class="form-group">
+            <label>Частота</label>
+            <select @bind="task.Frequency">
+                <option disabled>Частота</option>
+                <option>Никогда</option>
+                <option>Каждый день</option>
+                <option>Каждую неделю</option>
+                <option>Каждый месяц</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            @if (isValidationError)
             {
-                <option value="@task.Id.ToString()" > @task.Name </option>
+                <label>Проверьте правильность заполнения полей</label>
             }
-        }
-    </select>
-    </div >
-    <div class="form-group">
-        <label>Максимум в день</label>
-        <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
-    </div>
-    <div class="form-group">
-        <label>Частота</label>
-        <select @bind="task.Frequency">
-            <option disabled>Частота</option>
-            <option>Никогда</option>
-            <option>Каждый день</option>
-            <option>Каждую неделю</option>
-            <option>Каждый месяц</option>
-        </select>
-    </div>
-    <div class="form-group">
-        @if (isValidationError)
-        {
-            <label>Проверьте правильность заполнения полей</label>
-        }
-    </div>
-    <button @onclick="addTask" class="btn btn-primary">Готово</button>
+        </div>
+        <button @onclick="addTask" type="submit" class="btn btn-primary">Готово</button>
+</EditForm>
 
 
 
     @code {
-        string predecessorIdstr = "После любой";
-        int projectId = 0;
-        Data.Task task = new Data.Task();
-        Data.User user;
-        TimeSpan? tempDT;
-        IEnumerable<Data.Project> userProjects;
-        IEnumerable<Data.Task> userTasks;
-        bool isValidationError = false;
+            string predecessorIdstr = "После любой";
+            int? projectId = 0;
+            Data.Task task = new Data.Task();
+            Data.User user;
+            Data.Project firstProject;
+            TimeSpan? tempDT;
+            IEnumerable<Data.Project> userProjects;
+            IEnumerable<Data.Task> userTasks;
+            bool isValidationError = false;
         protected override async System.Threading.Tasks.Task OnInitializedAsync()
         {
             tempDT = TimeSpan.Parse("00:00:00"); // инициализация для здравого показа
+            DateTime dt = DateTime.Now;
+            task.Deadline = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
             user = taskService.GetUser();
             userTasks = taskService.GetTasks(user);
             userProjects = taskService.GetProjects(user);
+            firstProject = taskService.GetFirstProject();
+            projectId = firstProject.Id;
         }
         void addTask()
         {
@@ -97,9 +104,11 @@
             }
             if (predecessorIdstr != "После любой")
                 task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
-            taskService.AddTask(task, projectId);
-            task = new Data.Task();
-            OnInitializedAsync();
-            NavigationManager.NavigateTo("/");
+            if (taskService.AddTask(task, projectId))
+            {
+                task = new Data.Task();
+                OnInitializedAsync();
+                NavigationManager.NavigateTo("/");
+            }
         }
     }

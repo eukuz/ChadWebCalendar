@@ -1,0 +1,34 @@
+﻿@page "/"
+@using ChadWebCalendar.Models
+@using ChadWebCalendar.Data.Services
+@inject IAccountService _accountService;
+<div>
+    <AuthorizeView>
+        <Authorized>
+            <h1>Your Dashboard @authenticationState.Result.User.Identity.Name</h1>
+            <div>
+                <button type="button" class="btn btn-primary" @onclick="Logout">Logout</button>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <div>
+                <h1>Войдите в систему!</h1>
+                <a type="button" href="/login" class="btn btn-primary">Login</a>
+                <button type="button" class="btn btn-primary">Register</button>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+@code{
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+    private IList<Claim> userClaim = new List<Claim>();
+    private LoginModel model = new LoginModel();
+
+
+    private async void Logout()
+    {
+        await _accountService.LogoutAsync();
+    }
+}

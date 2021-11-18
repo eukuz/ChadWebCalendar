@@ -1,26 +1,28 @@
 ﻿@page "/"
+@using BlazorChadCalendar.Data.Services 
+@inject IAccountService _accountService;
 
 <h1>Index</h1>
 
-@*<AuthorizeView>
-        <Authorized>
-            <a href="Identity/Account/Manage">Hello, @Login!</a>
-            <form method="post" action="Identity/Account/LogOut">
-                <button type="submit" class="nav-link btn btn-link">Log out</button>
-            </form>
-        </Authorized>
-        <NotAuthorized>
-            <a href="Identity/Register">Register</a>
-            <a href="/login">Log in</a>
-        </NotAuthorized>
- </AuthorizeView>*@
+<AuthorizeView>
+    <Authorized>
+        <a href="Identity/Account/Manage">Hello, @login!</a>
+        <form method="post" action="Identity/Account/LogOut">
+            <button type="submit" class="nav-link btn btn-link">Log out</button>
+        </form>
+    </Authorized>
+    <NotAuthorized>
+        <a href="Identity/Register">Register</a>
+        <a href="/login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
 
-<a href="Identity/Account/Manage">Hello, @Login!</a>
-<form method="post" action="Identity/Account/LogOut">
-    @*<button type="submit" class="nav-link btn btn-link">Log out</button>*@
-</form>
+<!--<a href="Identity/Account/Manage">Hello, @login!</a>
+<form method="post" action="Identity/Account/LogOut">-->
+@*<button type="submit" class="nav-link btn btn-link">Log out</button>*@
+<!--</form>
 <a href="/register">Register</a>
-<a href="/login">Log in</a>
+<a href="/login">Log in</a>-->
 
 
 <div style="display:flex">
@@ -48,31 +50,62 @@
 
 
 
+
+
 @code{
+
     [CascadingParameter] public Task<AuthenticationState> AuthTask { get; set; }
 
     [Inject] private CustomAuthStateProvider AuthState { get; set; }
     private System.Security.Claims.ClaimsPrincipal user;
 
-    private string Login;
+    private string login;
     private List<BlazorChadCalendar.Data.Task> Tasks = new List<BlazorChadCalendar.Data.Task>();
 
 
 
     protected override async System.Threading.Tasks.Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender) {
+        if (firstRender)
+        {
             var authState = await AuthState.GetAuthenticationStateAsync();
-            Login = authState.User.Identity.Name;
+            login = authState.User.Identity.Name;
 
             if (authState.User.Identity.IsAuthenticated == true)
                 using (ApplicationContext db = new ApplicationContext())
-                    Tasks.AddRange(db.Tasks.Where(t => t.User.Login == Login).ToList<BlazorChadCalendar.Data.Task>());
+                    Tasks.AddRange(db.Tasks.Where(t => t.User.Login == login).ToList<BlazorChadCalendar.Data.Task>());
 
             StateHasChanged();
         }
 
     }
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+    private IList<Claim> userClaim
+    {
+        get
+        {
+            var auth = authenticationState.Result;
+            if (auth.User.Identity.IsAuthenticated)
+            {
+                return auth.User.Claims.ToList();
+            }
+            return new List<Claim>();
+        }
+    }
+
+    private void Login()
+    {
+
+    }
+
+    private void Logout()
+    {
+
+    }
 }
 
 
+@*<TableListTasks />*@
+<GetListTask />

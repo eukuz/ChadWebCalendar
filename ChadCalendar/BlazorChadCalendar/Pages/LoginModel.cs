@@ -16,28 +16,20 @@ namespace BlazorChadCalendar.Pages
         [Inject] public NavigationManager NavigationManager { get; set; }
         public LoginModel()
         {
-            LoginData = new LoginViewModel();
+            LoginData = new LoginViewModelValidation { model = new LoginViewModel()};
         }
-        public LoginViewModel LoginData { get; set; }
+        public LoginViewModelValidation LoginData { get; set; }
         protected async System.Threading.Tasks.Task LoginAsync()
         {
-            User user;
-            using (ApplicationContext db = new ApplicationContext())
+            var token = new SecurityToken
             {
-                user = db.Users.FirstOrDefault(u => u.Login == LoginData.Login&& u.Password == LoginData.Password);
-            }
-            if (user != null)
-            {
-                var token = new SecurityToken
-                {
-                    AccessToken = LoginData.Password,
-                    UserName = LoginData.Login,
-                    ExpiredAt = DateTime.UtcNow.AddDays(3)
-                };
-                await LocalStorageService.SetAsync(nameof(SecurityToken), token);
-                CustomAuthStateProvider.NotifyAuthenticationStateChanged();
-                NavigationManager.NavigateTo("/", true);
-            }
+                AccessToken = LoginData.model.Password,
+                UserName = LoginData.model.Login,
+                ExpiredAt = DateTime.UtcNow.AddDays(3)
+            };
+            await LocalStorageService.SetAsync(nameof(SecurityToken), token);
+            CustomAuthStateProvider.NotifyAuthenticationStateChanged();
+            NavigationManager.NavigateTo("/", true);
         }
     }
     public class LoginViewModel
@@ -46,6 +38,26 @@ namespace BlazorChadCalendar.Pages
         public string Login { get; set; }
         [Required]
         public string Password { get; set; }
+    }
+    public class LoginViewModelValidation
+    {
+        [Required]
+        [LoginAuthValidator]
+        public LoginViewModel model { get; set; }
+    }
+    public class LoginAuthValidator : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            LoginViewModel model = value as LoginViewModel;
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                User u = db.Users.FirstOrDefault(u => u.Login == model.Login && u.Password == model.Password);
+                if (u == null)
+                    return new ValidationResult($"Пользователя с таким логином  и паролем не существует");
+                return null;
+            }
+        }
     }
 }
 
