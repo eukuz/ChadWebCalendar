@@ -1,0 +1,48 @@
+﻿@page "/scheduler"
+@using ChadWebCalendar.Data 
+@inject DialogService DialogService
+
+<RadzenScheduler Data="@DataItems" TItem="DataItem" StartProperty="Start" EndProperty="End" TextProperty="Text" Style="height: 800px">
+    <ChildContent>
+        <RadzenMonthView />
+        <RadzenDayView />
+        <RadzenWeekView />
+    </ChildContent>
+</RadzenScheduler>
+
+
+<h1>Events: </h1>
+@foreach (var item in DataItems)
+{
+    <h3>@item.Text</h3>
+}
+
+@code {
+    class DataItem
+    {
+        public DateTime? Start { get; set; }
+        public DateTime? End { get; set; }
+        public string Text { get; set; }
+    }
+
+    ApplicationContext db = new ApplicationContext();
+
+    public IEnumerable<Data.Event> GetEvents()
+    {
+        return db.Events.Where(e => e != null);
+    }
+
+    List<DataItem> DataItems = new();
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        foreach (var item in GetEvents())
+        {
+            DataItem d = new DataItem();
+            d.Start = item.StartsAt;
+            d.End = item.FinishesAt;
+            d.Text = item.Name;
+            DataItems.Add(d);
+        }
+    }
+}

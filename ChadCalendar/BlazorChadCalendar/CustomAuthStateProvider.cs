@@ -13,33 +13,34 @@ namespace BlazorChadCalendar
     {
         private readonly ILocalStorageService _localStorageService;
 
+        private ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
+
         public CustomAuthStateProvider(ILocalStorageService localStorageService)
         {
             _localStorageService = localStorageService;
         }
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            AuthenticationState CreateAnonymus()
-            {
-                var anonymusIdentity = new ClaimsIdentity();
-                var anonymysPrincipal = new ClaimsPrincipal(anonymusIdentity);
-                return new AuthenticationState(anonymysPrincipal);
-            }
+            var state= new AuthenticationState(claimsPrincipal);
+            return await System.Threading.Tasks.Task.FromResult(state);
+        }
 
-            
+        public async void LoginNotify()
+        {
+            ClaimsPrincipal CreateAnonymus() => new(new ClaimsIdentity());
+
             var token = await _localStorageService.GetAsync<SecurityToken>(nameof(SecurityToken));
 
 
             if (token == null)
             {
-                return CreateAnonymus();
+                claimsPrincipal =  CreateAnonymus();
             }
             if (string.IsNullOrEmpty(token.AccessToken) || token.ExpiredAt < System.DateTime.Now)
             {
-                return CreateAnonymus();
+                claimsPrincipal = CreateAnonymus();
             }
 
-   
 
             var claims = new List<Claim>() {
                 new Claim(ClaimTypes.Name,token.UserName),
@@ -49,12 +50,16 @@ namespace BlazorChadCalendar
 
 
             var identity = new ClaimsIdentity(claims, "Token");
-            var principal = new ClaimsPrincipal(identity);
-            var state= new AuthenticationState(principal);
-            return await System.Threading.Tasks.Task.FromResult(state);
+            claimsPrincipal = new ClaimsPrincipal(identity);
 
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
+        public void LogoutNotify()
+        {
+            claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity()); 
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+        }
         public void NotifyAuthenticationStateChanged()
         {
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());

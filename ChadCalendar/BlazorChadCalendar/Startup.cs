@@ -18,6 +18,8 @@ using System.Net.Http;
 using BlazorChadCalendar.Infrastructure;
 using Microsoft.AspNetCore.Components.Authorization;
 using Radzen;
+using Blazored.Modal;
+using BlazorChadCalendar.Data.Services;
 
 namespace BlazorChadCalendar
 {
@@ -45,15 +47,15 @@ namespace BlazorChadCalendar
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddAuthentication();
-            services.AddAuthorization();
+             
 
             services.AddScoped<ILocalStorageService, LocalStorageService>();
 
             services.AddScoped<CustomAuthStateProvider>();
             services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CustomAuthStateProvider>());
-
             //services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+            services.AddAuthorizationCore();
+            services.AddScoped<IAccountService, AccountService>();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -65,6 +67,7 @@ namespace BlazorChadCalendar
             services.AddScoped<NotificationService>();
             services.AddScoped<TooltipService>();
             services.AddScoped<ContextMenuService>();
+            services.AddBlazoredModal();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

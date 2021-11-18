@@ -1,0 +1,76 @@
+﻿@page "/"
+@using ChadWebCalendar.Data.Models
+@using ChadWebCalendar.Data.Services
+@inject IAccountService _accountService;
+@using ChadWebCalendar.Components.Events 
+@using ChadWebCalendar.Components.Projects 
+@using ChadWebCalendar.Components.Tasks 
+@using ChadWebCalendar.Components
+<div>
+    <AuthorizeView>
+        <Authorized>
+            <h1>Your Dashboard @authenticationState.Result.User.Identity.Name</h1>
+            <div>
+                <button type="button" class="btn btn-primary" @onclick="Logout">Logout</button>
+            </div>
+
+            <div style="display:flex">
+                <div>
+                    <div style="display:flex">
+                        <input class="btn btn-primary" color="" type="button" value="Input">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                проект
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                        <input class="btn btn-primary" type="button" value="+">
+                    </div>
+                    <TaskRendering />
+                </div>
+                <div>
+                    <Scheduler></Scheduler>
+                </div>
+            </div>
+
+        </Authorized>
+        <NotAuthorized>
+            <div>
+                <h1>Войдите в систему!</h1>
+                <a type="button" href="/login" class="btn btn-primary">Login</a>
+                <button type="button" class="btn btn-primary">Register</button>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+
+
+
+
+
+
+
+
+
+@*<TableListTasks />*@
+@*<GetListTask />*@
+
+
+@code{
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+    private List<ChadWebCalendar.Data.Task> Tasks = new List<ChadWebCalendar.Data.Task>();
+    private IList<Claim> userClaim = new List<Claim>();
+    private LoginModel model = new LoginModel();
+
+
+    private async void Logout()
+    {
+        await _accountService.LogoutAsync();
+    }
+}

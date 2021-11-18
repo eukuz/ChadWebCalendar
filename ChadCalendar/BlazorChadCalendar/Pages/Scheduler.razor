@@ -1,4 +1,5 @@
 ﻿@page "/scheduler"
+@inject DialogService DialogService
 
 <RadzenScheduler Data="@DataItems" TItem="DataItem" StartProperty="Start" EndProperty="End" TextProperty="Text" Style="height: 800px">
     <ChildContent>
