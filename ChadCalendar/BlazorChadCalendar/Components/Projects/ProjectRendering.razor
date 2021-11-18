@@ -1,6 +1,6 @@
-﻿@inject Data.Services.TaskService taskService
+﻿@inject Data.Services.ProjectService projectService
 @inject NavigationManager NavigationManager
-@foreach (var project in taskService.GetProjects(user))
+@foreach (var project in projectService.GetProjects(user))
 {
     <p>@project.Name</p>
     <button @onclick="( () => redirectToEdit(project.Id))">Изменить</button>
@@ -9,7 +9,7 @@
     Data.User user;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        user = taskService.GetUser();
+        user = projectService.GetUser();
     }
     void redirectToEdit(int? id)
     {

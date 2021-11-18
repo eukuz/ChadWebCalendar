@@ -10,9 +10,20 @@ namespace BlazorChadCalendar.Data.Services
     {
         ApplicationContext db = new ApplicationContext();
         string tempLogin = "defourtend";
+        public Data.Project GetProjectById(int? id)
+        {
+            if (id != null)
+                return db.Projects.FirstOrDefault(p => p.Id == id);
+            else
+                return null;
+        }
         public IEnumerable<Project> GetProjects(User user)
         {
             return db.Projects.Where(proj => proj.User == user);
+        }
+        public Data.User GetUser()
+        {
+            return db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
         }
 
         public async void Create(Project project)

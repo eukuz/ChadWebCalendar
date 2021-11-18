@@ -27,11 +27,11 @@
 </div>
 <div class="form-group">
     <label>Введите время дедлайна</label>
-    <input type="datetime-local" @bind="project.Deadline" />
+    <input type="datetime-local" @bind="project.Deadline" @bind:format="yyyy-MM-ddTHH:mm" />
 </div>
 <div class="form-group">
     <label>Выберите иконку</label>
-    <select @bind="project.Deadline">
+    <select @bind="project.IconNumber">
         <option selected>💗</option>
         <option>😈</option>
         <option>😍</option>
@@ -61,6 +61,10 @@
     public int? projectId { get; set; }
     Data.Project project;
     bool isHaveError = false;
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        project = projectService.GetProjectById(projectId);
+    }
     void redirectToIndex()
     {
         NavigationManager.NavigateTo("/");
