@@ -1,26 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Blazored.LocalStorage;
+using ChadWebCalendar.Data;
+using ChadWebCalendar.Data.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BlazorChadCalendar.Data;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
+using System.Linq;
 using System.Net.Http;
-using BlazorChadCalendar.Infrastructure;
-using Microsoft.AspNetCore.Components.Authorization;
-using Radzen;
-using BlazorChadCalendar.Data.Services;
+using System.Threading.Tasks;
 
-namespace BlazorChadCalendar
+namespace ChadWebCalendar
 {
     public class Startup
     {
@@ -40,31 +37,12 @@ namespace BlazorChadCalendar
             Directory.CreateDirectory(path);
             services.AddDbContext<ApplicationContext>(options => options.UseSqlite($"Data Source = { Path.Combine(path, "Calendar.db")}"));
 
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
-             
-
-            services.AddScoped<ILocalStorageService, LocalStorageService>();
-
-            services.AddScoped<CustomAuthStateProvider>();
-            services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CustomAuthStateProvider>());
-            //services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
-            services.AddAuthorizationCore();
-            services.AddScoped<IAccountService, AccountService>();
-
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<Data.Services.TaskService>();
-            services.AddSingleton<Data.Services.EventService>();
-
-            services.AddScoped<DialogService>();
-            services.AddScoped<NotificationService>();
-            services.AddScoped<TooltipService>();
-            services.AddScoped<ContextMenuService>();
+            services.AddScoped<AuthenticationStateProvider, CustomAuthenticationProvider>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddBlazoredLocalStorage();
+            services.AddAuthorizationCore();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,13 +59,11 @@ namespace BlazorChadCalendar
                 app.UseHsts();
             }
 
-           
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();
