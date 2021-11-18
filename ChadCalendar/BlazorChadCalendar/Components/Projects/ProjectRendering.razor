@@ -2,7 +2,7 @@
 @inject NavigationManager NavigationManager
 @foreach (var project in projectService.GetProjects(user))
 {
-    <p>@project.Name</p>
+    <p>@project.IconNumber</p>
     <button @onclick="( () => redirectToEdit(project.Id))">Изменить</button>
 }
 @code {

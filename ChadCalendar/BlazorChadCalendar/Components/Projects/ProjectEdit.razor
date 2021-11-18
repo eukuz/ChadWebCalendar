@@ -1,6 +1,7 @@
 ﻿@using BlazorChadCalendar.Data.Services
 @inject ProjectService projectService
 @inject NavigationManager NavigationManager
+@inject IModalService modal
 
 
 <div class="form-group">
@@ -50,6 +51,7 @@
     }
 </div>
 
+<button @onclick="@(() => modal.Show<ProjectAdd>("Добавить проект"))" class="btn btn-secondary">Добавить проект</button>
 <button @onclick="editProject" class="btn btn-primary">Готово</button>
 <button @onclick="deleteProject" class="btn btn-danger">Удалить задачу</button>
 
