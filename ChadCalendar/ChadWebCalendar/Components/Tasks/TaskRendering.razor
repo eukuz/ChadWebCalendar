@@ -1,11 +1,29 @@
 ﻿@inject Data.Services.TaskService taskService
 @inject NavigationManager NavigationManager
 
+
 <div class row="row">
     <table class="table table-striped" >
         <thead class="thead-light">
         <tr>
-            
+            <td>
+                <input class="btn btn-primary" color="" type="button" value="Сек">
+            </td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        проект
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <input class="btn btn-primary" @onclick="( () => redirectToAdd())" type="button" value="+">
+            </td>
         </tr>
         </thead>
         @foreach (var task in taskService.GetTasks(user))
@@ -42,5 +60,9 @@
     void redirectToEdit(int? id)
     {
         NavigationManager.NavigateTo($"/taskedit/{id}");
+    }
+    void redirectToAdd()
+    {
+        NavigationManager.NavigateTo($"/taskadd");
     }
 }
