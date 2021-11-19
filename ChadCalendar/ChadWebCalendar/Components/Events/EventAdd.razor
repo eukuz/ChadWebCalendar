@@ -2,11 +2,14 @@
 @inject EventService eventService
 @inject NavigationManager NavigationManager
 
-
-<div class="form-group">
-    <label>Название события</label>
-    <input class="form-control" type="text" placeholder="" @bind="_event.Name">
-</div>
+<EditForm Model="eventValidation">
+<DataAnnotationsValidator/>
+    <ValidationSummary></ValidationSummary>
+    <div class="form-group">
+        <label>Название события</label>
+        <input class="form-control" type="text" placeholder="" @bind="_event.Name">
+        <ValidationMessage For="() => _event" />
+    </div>
 <div class="form-group">
     <label>Описание</label>
     <textarea class="form-control" type="text" placeholder="" @bind="_event.Description"></textarea>
@@ -42,12 +45,13 @@
 </div>
 
 <button @onclick="addEvent" class="btn btn-primary">Готово</button>
-
+</EditForm>
 
 
 @code {
-    Data.Event _event;
-    bool isHaveError = false;
+        Data.Event _event;
+        Data.EventValidation eventValidation = new Data.EventValidation();
+        bool isHaveError = false;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         _event = new Data.Event();
@@ -56,8 +60,10 @@
     }
     void addEvent()
     {
-        eventService.Create(_event);
-        OnInitializedAsync();
-        NavigationManager.NavigateTo("/");
+        if (eventService.Create(_event))
+        {
+            OnInitializedAsync();
+            NavigationManager.NavigateTo("/");
+        }
     }
 }

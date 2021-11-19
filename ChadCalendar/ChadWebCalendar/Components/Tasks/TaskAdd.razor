@@ -6,8 +6,7 @@
     <ValidationSummary></ValidationSummary>
     <div class="form-group">
         <label for="Name">Название задачи</label>
-        <InputText type="text" placeholder="" @bind-Value=task.Name id="Name" />
-        <ValidationMessage For="() => task" />
+        <InputText type="text" placeholder="" class="form-control" @bind-Value=task.Name id="Name" />
     </div>
         <div class="form-group">
             <label>Время на задачу</label>

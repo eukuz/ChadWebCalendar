@@ -10,6 +10,14 @@ namespace ChadWebCalendar.Data.Services
     {
         ApplicationContext db = new ApplicationContext();
         string tempLogin = "defourtend";
+
+        bool IsCorrect(ref Data.Event _event)
+        {
+            if (_event.Name != null && _event.Name != "")
+                return true;
+            else
+                return false;
+        }
         public Data.User GetUser()
         {
             return db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
@@ -30,24 +38,31 @@ namespace ChadWebCalendar.Data.Services
             else
                 return null;
         }
-        public async void Create(Event _event)
+        public bool Create(Event _event)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == tempLogin/*User.Identity.Name*/);
             _event.User = user;
             _event.Accessed = DateTime.Now;
             _event.NRepetitions = 1;
-            db.Events.Add(_event);
-            await db.SaveChangesAsync();
+            if (IsCorrect(ref _event))
+            {
+                db.Events.Add(_event);
+                db.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
-        public async void Edit(int? id)
+        public bool Edit(int? id)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == tempLogin/*User.Identity.Name*/);
-            if (id != null)
+            Event _event = db.Events.Include(e => e.User).FirstOrDefault(p => p.Id == id);
+            if (IsCorrect(ref _event))
             {
-                Event _event = await db.Events.Include(e => e.User).FirstOrDefaultAsync(p => p.Id == id);
                 db.Events.Update(_event);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
+                return true;
             }
+            return false;
         }
         public async void Delete(int? id)
         {
