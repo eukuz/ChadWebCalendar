@@ -1,7 +1,7 @@
 ﻿@using ChadWebCalendar.Data.Services
 @inject TaskService taskService
 @inject NavigationManager NavigationManager
-<EditForm Model="@task">
+<EditForm Model="@taskValidation">
     <DataAnnotationsValidator />
     <ValidationSummary></ValidationSummary>
     <div class="form-group">
@@ -76,15 +76,16 @@
 
 
     @code {
-            string predecessorIdstr = "После любой";
-            int? projectId = 0;
-            Data.Task task = new Data.Task();
-            Data.User user;
-            Data.Project firstProject;
-            TimeSpan? tempDT;
-            IEnumerable<Data.Project> userProjects;
-            IEnumerable<Data.Task> userTasks;
-            bool isValidationError = false;
+        string predecessorIdstr = "После любой";
+        int? projectId = 0;
+        Data.TaskValidation taskValidation = new Data.TaskValidation();
+        Data.Task task = new Data.Task();
+        Data.User user;
+        Data.Project firstProject;
+        TimeSpan? tempDT;
+        IEnumerable<Data.Project> userProjects;
+        IEnumerable<Data.Task> userTasks;
+        bool isValidationError = false;
         protected override async System.Threading.Tasks.Task OnInitializedAsync()
         {
             tempDT = TimeSpan.Parse("00:00:00"); // инициализация для здравого показа
@@ -95,12 +96,15 @@
             userProjects = taskService.GetProjects(user);
             firstProject = taskService.GetFirstProject();
             projectId = firstProject.Id;
+
+            taskValidation.TimeTakes = task.TimeTakes;
         }
         void addTask()
-        {
+        {  
             if (tempDT != null)
             {
                 task.TimeTakes = tempDT;
+                taskValidation.TimeTakes = task.TimeTakes;
             }
             if (predecessorIdstr != "После любой")
                 task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
