@@ -9,7 +9,6 @@ namespace ChadWebCalendar.Data.Services
     public class EventService
     {
         static ApplicationContext db = new ApplicationContext();
-        string tempLogin = "defourtend";
 
         bool IsCorrect(ref Data.Event _event)
         {
@@ -18,9 +17,14 @@ namespace ChadWebCalendar.Data.Services
             else
                 return false;
         }
-        public Data.User GetUser()
+        public int? GetId(string Name)
         {
-            return db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+            Data.User user = db.Users.FirstOrDefault(e => e.Login == Name);
+            return user.Id;
+        }
+        public Data.User GetUser(string Name)
+        {
+            return db.Users.FirstOrDefault(u => u.Login == Name);
         }
         public Data.Event GetEventById(int? id)
         {
@@ -39,9 +43,9 @@ namespace ChadWebCalendar.Data.Services
             else
                 return null;
         }
-        public bool Create(Event _event)
+        public bool Create(Event _event, string Name)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == tempLogin/*User.Identity.Name*/);
+            User user = db.Users.FirstOrDefault(u => u.Login == Name);
             _event.User = user;
             _event.Accessed = DateTime.Now;
             _event.NRepetitions = 1;
@@ -53,9 +57,9 @@ namespace ChadWebCalendar.Data.Services
             }
             return false;
         }
-        public bool Edit(int? id)
+        public bool Edit(int? id, string Name)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == tempLogin/*User.Identity.Name*/);
+            User user = db.Users.FirstOrDefault(u => u.Login == Name);
             Event _event = db.Events.Include(e => e.User).FirstOrDefault(p => p.Id == id);
             if (IsCorrect(ref _event))
             {
@@ -77,9 +81,9 @@ namespace ChadWebCalendar.Data.Services
                 }
             }
         }
-        public async void Mutatuion(Data.Event _event, int? projectIDforMutation)
+        public async void Mutatuion(Data.Event _event, int? projectIDforMutation, string Name)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+            User user = db.Users.FirstOrDefault(u => u.Login == Name);
             _event = await db.Events.FirstOrDefaultAsync(t => _event.Id == t.Id);
             Data.Task task;
             if (projectIDforMutation != null)

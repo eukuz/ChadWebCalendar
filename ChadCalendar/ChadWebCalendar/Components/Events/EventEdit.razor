@@ -1,6 +1,7 @@
 ﻿@using ChadWebCalendar.Data.Services
 @inject EventService eventService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 <EditForm Model="@eventValidation">
     <DataAnnotationsValidator/>
@@ -55,13 +56,16 @@
 
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     Data.EventValidation eventValidation = new Data.EventValidation();
+    string userName;
     [Parameter]
     public int? _eventId { get; set; }
     Data.Event _event;
     bool isHaveError = false;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        userName = authenticationState.Result.User.Identity.Name;
         _event = eventService.GetEventById(_eventId);
     }
     void redirectToIndex()
@@ -70,7 +74,7 @@
     }
     void editEvent()
     {
-        if (eventService.Edit(_event.Id))
+        if (eventService.Edit(_event.Id, userName))
         {
             OnInitializedAsync();
             redirectToIndex();
@@ -83,7 +87,7 @@
     }
     void migration()
     {
-        eventService.Mutatuion(_event, null);
+        eventService.Mutatuion(_event, null, userName);
         redirectToIndex();
     }
 }

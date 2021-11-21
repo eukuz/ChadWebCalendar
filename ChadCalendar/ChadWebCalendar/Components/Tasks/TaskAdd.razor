@@ -1,6 +1,7 @@
 ﻿@using ChadWebCalendar.Data.Services
 @inject TaskService taskService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 <EditForm Model="@taskValidation">
     <DataAnnotationsValidator />
     <ValidationSummary></ValidationSummary>
@@ -75,6 +76,7 @@
 
 
     @code {
+        [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
         string predecessorIdstr = "После любой";
         int? projectId = 0;
         Data.TaskValidation taskValidation = new Data.TaskValidation();
@@ -90,7 +92,7 @@
             tempDT = TimeSpan.Parse("00:00:00"); // инициализация для здравого показа
             DateTime dt = DateTime.Now;
             task.Deadline = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
-            user = taskService.GetUser();
+            user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
             userTasks = taskService.GetTasks(user);
             userProjects = taskService.GetProjects(user);
             firstProject = taskService.GetFirstProject();
@@ -99,7 +101,7 @@
             taskValidation.TimeTakes = task.TimeTakes;
         }
         void addTask()
-        {  
+        {
             if (tempDT != null)
             {
                 task.TimeTakes = tempDT;
@@ -107,7 +109,7 @@
             }
             if (predecessorIdstr != "После любой")
                 task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
-            if (taskService.AddTask(task, projectId))
+            if (taskService.AddTask(task, projectId, user))
             {
                 task = new Data.Task();
                 OnInitializedAsync();

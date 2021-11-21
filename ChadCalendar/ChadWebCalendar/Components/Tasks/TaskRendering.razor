@@ -1,5 +1,6 @@
 ﻿@inject Data.Services.TaskService taskService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 <div class row="row">
     <table class="table table-striped" >
@@ -35,9 +36,10 @@
 
 @code {
     Data.User user;
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        user = taskService.GetUser();
+        user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
     }
     void redirectToEdit(int? id)
     {
