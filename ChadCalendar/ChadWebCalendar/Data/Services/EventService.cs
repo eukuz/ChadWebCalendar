@@ -8,7 +8,7 @@ namespace ChadWebCalendar.Data.Services
 {
     public class EventService
     {
-        ApplicationContext db = new ApplicationContext();
+        static ApplicationContext db = new ApplicationContext();
         string tempLogin = "defourtend";
 
         bool IsCorrect(ref Data.Event _event)
@@ -29,6 +29,7 @@ namespace ChadWebCalendar.Data.Services
             else
                 return null;
         }
+        
         public IEnumerable<Data.Event> GetEvents(int? userId)
         {
             if (userId != null)

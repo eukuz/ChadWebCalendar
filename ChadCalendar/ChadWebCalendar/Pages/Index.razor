@@ -67,7 +67,12 @@
     private List<ChadWebCalendar.Data.Task> Tasks = new List<ChadWebCalendar.Data.Task>();
     private IList<Claim> userClaim = new List<Claim>();
     private LoginModel model = new LoginModel();
-
+    NotificationsWorker notificationWorker = new NotificationsWorker();
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        if (!NotificationsWorker.IsStarted)
+            notificationWorker.Start();
+    }
 
     private async void Logout()
     {
