@@ -12,32 +12,27 @@
     <AuthorizeView>
         <Authorized>
             <h1>Your Dashboard @authenticationState.Result.User.Identity.Name</h1>
+
             <div>
                 <button type="button" class="btn btn-primary" @onclick="Logout">Выйти</button>
                 <a type="button" href="/settings" class="btn btn-primary">Настройки</a>
             </div>
-
+            
+            <p></p>
             <div style="display:flex">
+                
                 <div>
-                    <div style="display:flex">
-                        <input class="btn btn-primary" color="" type="button" value="Input">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                проект
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                        <input class="btn btn-primary" type="button" value="+">
-                    </div>
-                    <TaskRendering />
+                    <ProjectRendering/>
                 </div>
+
                 <div>
-                    <Scheduler></Scheduler>
+                    <TaskRendering/>
                 </div>
+
+                <div>
+                    <Scheduler/>
+                </div>
+
             </div>
 
         </Authorized>
@@ -50,18 +45,6 @@
         </NotAuthorized>
     </AuthorizeView>
 </div>
-
-
-
-
-
-
-
-
-
-
-@*<TableListTasks />*@
-@*<GetListTask />*@
 
 
 @code{

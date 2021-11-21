@@ -1,10 +1,17 @@
 ﻿@inject Data.Services.ProjectService projectService
 @inject NavigationManager NavigationManager
-@foreach (var project in projectService.GetProjects(user))
-{
-    <p>@project.Name</p>
-    <button @onclick="( () => redirectToEdit(project.Id))">Изменить</button>
-}
+
+
+<div class="wrapper">
+     @foreach (var project in projectService.GetProjects(user))
+     {
+         <div width="100%">
+             <input @onclick="(() => redirectToEdit(project.Id))" class="btn btn-info"  color="" type="button" value="@project.IconNumber">
+         </div>
+     }
+     <input @onclick="(() => redirectToAdd())" class="btn btn-info"  color="" type="button" value="+">
+</div>
+
 @code {
     Data.User user;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
@@ -14,5 +21,10 @@
     void redirectToEdit(int? id)
     {
         NavigationManager.NavigateTo($"/projectedit/{id}");
+    }
+    //метод, для создания проекта
+    void redirectToAdd()
+    {
+        NavigationManager.NavigateTo($"/projectadd");
     }
 }
