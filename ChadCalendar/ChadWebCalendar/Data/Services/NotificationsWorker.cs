@@ -10,13 +10,14 @@ namespace ChadWebCalendar.Data.Services
     {
         public static DateTime? FirstEventDT;
         public static bool IsStarted = false;
+        public delegate void NotificationShowHandler();
+        static public event NotificationShowHandler NotificationReadyToShow;
         Thread NotificationsCheckThread = new Thread(new ThreadStart(NotificationChecker));
         static ApplicationContext db = new ApplicationContext();
         static public Data.Event GetFirstEventByTime()
         {
             DateTime dt = DateTime.Now.AddMinutes(-5);
             var enumerable = db.Events.OrderBy(e => e != null);
-            // сделат ьвременной отрезок в который должен попасть стартсат, по этому отрезку выводить уведомления
             List<Data.Event> events = enumerable.ToList();
             List<Data.Event> eventsNew = new List<Event>();
             foreach (var item in events)
@@ -51,6 +52,7 @@ namespace ChadWebCalendar.Data.Services
                 if (FirstEventDT == null || dt >= FirstEventDT)
                 {
                     Debug.WriteLine("Fuck yeah");
+                    NotificationReadyToShow.Invoke();
                     if (FirstEvent != null)
                         FirstEventDT = (FirstEvent.StartsAt?.AddMinutes(-FirstEvent.RemindNMinutesBefore)); // вычисление напоминалки
                     else

@@ -1,11 +1,13 @@
 ﻿@page "/"
 @using ChadWebCalendar.Data.Models
 @using ChadWebCalendar.Data.Services
-@inject IAccountService _accountService;
+@inject IAccountService _accountService
 @using ChadWebCalendar.Components.Events 
 @using ChadWebCalendar.Components.Projects 
 @using ChadWebCalendar.Components.Tasks 
 @using ChadWebCalendar.Components
+
+@inject IToastService toastService
 <div>
     <AuthorizeView>
         <Authorized>
@@ -71,10 +73,15 @@
     NotificationsWorker notificationWorker = new NotificationsWorker();
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        NotificationsWorker.NotificationReadyToShow -= showNotification;
+        NotificationsWorker.NotificationReadyToShow += showNotification;
         if (!NotificationsWorker.IsStarted)
             notificationWorker.Start();
     }
-
+    private void showNotification()
+    {
+        toastService.ShowInfo("meow");
+    }
     private async void Logout()
     {
         await _accountService.LogoutAsync();
