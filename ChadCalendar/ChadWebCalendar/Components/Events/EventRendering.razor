@@ -1,0 +1,23 @@
+﻿@inject Data.Services.EventService eventService
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+@foreach (var _event in eventService.GetEvents(userId))
+{
+    <p>@_event.Name</p>
+    <button @onclick="( () => redirectToEdit(_event.Id))">Изменить</button>
+}
+@code {
+    string userName;
+    int? userId;
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        userName = authenticationState.Result.User.Identity.Name;
+        userId = eventService.GetId(userName);
+    }
+    void redirectToEdit(int? id)
+    {
+        NavigationManager.NavigateTo($"/eventedit/{id}");
+    }
+}

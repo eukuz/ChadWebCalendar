@@ -8,9 +8,9 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
         <label for="login">Login</label>
-        <InputText id="login" @bind-Value="LoginData.Login" class="form-control" />
+        <InputText id="login" @bind-Value="LoginData.model.Login" class="form-control" />
         <label for="password">Password</label>
-        <InputText id="password" @bind-Value="LoginData.Password" class="form-control" />
+        <InputText id="password" @bind-Value="LoginData.model.Password" class="form-control" />
         <p class="my-4"><button type="submit" class="btn btn-primary">Log in</button></p>
 
     </EditForm>

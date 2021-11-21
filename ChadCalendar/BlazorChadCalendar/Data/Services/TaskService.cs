@@ -9,6 +9,13 @@ namespace BlazorChadCalendar.Data.Services
     public class TaskService
     {
         ApplicationContext db = new ApplicationContext();
+        public bool IsCorrect(in Data.Task task)
+        {
+            if (task.Name != null && task.TimeTakes != null)
+                return true;
+            else
+                return false;
+        }
         private void removeDependencies(Data.Task task)
         {
             var PredecessorDependecies = db.Tasks.Where(t => t.Predecessor == task);
@@ -22,6 +29,10 @@ namespace BlazorChadCalendar.Data.Services
         public IEnumerable<Project> GetProjects(User user)
         {
             return db.Projects.Where(proj => proj.User == user);
+        }
+        public Data.Project GetFirstProject()
+        {
+            return db.Projects.FirstOrDefault(p => p.Id != null);
         }
         public Data.Task GetTask(int? id)
         {
@@ -42,7 +53,7 @@ namespace BlazorChadCalendar.Data.Services
         {
             return db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
         }
-        public void AddTask(Data.Task task, int projectId)
+        public bool AddTask(Data.Task task, int? projectId)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
             task.User = user;
@@ -51,8 +62,13 @@ namespace BlazorChadCalendar.Data.Services
             task.NRepetitions = 1;
             task.Predecessor = GetPredecessor(91);
             task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId); // это странное выражение нужно потому что в модели передается только Id
-            db.Add(task);
-            db.SaveChanges();
+            if (IsCorrect(task))
+            {
+                db.Add(task);
+                db.SaveChanges();
+                return true;
+            }
+            return false;
         }
         public async void Edit(Data.Task task, int projectId)
         {

@@ -1,0 +1,71 @@
+﻿@using ChadWebCalendar.Data.Services
+@inject ProjectService projectService
+@inject NavigationManager NavigationManager
+
+
+<div class="form-group">
+    <label>Название события</label>
+    <input class="form-control" type="text" placeholder="" @bind="project.Name">
+</div>
+<div class="form-group">
+    <label>Описание</label>
+    <textarea class="form-control" type="text" placeholder="" @bind="project.Description"></textarea>
+</div>
+<div class="form-group">
+    <label asp-for="NRepetitions" class="control-label">Количество повторений в неделю</label>
+    <input class="form-control" type="number" @bind="project.NRepetitions" min="0">
+    <span asp-validation-for="NRepetitions" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label>Частота</label>
+    <select @bind="project.Frequency">
+        <option disabled>Частота</option>
+        <option>Никогда</option>
+        <option>Каждый день</option>
+        <option>Каждую неделю</option>
+        <option>Каждый месяц</option>
+    </select>
+</div>
+<div class="form-group">
+    <label>Введите время дедлайна</label>
+    <input type="datetime-local" @bind="project.Deadline" @bind:format="yyyy-MM-ddTHH:mm" />
+</div>
+<div class="form-group">
+    <label>Выберите иконку</label>
+    <select @bind="project.IconNumber">
+        <option>💗</option>
+        <option>😈</option>
+        <option>😍</option>
+        <option>🤠</option>
+        <option>😀</option>
+        <option>⛹</option>
+        <option>☕</option>
+        <option>⌚</option>
+    </select>
+</div>
+
+<div class="form-group">
+    @if (isHaveError)
+    {
+        <label>Введенные данные некорректны, попробуйте еще раз</label>
+    }
+</div>
+
+<button @onclick="addProject" class="btn btn-primary">Готово</button>
+
+
+
+@code {
+    Data.Project project;
+    bool isHaveError = false;
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        project = new Data.Project();
+    }
+    void addProject()
+    {
+        projectService.Create(project);
+        OnInitializedAsync();
+        NavigationManager.NavigateTo("/");
+    }
+}

@@ -1,0 +1,137 @@
+﻿@using ChadWebCalendar.Data.Services
+@inject TaskService taskService
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+<EditForm Model="@taskValidation">
+    <DataAnnotationsValidator />
+    <ValidationSummary></ValidationSummary>
+    <div class="form-group">
+        <label>Название задачи</label>
+        <input type="text" placeholder="" @bind="task.Name">
+        <ValidationMessage For="() => task" />
+    </div>
+    <div class="form-group">
+        <label>Время на задачу</label>
+        <input type="text" @bind="tempDT" min="0">
+    </div>
+    <div class="form-group">
+        <label>Описание</label>
+        <textarea class="form-control" type="text" placeholder="" @bind="task.Description"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Дедлайн</label>
+        <input class="form-control" type="datetime-local" @bind="task.Deadline" @bind:format="yyyy-MM-ddTHH:mm" />
+    </div>
+    <div class="form-group">
+        <label>Выберите проект для задачи</label>
+        @if (userProjects != null)
+        {
+            @if (task.Project == null)
+            {
+                task.Project = new Data.Project { Id = 0 };
+            }
+            <select @bind="projectId">
+                @foreach (var proj in userProjects)
+                {
+                    <option value="@proj.Id">@proj.Name</option>
+                }
+            </select>
+        }
+    </div>
+    <div class="form-group">
+        <input type="checkbox" @bind="task.AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
+    </div>
+    <div class="form-group">
+        <label> После какой задачи расположить</label>
+        <select @bind="predecessorIdstr">
+            <option value="После любой">После любой</option>
+            @if (userTasks != null)
+            {
+                foreach (var task in userTasks)
+                {
+                    <option value="@task.Id.ToString()"> @task.Name </option>
+                }
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Максимум в день</label>
+        <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
+    </div>
+    <div class="form-group">
+        <label>Частота</label>
+        <select @bind="task.Frequency">
+            <option disabled>Частота</option>
+            <option>Никогда</option>
+            <option>Каждый день</option>
+            <option>Каждую неделю</option>
+            <option>Каждый месяц</option>
+        </select>
+    </div>
+    <div class="form-group">
+        @if (isValidationError)
+        {
+            <label>Проверьте правильность заполнения полей</label>
+        }
+    </div>
+    <button @onclick="updateTask" class="btn btn-primary">Готово</button>
+    <button @onclick="deleteTask" class="btn btn-danger">Удалить задачу</button>
+    <button @onclick="mutation" class="btn-dark">Сделать событием</button>
+</EditForm>
+
+    @code {
+        [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+        string predecessorIdstr = "После любой";
+        Data.TaskValidation taskValidation = new Data.TaskValidation();
+        [Parameter]
+        public int taskId { get; set; }
+        int projectId = 0;
+        Data.Task task;
+        Data.User user;
+        TimeSpan? tempDT;
+        IEnumerable<Data.Project> userProjects;
+        IEnumerable<Data.Task> userTasks;
+        bool isValidationError = false;
+        protected override async System.Threading.Tasks.Task OnInitializedAsync()
+        {
+            task = taskService.GetTask(taskId);
+            if (task.Predecessor != null)
+                predecessorIdstr = task.Predecessor.ToString();
+            if (task.Project != null)
+                projectId = (int)task.Project.Id;
+            tempDT = task.TimeTakes;
+            user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
+            userTasks = taskService.GetTasks(user);
+            userProjects = taskService.GetProjects(user);
+        }
+        void redirectToIndex()
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        void deleteTask()
+        {
+            taskService.Delete(task);
+            redirectToIndex();
+        }
+        void updateTask()
+        {
+            if (tempDT != null)
+            {
+                task.TimeTakes = tempDT;
+                taskValidation.TimeTakes = task.TimeTakes;
+            }
+            if (predecessorIdstr != "После любой")
+                task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
+            if (taskService.Edit(task, projectId))
+            {
+                OnInitializedAsync();
+                redirectToIndex();
+            }
+        }
+        void mutation()
+        {
+            taskService.Mutatuion(task.Id);
+            redirectToIndex();
+
+        }
+    }

@@ -1,0 +1,86 @@
+﻿@using BlazorChadCalendar.Data.Services
+@inject ProjectService projectService
+@inject NavigationManager NavigationManager
+@inject IModalService modal
+
+
+<div class="form-group">
+    <label>Название проекта</label>
+    <input class="form-control" type="text" placeholder="" @bind="project.Name">
+</div>
+<div class="form-group">
+    <label>Описание</label>
+    <textarea class="form-control" type="text" placeholder="" @bind="project.Description"></textarea>
+</div>
+<div class="form-group">
+    <label asp-for="NRepetitions" class="control-label">Количество повторений в неделю</label>
+    <input class="form-control" type="number" @bind="project.NRepetitions" min="0">
+    <span asp-validation-for="NRepetitions" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label>Частота</label>
+    <select @bind="project.Frequency">
+        <option>Никогда</option>
+        <option>Каждый день</option>
+        <option>Каждую неделю</option>
+        <option>Каждый месяц</option>
+    </select>
+</div>
+<div class="form-group">
+    <label>Введите время дедлайна</label>
+    <input type="datetime-local" @bind="project.Deadline" @bind:format="yyyy-MM-ddTHH:mm" />
+</div>
+<div class="form-group">
+    <label>Выберите иконку</label>
+    <select @bind="project.IconNumber">
+        <option>💗</option>
+        <option>😈</option>
+        <option>😍</option>
+        <option>🤠</option>
+        <option>😀</option>
+        <option>⛹</option>
+        <option>☕</option>
+        <option>⌚</option>
+    </select>
+</div>
+
+<div class="form-group">
+    @if (isHaveError)
+    {
+        <label>Введенные данные некорректны, попробуйте еще раз</label>
+    }
+</div>
+
+<button @onclick="@(() => modal.Show<ProjectAdd>("Добавить проект"))" class="btn btn-secondary">Добавить проект</button>
+<button @onclick="editProject" class="btn btn-primary">Готово</button>
+<button @onclick="deleteProject" class="btn btn-danger">Удалить задачу</button>
+
+
+
+
+@code {
+    [Parameter]
+    public int? projectId { get; set; }
+    Data.Project project;
+    bool isHaveError = false;
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        project = projectService.GetProjectById(projectId);
+    }
+    void redirectToIndex()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+    void editProject()
+    {
+        projectService.Edit(project.Id);
+        OnInitializedAsync();
+        redirectToIndex();
+    }
+    void deleteProject()
+    {
+        projectService.Delete(project.Id);
+        redirectToIndex();
+    }
+}
+
