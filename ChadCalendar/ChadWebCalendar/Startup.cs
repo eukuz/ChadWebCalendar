@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using Blazored.Modal;
+using Blazored.Toast;
 using ChadWebCalendar.Data;
 using ChadWebCalendar.Data.Services;
 using Microsoft.AspNetCore.Builder;
@@ -49,6 +50,7 @@ namespace ChadWebCalendar
             services.AddScoped<TooltipService>();
             services.AddScoped<ContextMenuService>();
             services.AddBlazoredModal();
+            services.AddBlazoredToast();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
