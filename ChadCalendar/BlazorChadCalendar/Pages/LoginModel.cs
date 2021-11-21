@@ -23,6 +23,7 @@ namespace BlazorChadCalendar.Pages
         {
             var token = new SecurityToken
             {
+
                 AccessToken = LoginData.model.Password,
                 UserName = LoginData.model.Login,
                 ExpiredAt = DateTime.UtcNow.AddDays(3)
