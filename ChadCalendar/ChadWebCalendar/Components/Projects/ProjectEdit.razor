@@ -2,6 +2,7 @@
 @inject ProjectService projectService
 @inject NavigationManager NavigationManager
 @inject IModalService modal
+@attribute [Authorize]
 
 
 <div class="form-group">
@@ -59,12 +60,15 @@
 
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     [Parameter]
     public int? projectId { get; set; }
     Data.Project project;
     bool isHaveError = false;
+    string userName;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        userName = authenticationState.Result.User.Identity.Name;
         project = projectService.GetProjectById(projectId);
     }
     void redirectToIndex()
@@ -73,9 +77,11 @@
     }
     void editProject()
     {
-        projectService.Edit(project.Id);
-        OnInitializedAsync();
-        redirectToIndex();
+        if (projectService.Edit(project.Id, userName))
+        {
+            OnInitializedAsync();
+            redirectToIndex();
+        }
     }
     void deleteProject()
     {

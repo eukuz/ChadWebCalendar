@@ -1,7 +1,7 @@
 ﻿@using ChadWebCalendar.Data.Services
 @inject ProjectService projectService
 @inject NavigationManager NavigationManager
-
+@attribute [Authorize]
 
 <div class="form-group">
     <label>Название события</label>
@@ -57,15 +57,20 @@
 
 @code {
     Data.Project project;
+    string userName;
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     bool isHaveError = false;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         project = new Data.Project();
+        userName = authenticationState.Result.User.Identity.Name;
     }
     void addProject()
     {
-        projectService.Create(project);
-        OnInitializedAsync();
-        NavigationManager.NavigateTo("/");
+        if (projectService.Create(project, userName))
+        {
+            OnInitializedAsync();
+            NavigationManager.NavigateTo("/");
+        }
     }
 }
