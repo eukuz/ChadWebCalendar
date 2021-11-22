@@ -1,5 +1,6 @@
 ﻿@inject Data.Services.ProjectService projectService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 @foreach (var project in projectService.GetProjects(user))
 {
     <p>@project.Name</p>
@@ -7,9 +8,10 @@
 }
 @code {
     Data.User user;
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        user = projectService.GetUser();
+        user = projectService.GetUser(authenticationState.Result.User.Identity.Name);
     }
     void redirectToEdit(int? id)
     {
