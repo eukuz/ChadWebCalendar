@@ -1,51 +1,81 @@
 ﻿@page "/"
 @using ChadWebCalendar.Data.Models
 @using ChadWebCalendar.Data.Services
-@inject IAccountService _accountService
-@using ChadWebCalendar.Components.Events 
-@using ChadWebCalendar.Components.Projects 
-@using ChadWebCalendar.Components.Tasks 
+@inject IAccountService _accountService;
+@using ChadWebCalendar.Components.Events
+@using ChadWebCalendar.Components.Tasks
 @using ChadWebCalendar.Components
+@using ChadWebCalendar.Components.Projects
+@using AntDesign; 
 
-@inject IToastService toastService
+
 <div>
     <AuthorizeView>
         <Authorized>
-            <h1>Your Dashboard @authenticationState.Result.User.Identity.Name</h1>
-
+            <div class="navmenu">
+                <NavigationMenu></NavigationMenu>
+            </div>
+            <div class="main_container">
+                <div class="projectlist">
+                    <ProjectList></ProjectList>
+                </div>
+                <div class="tasklist">
+                    <TaskList></TaskList>
+                </div>
+                <div class="scheduler">
+                    <Scheduler></Scheduler>
+                </div>
+            </div>
             <div>
-                <button type="button" class="btn btn-primary" @onclick="Logout">Выйти</button>
-                <a type="button" href="/settings" class="btn btn-primary">Настройки</a>
+                <Button OnClick="@(()=>{ visibleEvent = true; })">
+                    Добавить событие
+                </Button>
+                <Modal Title="Добавить событие"
+                       Visible="@visibleEvent"
+                       OnOk="(e)=>{visibleEvent = false;}"
+                       OnCancel="(e)=>{visibleEvent = false;}">
+                    <EventAdd></EventAdd>
+                </Modal>
             </div>
-            
-            <p></p>
-            <div style="display:flex">
-                
-                <div>
-                    <ProjectRendering/>
-                </div>
-
-                <div>
-                    <TaskRendering/>
-                </div>
-
-                <div>
-                    <Scheduler/>
-                </div>
-
+            <div>
+                <Button OnClick="@(()=>{ visibleProject = true; })">
+                    Добавить проект
+                </Button>
+                <Modal Title="Добавить проект"
+                       Visible="@visibleProject"
+                       OnOk="(e)=>{visibleProject = false;}"
+                       OnCancel="(e)=>{visibleProject = false;}">
+                    <ProjectAdd></ProjectAdd>
+                </Modal>
             </div>
-
+            <div>
+                <Button OnClick="@(()=>{ visibleTask = true; })">
+                    Добавить таск
+                </Button>
+                <Modal Title="Добавить таск"
+                       Visible="@visibleTask"
+                       OnOk="(e)=>{visibleTask = false;}"
+                       OnCancel="(e)=>{visibleTask = false;}">
+                    <TaskAdd></TaskAdd>
+                </Modal>
+            </div>
+            <div>
+                <Button OnClick="@(()=>{ visibleEditProject = true; })">
+                    Изменить проект
+                </Button>
+                <Modal Title="Изменить проект"
+                       Visible="@visibleEditProject"
+                       OnOk="(e)=>{visibleEditProject = false;}"
+                       OnCancel="(e)=>{visibleEditProject = false;}">
+                    <ProjectEdit projectId="projectId"></ProjectEdit>
+                </Modal>
+            </div>
         </Authorized>
         <NotAuthorized>
-            <div>
-                <h1>Войдите в систему!</h1>
-                <a type="button" href="/login" class="btn btn-primary">Login</a>
-                <a type="button" href="/register" class="btn btn-primary">Register</a>
-            </div>
+            <LogIn />
         </NotAuthorized>
     </AuthorizeView>
 </div>
-
 
 @code{
     [CascadingParameter]
@@ -53,20 +83,18 @@
     private List<ChadWebCalendar.Data.Task> Tasks = new List<ChadWebCalendar.Data.Task>();
     private IList<Claim> userClaim = new List<Claim>();
     private LoginModel model = new LoginModel();
-    NotificationsWorker notificationWorker = new NotificationsWorker();
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
-    {
-        NotificationsWorker.NotificationReadyToShow -= showNotification;
-        NotificationsWorker.NotificationReadyToShow += showNotification;
-        if (!NotificationsWorker.IsStarted)
-            notificationWorker.Start();
-    }
-    private void showNotification()
-    {
-        toastService.ShowInfo("meow");
-    }
+
+
     private async void Logout()
     {
         await _accountService.LogoutAsync();
     }
+
+
+    bool visibleEvent = false;
+    bool visibleProject = false;
+    bool visibleTask = false;
+    bool visibleEditProject = false;
+
+    public int? projectId = 5;
 }

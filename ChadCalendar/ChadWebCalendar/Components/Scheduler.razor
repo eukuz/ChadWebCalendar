@@ -1,21 +1,14 @@
 ﻿@page "/scheduler"
-@using ChadWebCalendar.Data 
+@using ChadWebCalendar.Data
 @inject DialogService DialogService
 
-<RadzenScheduler Data="@DataItems" TItem="DataItem" StartProperty="Start" EndProperty="End" TextProperty="Text" Style="height: 800px" >
+<RadzenScheduler Data="@DataItems" TItem="DataItem" StartProperty="Start" EndProperty="End" TextProperty="Text" Style="height: 800px; width: 100%">
     <ChildContent>
-        <RadzenMonthView />
-        <RadzenDayView />
         <RadzenWeekView />
+        <RadzenDayView />
+        <RadzenMonthView />
     </ChildContent>
 </RadzenScheduler>
-
-
-<h1>Events: </h1>
-@foreach (var item in DataItems)
-{
-    <h3>@item.Text</h3>
-}
 
 @code {
     class DataItem
@@ -27,9 +20,11 @@
 
     ApplicationContext db = new ApplicationContext();
 
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+
     public IEnumerable<Data.Event> GetEvents()
     {
-        return db.Events.Where(e => e != null);
+        return db.Events.Where(e => e != null && e.User.Login == @authenticationState.Result.User.Identity.Name);
     }
 
     List<DataItem> DataItems = new();

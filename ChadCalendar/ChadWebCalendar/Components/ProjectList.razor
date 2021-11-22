@@ -1,0 +1,20 @@
+﻿@inject Data.Services.ProjectService projectService
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+<div class="list-group" style="height: 800px; width:100%; overflow: auto;">
+    @foreach (var project in projectService.GetProjects(user))
+    {
+        <button type="button" class="list-group-item">@project.IconNumber</button>
+    }
+</div>
+
+@code
+{
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    Data.User user;
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        user = projectService.GetUser(authenticationState.Result.User.Identity.Name);
+    }
+}

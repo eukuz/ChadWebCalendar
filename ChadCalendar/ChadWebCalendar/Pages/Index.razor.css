@@ -1,0 +1,16 @@
+.main_container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.scheduler {
+    width: 80%;
+}
+
+.projectlist {
+    width: 4%;
+}
+
+.tasklist {
+    width: 16%;
+}
