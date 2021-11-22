@@ -1,14 +1,37 @@
 ﻿@page "/scheduler"
 @using ChadWebCalendar.Data
+@using AntDesign;
 @inject DialogService DialogService
+@using ChadWebCalendar.Components.Events
 
-<RadzenScheduler Data="@DataItems" TItem="DataItem" StartProperty="Start" EndProperty="End" TextProperty="Text" Style="height: 800px; width: 100%">
+<RadzenScheduler  @ref=@scheduler Data="@DataItems" TItem="DataItem" StartProperty="Start" EndProperty="End" TextProperty="Text" Style="height: 800px; width: 100%"
+                 SlotSelect=@OnSlotSelect>
     <ChildContent>
         <RadzenWeekView />
         <RadzenDayView />
         <RadzenMonthView />
     </ChildContent>
 </RadzenScheduler>
+
+<Modal Title="@("Создание события")"
+       Visible="@EventAddModal"
+       OnOk="@HideModal"
+       OnCancel="@HideModal"
+       OkText="@("Ок")"
+       CancelText="@("Закрыть")">
+    <EventAdd></EventAdd>
+</Modal>
+
+<Modal Title="@("Изменить событие")"
+       Visible="@EventEditModal"
+       OnOk="@HideModal"
+       OnCancel="@HideModal"
+       OkText="@("Ок")"
+       CancelText="@("Закрыть")">
+    <p>Bla bla ...</p>
+    <p>Bla bla ...</p>
+    <p>Bla bla ...</p>
+</Modal>
 
 @code {
     class DataItem
@@ -18,6 +41,7 @@
         public string Text { get; set; }
     }
 
+    RadzenScheduler<DataItem> scheduler;
     ApplicationContext db = new ApplicationContext();
 
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
@@ -26,7 +50,7 @@
     {
         return db.Events.Where(e => e != null && e.User.Login == @authenticationState.Result.User.Identity.Name);
     }
-
+     
     List<DataItem> DataItems = new();
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
@@ -39,5 +63,31 @@
             d.Text = item.Name;
             DataItems.Add(d);
         }
+    }
+
+    private int myValue = 0;
+
+    private bool EventAddModal = false;
+    private bool EventEditModal = false;
+
+    private void ShowEventAddModal()
+    {
+        EventAddModal = true;
+    }
+    private void ShowEventEditModal()
+    {
+        EventEditModal = true;
+    }
+
+    private void HideModal()
+    {
+        EventAddModal = false;
+        EventEditModal = false;
+    }
+
+    async System.Threading.Tasks.Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
+    {
+        ShowEventAddModal();
+        await scheduler.Reload();
     }
 }
