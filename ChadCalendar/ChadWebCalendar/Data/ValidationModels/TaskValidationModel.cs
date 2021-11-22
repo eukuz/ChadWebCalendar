@@ -6,8 +6,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ChadWebCalendar.Data
 {
     [Table("Tasks")]
-    public class Task : Duty
+    public class TaskValidation : Duty
     {
+        public new int? Id { get; set; }
+        public new DateTime? Accessed { get; set; }
+        public new int? NRepetitions { get; set; } = 1;
+        public new User User { get; set; }
         [Required]
         public bool IsCompleted { get; set; } = false; // false т.к при создании Task задача еще не выполнена
         [Required]
@@ -19,7 +23,6 @@ namespace ChadWebCalendar.Data
         public int? PredecessorFK { get; set; }
         [ForeignKey("PredecessorFK")]
         public Task Predecessor { get; set; }
-        [Required]
         public Project Project { get; set; }
 
         public bool IsCorrect()
@@ -28,23 +31,6 @@ namespace ChadWebCalendar.Data
                 return false;
             else
                 return true;
-        }
-        public Task() { }
-        public Task(Event _event, Project project)
-        {
-            Accessed = DateTime.Now;
-            Description = _event.Description;
-            AllowedToDistribute = true;
-            Deadline = _event.FinishesAt;
-            TimeTakes = _event.FinishesAt - _event.StartsAt;
-            IsCompleted = false;
-            MaxPerDay = 0;
-            Predecessor = null;
-            Project = project;
-            Frequency = _event.Frequency;
-            Name = _event.Name;
-            NRepetitions = _event.NRepetitions;
-            User = _event.User;
         }
     }
 }

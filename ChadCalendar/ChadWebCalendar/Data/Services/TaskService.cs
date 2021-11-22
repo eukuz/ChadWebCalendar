@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace ChadWebCalendar.Data.Services
 {
     public class TaskService
@@ -10,7 +11,7 @@ namespace ChadWebCalendar.Data.Services
         ApplicationContext db = new ApplicationContext();
         public bool IsCorrect(in Data.Task task)
         {
-            if (task.Name != null && task.TimeTakes != null)
+            if (task.Name != null && task.TimeTakes != null && task.Name != "")
                 return true;
             else
                 return false;
@@ -48,13 +49,12 @@ namespace ChadWebCalendar.Data.Services
             else
                 return null;
         }
-        public Data.User GetUser()
+        public Data.User GetUser(string Name)
         {
-            return db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+            return db.Users.FirstOrDefault(u => u.Login == Name);
         }
-        public bool AddTask(Data.Task task, int? projectId)
+        public bool AddTask(Data.Task task, int? projectId, User user)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
             task.User = user;
             //task.Predecessor = getPredecessor(task.Predecessor.Id);
             task.Accessed = DateTime.Now;
@@ -69,15 +69,20 @@ namespace ChadWebCalendar.Data.Services
             }
             return false;
         }
-        public async void Edit(Data.Task task, int projectId)
+        public bool Edit(Data.Task task, int projectId)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
             task.Accessed = DateTime.Now;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId); // это странное выражение нужно потому что в модели передается только Id
             //Models.Task tempTask = task.Predecessor;
             task.Predecessor = GetPredecessor(91/*task.Predecessor.Id*/);
-            db.Tasks.Update(task);
-            await db.SaveChangesAsync();
+            if (IsCorrect(task))
+            {
+                db.Tasks.Update(task);
+                db.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
         public async void Delete(Data.Task task)
         {

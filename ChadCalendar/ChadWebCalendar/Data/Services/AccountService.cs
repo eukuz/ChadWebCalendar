@@ -10,6 +10,7 @@ namespace ChadWebCalendar.Data.Services
     {
         Task<bool> LoginAsync(LoginModel model);
         Task<bool> LogoutAsync();
+        string GetLogin();
     }
     public class AccountService : IAccountService
     {
@@ -35,7 +36,10 @@ namespace ChadWebCalendar.Data.Services
             //}  
            
         }
-
+        public string GetLogin()
+        {
+            return _customAuthenticationProvider.GetAuthenticationStateAsync().Result.User.Identity.Name;
+        }
         public async Task<bool> LogoutAsync()
         {
             await _localStorageService.RemoveItemAsync("token");

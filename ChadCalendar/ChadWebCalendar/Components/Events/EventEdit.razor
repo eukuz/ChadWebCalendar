@@ -1,62 +1,71 @@
 ﻿@using ChadWebCalendar.Data.Services
 @inject EventService eventService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
+<EditForm Model="@eventValidation">
+    <DataAnnotationsValidator/>
+    <ValidationSummary></ValidationSummary>
+    <div class="form-group">
+        <label>Название события</label>
+        <input class="form-control" type="text" placeholder="" @bind="_event.Name">
+        <ValidationMessage For="() => _event" />
+    </div>
+    <div class="form-group">
+        <label>Описание</label>
+        <textarea class="form-control" type="text" placeholder="" @bind="_event.Description"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Частота</label>
+        <select @bind="_event.Frequency">
+            <option>Никогда</option>
+            <option>Каждый день</option>
+            <option>Каждую неделю</option>
+            <option>Каждый месяц</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Начинается</label>
+        <input class="form-control" type="datetime-local" @bind="_event.StartsAt" @bind:format="yyyy-MM-ddTHH:mm" />
+    </div>
+    <div class="form-group">
+        <label>Заканчивается</label>
+        <input class="form-control" type="datetime-local" @bind="_event.FinishesAt" @bind:format="yyyy-MM-ddTHH:mm" />
+        <span asp-validation-for="FinishesAt"></span>
+    </div>
+    <div class="form-group">
+        <label>Напомнить за</label>
+        <input class="form-control" type="number" @bind="_event.RemindNMinutesBefore" min="0">
+        <label>минут</label>
+    </div>
+    <div class="form-group">
+        @if (isHaveError)
+        {
+            <label>Введенные данные некорректны, попробуйте еще раз</label>
+        }
+    </div>
 
-<div class="form-group">
-    <label>Название события</label>
-    <input class="form-control" type="text" placeholder="" @bind="_event.Name">
-</div>
-<div class="form-group">
-    <label>Описание</label>
-    <textarea class="form-control" type="text" placeholder="" @bind="_event.Description"></textarea>
-</div>
-<div class="form-group">
-    <label>Частота</label>
-    <select @bind="_event.Frequency">
-        <option>Никогда</option>
-        <option>Каждый день</option>
-        <option>Каждую неделю</option>
-        <option>Каждый месяц</option>
-    </select>
-</div>
-<div class="form-group">
-    <label>Начинается</label>
-    <input class="form-control" type="datetime-local" @bind="_event.StartsAt" @bind:format="yyyy-MM-ddTHH:mm"/>
-</div>
-<div class="form-group">
-    <label>Заканчивается</label>
-    <input class="form-control" type="datetime-local" @bind="_event.FinishesAt" @bind:format="yyyy-MM-ddTHH:mm"/>
-    <span asp-validation-for="FinishesAt"></span>
-</div>
-<div class="form-group">
-    <label>Напомнить за</label>
-    <input class="form-control" type="number" @bind="_event.RemindNMinutesBefore" min="0">
-    <label>минут</label>
-</div>
-<div class="form-group">
-    @if (isHaveError)
-    {
-        <label>Введенные данные некорректны, попробуйте еще раз</label>
-    }
-</div>
-
-<button @onclick="editEvent" class="btn btn-primary">Готово</button>
-<button @onclick="deleteEvent" class="btn btn-danger">Удалить</button>
-<button @onclick="migration" class="btn btn-dark">Сделать задачей</button>
-<div class="dropdown">
-    <button class="dropbtn">Dropdown</button>
-</div>
+    <button @onclick="editEvent" class="btn btn-primary">Готово</button>
+    <button @onclick="deleteEvent" class="btn btn-danger">Удалить</button>
+    <button @onclick="migration" class="btn btn-dark">Сделать задачей</button>
+    <div class="dropdown">
+        <button class="dropbtn">Dropdown</button>
+    </div>
+</EditForm>
 
 
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    Data.EventValidation eventValidation = new Data.EventValidation();
+    string userName;
     [Parameter]
     public int? _eventId { get; set; }
     Data.Event _event;
     bool isHaveError = false;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        userName = authenticationState.Result.User.Identity.Name;
         _event = eventService.GetEventById(_eventId);
     }
     void redirectToIndex()
@@ -65,9 +74,11 @@
     }
     void editEvent()
     {
-        eventService.Edit(_event.Id);
-        OnInitializedAsync();
-        redirectToIndex();
+        if (eventService.Edit(_event.Id, userName))
+        {
+            OnInitializedAsync();
+            redirectToIndex();
+        }
     }
     void deleteEvent()
     {
@@ -76,7 +87,7 @@
     }
     void migration()
     {
-        eventService.Mutatuion(_event, null);
+        eventService.Mutatuion(_event, null, userName);
         redirectToIndex();
     }
 }
