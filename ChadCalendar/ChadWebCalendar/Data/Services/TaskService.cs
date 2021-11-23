@@ -56,11 +56,10 @@ namespace ChadWebCalendar.Data.Services
         public bool AddTask(Data.Task task, int? projectId, User user)
         {
             task.User = user;
-            //task.Predecessor = getPredecessor(task.Predecessor.Id);
             task.Accessed = DateTime.Now;
             task.NRepetitions = 1;
             task.Predecessor = GetPredecessor(91);
-            task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId); // это странное выражение нужно потому что в модели передается только Id
+            task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId);
             if (IsCorrect(task))
             {
                 db.Add(task);
