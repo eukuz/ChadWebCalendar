@@ -122,7 +122,7 @@
             }
             if (predecessorIdstr != "После любой")
                 task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
-            if (taskService.Edit(task, projectId))
+            if (taskService.Edit(task, projectId, authenticationState.Result.User.Identity.Name))
             {
                 OnInitializedAsync();
                 redirectToIndex();
@@ -130,7 +130,7 @@
         }
         void mutation()
         {
-            taskService.Mutatuion(task.Id);
+            taskService.Mutatuion(task.Id, authenticationState.Result.User.Identity.Name);
             redirectToIndex();
 
         }

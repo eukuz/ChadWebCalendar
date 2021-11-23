@@ -2,11 +2,12 @@
 @using ChadWebCalendar.Data.Models
 @using ChadWebCalendar.Data.Services
 @inject IAccountService _accountService
-@using ChadWebCalendar.Components.Events 
-@using ChadWebCalendar.Components.Projects 
-@using ChadWebCalendar.Components.Tasks 
+@using ChadWebCalendar.Components.Events
+@using ChadWebCalendar.Components.Projects
+@using ChadWebCalendar.Components.Tasks
 @using ChadWebCalendar.Components
 
+@inject NotificationService _notice
 @inject IToastService toastService
 <div>
     <AuthorizeView>
@@ -31,7 +32,7 @@
                                 <a class="dropdown-item" href="#">Something else here</a>
                             </div>
                         </div>
-                        <input class="btn btn-primary" type="button" value="+">
+                        <input class="btn btn-primary" type="button" @onclick="showNotification" value="+">
                     </div>
                     <TaskRendering />
                 </div>
@@ -73,17 +74,21 @@
     NotificationsWorker notificationWorker = new NotificationsWorker();
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        NotificationsWorker.NotificationReadyToShow -= showNotification;
-        NotificationsWorker.NotificationReadyToShow += showNotification;
-        if (!NotificationsWorker.IsStarted)
+        if (!NotificationsWorker.IsStarted && authenticationState.Result.User.Identity.Name != null)
+        {
+            NotificationsWorker.Username = authenticationState.Result.User.Identity.Name;
             notificationWorker.Start();
+            NotificationsWorker.NotificationReadyToShow += showNotification;
+            NotificationsWorker.IsStarted = true;
+        }
     }
     private void showNotification()
     {
-        toastService.ShowInfo("meow");
+        toastService.ShowInfo($"You have {NotificationsWorker.TypeOfNotification} at {NotificationsWorker.DeadlineNotification}");
     }
     private async void Logout()
     {
+        notificationWorker.Stop();
         await _accountService.LogoutAsync();
     }
 }

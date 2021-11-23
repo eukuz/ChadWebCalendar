@@ -48,11 +48,17 @@ namespace ChadWebCalendar.Data.Services
         {
             if (id != null)
             {
-                Project project = await db.Projects.FirstOrDefaultAsync(p => p.Id == id);
+                Project project = db.Projects.FirstOrDefault(p => p.Id == id);
                 if (project != null)
                 {
+                    var projectDependencies = db.Tasks.Where(t => t.Project == project);
+                    foreach (var item in projectDependencies)
+                    {
+                        item.Project = null;
+                    }
+                    db.SaveChanges();
                     db.Projects.Remove(project);
-                    await db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
             }
         }
