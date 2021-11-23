@@ -1,75 +1,71 @@
-@inject DialogService DialogService
+п»ї@inject DialogService DialogService
 @using ChadWebCalendar.Data
 
 <RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
-            <RadzenLabel Text="Название" />
+            <RadzenLabel Text="РќР°Р·РІР°РЅРёРµ"/>
         </div>
         <div class="col">
-            <RadzenTextBox @bind-Value="@model.Text" Name="Название123`qq" />
-            <RadzenRequiredValidator Text="Title is required" Component="Название" />
+            <RadzenTextBox @bind-Value="@model.Text" Name="РќР°Р·РІР°РЅРёРµ" />
         </div>
     </div>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
-            <RadzenLabel Text="Описание" />
+            <RadzenLabel Text="РћРїРёСЃР°РЅРёРµ" />
         </div>
         <div class="col">
             <RadzenTextArea @bind-Value="@model.Description" Name="Description" />
-            <RadzenRequiredValidator Text="Title is required" Component="Description" />
         </div>
     </div>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
-            <RadzenLabel Text="Частота" />
+            <RadzenLabel Text="Р§Р°СЃС‚РѕС‚Р°" />
         </div>
         <div class="col">
             <div class="form-group">
                 <label></label>
                 <select @bind="model.Frequency">
-                    <option><RadzenLabel Text="Никогда" /></option>
-                    <option><RadzenLabel Text="Каждый день" /></option>
-                    <option><RadzenLabel Text="Каждую неделю" /></option>
-                    <option><RadzenLabel Text="Каждый месяц" /></option>
+                    <option><RadzenLabel Text="РќРёРєРѕРіРґР°" /></option>
+                    <option><RadzenLabel Text="РљР°Р¶РґС‹Р№ РґРµРЅСЊ" /></option>
+                    <option><RadzenLabel Text="РљР°Р¶РґСѓСЋ РЅРµРґРµР»СЋ" /></option>
+                    <option><RadzenLabel Text="РљР°Р¶РґС‹Р№ РјРµСЃСЏС†" /></option>
                 </select>
             </div>
         </div>
     </div>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
-            <RadzenLabel Text="Начало" />
+            <RadzenLabel Text="РќР°С‡Р°Р»Рѕ" />
         </div>
         <div class="col">
             <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true" />
-            <RadzenRequiredValidator Text="Start is required" Component="Start" />
         </div>
     </div>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
-            <RadzenLabel Text="Конец" />
+            <RadzenLabel Text="РљРѕРЅРµС†" />
         </div>
         <div class="col">
             <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true" />
-            <RadzenRequiredValidator Component="End" Text="End is required" />
         </div>
     </div>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
-            <RadzenLabel Text="Напомнить за" />
+            <RadzenLabel Text="РќР°РїРѕРјРЅРёС‚СЊ Р·Р°" />
         </div>
         <div class="col">
             <div class="form-group">
-                <label>Напомнить за</label>
+                <label>РќР°РїРѕРјРЅРёС‚СЊ Р·Р°</label>
                 <input class="form-control" type="number" @bind="model.RemindNMinutesBefore" min="0">
-                <label>минут</label>
+                <label>РјРёРЅСѓС‚</label>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
-            <RadzenButton ButtonType="ButtonType.Submit" Text="Сохранить" />
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Save" />
         </div>
     </div>
 </RadzenTemplateForm>

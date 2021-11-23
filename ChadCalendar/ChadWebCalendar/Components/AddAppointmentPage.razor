@@ -3,6 +3,8 @@
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
 @inject DialogService DialogService
+@inject EventService eventService
+@attribute [Authorize]
 @using ChadWebCalendar.Data
 
 <RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
@@ -85,11 +87,18 @@
     public DateTime End { get; set; }
 
     Appointment model = new Appointment();
-
+    Data.Event _event;
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    string userName;
     protected override void OnParametersSet()
     {
         model.Start = Start;
         model.End = End;
+    }
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        userName = authenticationState.Result.User.Identity.Name;
     }
 
     void OnSubmit(Appointment model)
