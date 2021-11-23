@@ -90,19 +90,38 @@
     Data.Event _event;
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     string userName;
-    protected override void OnParametersSet()
-    {
-        model.Start = Start;
-        model.End = End;
-    }
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         userName = authenticationState.Result.User.Identity.Name;
     }
 
+    void addEvent()
+    {
+        _event = new Event
+        {
+            Name = model.Text,
+            Description = model.Description,
+            StartsAt = model.Start,
+            FinishesAt = model.End,
+            Frequency = model.Frequency,
+            RemindNMinutesBefore = model.RemindNMinutesBefore
+        };
+        if (eventService.Create(_event, userName))
+        {
+            OnInitializedAsync();
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        model.Start = Start;
+        model.End = End;
+    }
+
     void OnSubmit(Appointment model)
     {
+        addEvent();
         DialogService.Close(model);
     }
 }
