@@ -15,6 +15,7 @@ namespace ChadWebCalendar.Data
     {
         public static void Distribute(Project project)
         {
+
             List<Event> distributedTasks = new List<Event>();
             using (ApplicationContext db = new ApplicationContext())
             {
@@ -22,24 +23,46 @@ namespace ChadWebCalendar.Data
                 DateTime endOfWeek = GetTheEndOfWorkingWeek(DayOfWeek.Saturday, u.WorkingHoursTo);
 
                 List<Event> eventsOfTheWeek = (List<Event>)db.Events
-                    .Where(e => e.User.Login == u.Login && e.FinishesAt > DateTime.Now && e.FinishesAt <= endOfWeek)
-                    .OrderBy(e => e.StartsAt);
+                    .Where(e => e.User.Login == u.Login && e.FinishesAt > DateTime.Now && e.FinishesAt <= endOfWeek);
+                
+                AddNotWorkingHours(u.WorkingHoursFrom, u.WorkingHoursTo, eventsOfTheWeek, endOfWeek);
+                eventsOfTheWeek.OrderBy(e => e.StartsAt);
 
+                List<TimeSlot> freeTimeSlots = findFreeTimeSlots(eventsOfTheWeek,endOfWeek);
+                freeTimeSlots.OrderByDescending(e => e.getLen());
 
+                List<Task> tasks = new List<Task>(db.Tasks.Where(t => t.Project.Id == project.Id));
+                tasks.OrderByDescending(t => t.TimeTakes);
 
+                bool[] pickedTasks = new bool[tasks.Count];
 
+                for (int i = 0; i < freeTimeSlots.Count; i++)
+                {
+                    for (int j = 0; j < tasks.Count; j++)
+                    {
+                        if (!pickedTasks[j])
+                        {
+                            //if(tasks[j].TimeTakes < freeTimeSlots[i].Item3)
+                            //{
+                            //    pickedTasks[j] = true;
+                            //    distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].Item1, 10));
+                            //    freeTimeSlots[i].Item1 += tasks[j].TimeTakes;
+                            //}
+                        }
+                    }
+                }
 
             }
         }
-        private static List<(DateTime, DateTime)> findFreeTimeSlots(List<Event> eventsOfTheWeek, DateTime endOfWeek, int startWH, int finishWH)
+        private static List<TimeSlot> findFreeTimeSlots(List<Event> eventsOfTheWeek, DateTime endOfWeek)
         {
-            List<(DateTime, DateTime)> freeTimeSlots = new List<(DateTime, DateTime)>();
+            List<TimeSlot> freeTimeSlots = new List<TimeSlot>();
             //if there none events
-            if (eventsOfTheWeek.Count == 0) freeTimeSlots.Add(new(DateTime.Now, endOfWeek));
+            if (eventsOfTheWeek.Count == 0) freeTimeSlots.Add(new TimeSlot(DateTime.Now, endOfWeek));
             else
             {
                 //time before events started
-                if (eventsOfTheWeek[0].StartsAt > DateTime.Now) freeTimeSlots.Add(new(DateTime.Now, eventsOfTheWeek[0].StartsAt)); 
+                if (eventsOfTheWeek[0].StartsAt > DateTime.Now) freeTimeSlots.Add(new TimeSlot(DateTime.Now, eventsOfTheWeek[0].StartsAt)); 
 
                 //time during events
                 DateTime finishTakenTime = DateTime.Now;
@@ -51,27 +74,31 @@ namespace ChadWebCalendar.Data
                     finishTakenTime = selectedEvent.FinishesAt;
                     Event nextEvent = eventsOfTheWeek[i + 1];
 
-
-                    if (finishTakenTime < nextEvent.StartsAt) {
-                        DateTime startTakenTime = nextEvent.StartsAt;
-                        if (finishTakenTime.Hour > finishWH && startTakenTime.Hour < startWH) continue;
-                        if (finishTakenTime.Hour > finishWH) finishTakenTime.AddHours(GetHourDifference(finishWH, startWH));
-                        else
-                        {
-                            if (startTakenTime.Hour < startWH) startTakenTime.AddHours(GetHourDifference(startTakenTime.Hour,startWH));
-                            //TODO finish the method
-                        }
-                        freeTimeSlots.Add(new(finishTakenTime, startTakenTime));
-                    };
+                    if (finishTakenTime < nextEvent.StartsAt) freeTimeSlots.Add(new(finishTakenTime, nextEvent.StartsAt));
                 }
                 //after events finished
                 finishTakenTime = finishTakenTime < eventsOfTheWeek.Last().FinishesAt ? eventsOfTheWeek.Last().FinishesAt : finishTakenTime;
                 if(finishTakenTime<endOfWeek) freeTimeSlots.Add(new(finishTakenTime, endOfWeek));
             }
             return freeTimeSlots;
-
         }
 
+        private static void AddNotWorkingHours(int startWH, int finishWH, in List<Event> eventsOfTheWeek, DateTime endOfWeek)
+        {
+            DateTime start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, finishWH, 0, 0);
+            DateTime finish = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, startWH, 0, 0);
+
+            if (  finishWH > startWH )
+                finish.AddDays(1);
+                
+
+            for (int i = 0; i < (endOfWeek - DateTime.Now).TotalDays; i++)
+            {
+                eventsOfTheWeek.Add(new Event { Name = "Sleep", StartsAt = start, FinishesAt = finish });
+                start.AddDays(1);
+                finish.AddDays(1);
+            } 
+        }
         private static int GetHourDifference(int finishWH, int startWH)
         {
             if (finishWH > startWH)
@@ -94,5 +121,18 @@ namespace ChadWebCalendar.Data
 
 
 
+    }
+    class TimeSlot
+    {
+        DateTime start, finish;
+        public TimeSlot(DateTime start, DateTime finish)
+        {
+            this.start = start;
+            this.finish = finish;
+        }
+        public TimeSpan getLen()
+        {
+            return finish - start;
+        }
     }
 }
