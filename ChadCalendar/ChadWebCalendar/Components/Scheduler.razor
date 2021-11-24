@@ -2,8 +2,6 @@
 @using ChadWebCalendar.Data
 @inject DialogService DialogService
 
-
-
 <RadzenScheduler @ref=@scheduler style="height: 800px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
                  TextProperty="Text" SelectedIndex="2"
                  SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect>

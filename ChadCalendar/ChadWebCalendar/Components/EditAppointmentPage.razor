@@ -96,8 +96,8 @@
 
     void editEvent()
     {
-        _event.Name = model.Text;
-        _event.Description = model.Description;
+        _event.Name = model.Text + "";
+        _event.Description = model.Description + "";
         _event.Frequency = model.Frequency;
         _event.StartsAt = model.Start;
         _event.FinishesAt = model.End;
