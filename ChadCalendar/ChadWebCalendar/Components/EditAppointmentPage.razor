@@ -6,7 +6,7 @@
 @attribute [Authorize]
 @using ChadWebCalendar.Data
 
-<RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
+<RadzenTemplateForm TItem="Appointment" Data="@model">
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
             <RadzenLabel Text="Название" />
@@ -70,7 +70,9 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
-            <RadzenButton ButtonType="ButtonType.Submit" Text="Save" />
+            <button @onclick="editEvent" class="btn btn-danger">Изменить</button>
+            <button @onclick="deleteEvent" class="btn btn-danger">Удалить</button>
+            <button @onclick="migration" class="btn btn-dark">Сделать задачей</button>
         </div>
     </div>
 </RadzenTemplateForm>
@@ -96,8 +98,9 @@
 
     void editEvent()
     {
+        OnInitializedAsync();
         _event.Name = model.Text + "";
-        _event.Description = model.Description + "";
+        _event.Description = model.Description;
         _event.Frequency = model.Frequency;
         _event.StartsAt = model.Start;
         _event.FinishesAt = model.End;
@@ -107,12 +110,19 @@
         {
             OnInitializedAsync();
         }
+        DialogService.Close(model);
     }
 
-    void OnSubmit(Appointment model)
+    void deleteEvent()
     {
         OnInitializedAsync();
-        editEvent();
+        eventService.Delete(_event.Id);
+        DialogService.Close(model);
+    }
+    void migration()
+    {
+        OnInitializedAsync();
+        eventService.Mutatuion(_event, null, userName);
         DialogService.Close(model);
     }
 }
