@@ -72,7 +72,7 @@
         <div class="col">
             <button @onclick="editEvent" class="btn btn-danger">Изменить</button>
             <button @onclick="deleteEvent" class="btn btn-danger">Удалить</button>
-            <button @onclick="migration" class="btn btn-dark">Сделать задачей</button>
+            <button @onclick="migration" class="btn btn-danger">Сделать задачей</button>
         </div>
     </div>
 </RadzenTemplateForm>
@@ -80,9 +80,9 @@
     [Parameter]
     public Appointment Appointment { get; set; }
     Appointment model = new Appointment();
-    string userName;
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
 
+    string userName;
     Data.Event _event;
 
     protected override void OnParametersSet()
@@ -90,15 +90,23 @@
         model = Appointment;
     }
 
+    private Data.Event getEvent()
+    {
+        userName = authenticationState.Result.User.Identity.Name;
+        return _event = eventService.GetEventById(Appointment.Id);
+    }
+
+    /*
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         userName = authenticationState.Result.User.Identity.Name;
         _event = eventService.GetEventById(Appointment.Id);
     }
+    */
 
     void editEvent()
     {
-        OnInitializedAsync();
+        _event = getEvent();
         _event.Name = model.Text + "";
         _event.Description = model.Description;
         _event.Frequency = model.Frequency;
@@ -108,20 +116,19 @@
 
         if (eventService.Edit(_event.Id, userName))
         {
-            OnInitializedAsync();
+            DialogService.Close(model);
         }
-        DialogService.Close(model);
     }
 
     void deleteEvent()
     {
-        OnInitializedAsync();
+        _event = getEvent();
         eventService.Delete(_event.Id);
         DialogService.Close(model);
     }
     void migration()
     {
-        OnInitializedAsync();
+        _event = getEvent();
         eventService.Mutatuion(_event, null, userName);
         DialogService.Close(model);
     }
