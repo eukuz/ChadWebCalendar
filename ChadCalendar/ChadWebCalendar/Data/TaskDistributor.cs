@@ -29,28 +29,37 @@ namespace ChadWebCalendar.Data
                 eventsOfTheWeek.OrderBy(e => e.StartsAt);
 
                 List<TimeSlot> freeTimeSlots = findFreeTimeSlots(eventsOfTheWeek,endOfWeek);
-                freeTimeSlots.OrderByDescending(e => e.getLen());
+                freeTimeSlots.OrderByDescending(e => e.GetTimeSpan);
 
                 List<Task> tasks = new List<Task>(db.Tasks.Where(t => t.Project.Id == project.Id));
                 tasks.OrderByDescending(t => t.TimeTakes);
 
-                bool[] pickedTasks = new bool[tasks.Count];
-
-                for (int i = 0; i < freeTimeSlots.Count; i++)
+                bool noneApplropraiteSlots = freeTimeSlots.Count > 0;
+                int i = 0, j = 0;
+                while (!noneApplropraiteSlots && tasks.Count > 0)
                 {
-                    for (int j = 0; j < tasks.Count; j++)
+                    if ( freeTimeSlots[i].GetTimeSpan > tasks[j].TimeTakes)
                     {
-                        if (!pickedTasks[j])
-                        {
-                            //if(tasks[j].TimeTakes < freeTimeSlots[i].Item3)
-                            //{
-                            //    pickedTasks[j] = true;
-                            //    distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].Item1, 10));
-                            //    freeTimeSlots[i].Item1 += tasks[j].TimeTakes;
-                            //}
-                        }
+                        distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].start, 10));
+                        freeTimeSlots[i].start += (TimeSpan)tasks[j].TimeTakes;
+                        if (freeTimeSlots[i].GetTimeSpan.TotalMinutes == 0) freeTimeSlots.RemoveAt(i);
                     }
                 }
+                //for (int i = 0; i < freeTimeSlots.Count; i++)
+                //{
+                //    for (int j = 0; j < tasks.Count; j++)
+                //    {
+                //        if (!pickedTasks[j])
+                //        {
+                //            if (tasks[j].TimeTakes < freeTimeSlots[i].GetTimeSpan)
+                //            {
+                //                pickedTasks[j] = true;
+                //                distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].Item1, 10));
+                //                freeTimeSlots[i].Item1 += tasks[j].TimeTakes;
+                //            }
+                //        }
+                //    }
+                //}
 
             }
         }
@@ -124,15 +133,12 @@ namespace ChadWebCalendar.Data
     }
     class TimeSlot
     {
-        DateTime start, finish;
+        public DateTime start, finish;
+        public TimeSpan GetTimeSpan { get => finish - start; }
         public TimeSlot(DateTime start, DateTime finish)
         {
             this.start = start;
             this.finish = finish;
-        }
-        public TimeSpan getLen()
-        {
-            return finish - start;
         }
     }
 }
