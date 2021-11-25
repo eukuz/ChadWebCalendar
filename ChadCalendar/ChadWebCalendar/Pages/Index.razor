@@ -20,15 +20,32 @@
             </div>
             <div class="main_container">
                 <div class="projectlist">
-                    <ProjectList GetProject="@GetProjectId" />
+                    <ProjectList GetProject="GetProjectId" />
                 </div>
                 <div class="tasklist">
-                    <div class="row d-lg-table-row">
+                    <div class="row d-md-table-row">
                         <Button Type="@ButtonType.Primary">Секрет</Button>
-                        <Button Type="@AntDesign.ButtonType.Primary">@projName</Button>
-                        <Button Type="@AntDesign.ButtonType.Primary">+</Button>
+                        <Button OnClick="@(() => { visibleEditProject = true; })">
+                            
+                            @projName
+                        </Button>
+                        <Modal Title="Изменить проект"
+                               Visible="@visibleEditProject"
+                               OnOk="(e)=>{visibleEditProject = false;}"
+                               OnCancel="(e)=>{visibleEditProject = false;}">
+                            <ProjectEdit projectId="projId"/>
+                        </Modal>
+                        <Button OnClick="@(() => { visibleTask = true; })">
+                            +
+                        </Button>
+                        <Modal Title="Добавить таск"
+                               Visible="@visibleTask"
+                               OnOk="(e) => { visibleTask = false; }"
+                               OnCancel="(e) => { visibleTask = false; }">
+                            <TaskAdd/>
+                        </Modal>
                     </div>
-                        <TaskList projectId="@projId"></TaskList>
+                    <TaskList projectId="@projId"/>
                     </div>
                 <div class="scheduler">
                     <Scheduler></Scheduler>
@@ -53,7 +70,7 @@
                        Visible="@visibleProject"
                        OnOk="(e)=>{visibleProject = false;}"
                        OnCancel="(e)=>{visibleProject = false;}">
-                    <ProjectAdd></ProjectAdd>
+                    <ProjectAdd/>
                 </Modal>
             </div>
             <div>
@@ -64,7 +81,7 @@
                        Visible="@visibleTask"
                        OnOk="(e)=>{visibleTask = false;}"
                        OnCancel="(e)=>{visibleTask = false;}">
-                    <TaskAdd></TaskAdd>
+                    <TaskAdd/>
                 </Modal>
             </div>
             <div>
@@ -75,7 +92,7 @@
                        Visible="@visibleEditProject"
                        OnOk="(e)=>{visibleEditProject = false;}"
                        OnCancel="(e)=>{visibleEditProject = false;}">
-                    <ProjectEdit projectId="projId"></ProjectEdit>
+                    <ProjectEdit projectId="projId"/>
                 </Modal>
             </div>
         </Authorized>
@@ -97,22 +114,19 @@
     {
         await _accountService.LogoutAsync();
     }
-
-
-    bool visibleEvent = false;
-    bool visibleProject = false;
-    bool visibleTask = false;
-    bool visibleEditProject = false;
-
-    public int? projId = 14;
-    public string? projName = "Базовый список задач";
-
-
     private void GetProjectId(Project pr)
     {
         projId = pr.Id;
         projName = pr.Name;
     }
+    bool visibleEvent = false;
+    bool visibleProject = false;
+    bool visibleTask = false;
+    bool visibleEditProject = false;
+    public int? projId;
+    public string? projName = "Выбери проект";
+
+    
 
     
 }
