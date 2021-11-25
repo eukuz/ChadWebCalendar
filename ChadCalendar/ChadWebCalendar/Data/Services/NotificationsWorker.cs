@@ -22,7 +22,7 @@ namespace ChadWebCalendar.Data.Services
             List<Data.Event> eventsNew = new List<Event>();
             foreach (var item in events)
             {
-                if (DateTime.Compare((DateTime) item.StartsAt, dt) >= 0)
+                if (DateTime.Compare(item.StartsAt, dt) >= 0)
                 {
                     eventsNew.Add(item);
                 }
@@ -48,13 +48,13 @@ namespace ChadWebCalendar.Data.Services
                 DateTime dt = DateTime.Now;
                 Data.Event FirstEvent = GetFirstEventByTime();
                 if (FirstEvent != null)
-                    FirstEventDT = (FirstEvent.StartsAt?.AddMinutes(-FirstEvent.RemindNMinutesBefore));
+                    FirstEventDT = (FirstEvent.StartsAt.AddMinutes(-FirstEvent.RemindNMinutesBefore));
                 if (FirstEventDT == null || dt >= FirstEventDT)
                 {
                     Debug.WriteLine("Fuck yeah");
                     NotificationReadyToShow.Invoke();
                     if (FirstEvent != null)
-                        FirstEventDT = (FirstEvent.StartsAt?.AddMinutes(-FirstEvent.RemindNMinutesBefore)); // вычисление напоминалки
+                        FirstEventDT = (FirstEvent.StartsAt.AddMinutes(-FirstEvent.RemindNMinutesBefore)); // вычисление напоминалки
                     else
                         FirstEventDT = DateTime.Now.AddYears(1);
                 }

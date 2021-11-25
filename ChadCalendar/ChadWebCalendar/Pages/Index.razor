@@ -1,6 +1,8 @@
 ﻿@page "/"
+@using ChadWebCalendar.Data
 @using ChadWebCalendar.Data.Models
 @using ChadWebCalendar.Data.Services
+@using Microsoft.EntityFrameworkCore
 @inject IAccountService _accountService;
 @using ChadWebCalendar.Components.Events
 @using ChadWebCalendar.Components.Tasks
@@ -56,6 +58,11 @@
                 <div class="scheduler">
                     <Scheduler></Scheduler>
                 </div>
+            </div>
+            <div>
+                <Button OnClick="DistributeTasks">
+                    Распределить задачи
+                </Button>
             </div>
         </Authorized>
         <NotAuthorized>
