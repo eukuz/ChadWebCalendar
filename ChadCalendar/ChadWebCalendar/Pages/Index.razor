@@ -24,16 +24,22 @@
                 </div>
                 <div class="tasklist">
                     <div class="row d-md-table-row">
-                        <Button Type="@ButtonType.Primary">Секрет</Button>
-                        <Button OnClick="@(() => { visibleEditProject = true; })">
-                            
-                            @projName
-                        </Button>
+                        <Button Type="@ButtonType.Default">👩‍💼</Button>
+                        @if (projName != null)
+                        {
+                            <Button OnClick="@(() => { visibleEditProject = true; })">
+                                @projName
+                            </Button>
+                        }
+                        else
+                        {
+                            <Button Type="@ButtonType.Default">Выберите проект</Button>
+                        }
                         <Modal Title="Изменить проект"
                                Visible="@visibleEditProject"
                                OnOk="(e)=>{visibleEditProject = false;}"
                                OnCancel="(e)=>{visibleEditProject = false;}">
-                            <ProjectEdit projectId="projId"/>
+                            <ProjectEdit projectId="projId" />
                         </Modal>
                         <Button OnClick="@(() => { visibleTask = true; })">
                             +
@@ -42,7 +48,7 @@
                                Visible="@visibleTask"
                                OnOk="(e) => { visibleTask = false; }"
                                OnCancel="(e) => { visibleTask = false; }">
-                            <TaskAdd/>
+                            <TaskAdd />
                         </Modal>
                     </div>
                     <TaskList projectId="@projId"/>
@@ -124,9 +130,5 @@
     bool visibleTask = false;
     bool visibleEditProject = false;
     public int? projId;
-    public string? projName = "Выбери проект";
-
-    
-
-    
+    public string? projName;
 }
