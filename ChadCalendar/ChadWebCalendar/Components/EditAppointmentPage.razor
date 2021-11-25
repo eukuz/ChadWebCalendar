@@ -8,6 +8,7 @@
 @using ChadWebCalendar.Components
 @inject NavigationManager NavigationManager
 @using AntDesign;
+@inject ProjectService projectService
 
 
 <RadzenTemplateForm TItem="Appointment" Data="@model">
@@ -76,20 +77,22 @@
         <div class="col">
             <button @onclick="editEvent" class="btn btn-danger">Изменить</button>
             <button @onclick="deleteEvent" class="btn btn-danger">Удалить</button>
-            <button @onclick="migration" class="btn btn-danger">
-                <Dropdown Placement="@Placement.BottomCenter">
-                    <Overlay>
-                        <Menu>
-                            <MenuItem @key="0">
-                                <button type="button" class="btn btn-primary" >Выйти</button>
+            <Dropdown Placement="@Placement.BottomCenter">
+                <Overlay>
+                    <Menu>
+                        <span>Выберите проект</span>
+                        @foreach (var project in projectService.GetProjects(user))
+                        {
+                            <MenuItem @key="project.Id">
+                                <input class="list-group-item" type="button" @onclick="() => migration(project.Id)" value="@project.Name" />
                             </MenuItem>
-                        </Menu>
-                    </Overlay>
-                    <ChildContent>
-                        <Button class="btn-lg">Сделать задачей<Icon Type="user" /></Button>
-                    </ChildContent>
-                </Dropdown>
-            </button>
+                        }
+                    </Menu>
+                </Overlay>
+                <ChildContent>
+                    <button class="btn btn-danger">Сделать задачей</button>
+                </ChildContent>
+            </Dropdown>
         </div>
     </div>
 </RadzenTemplateForm>
@@ -102,6 +105,11 @@
     string userName;
     Data.Event _event;
 
+    Data.User user;
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        user = projectService.GetUser(authenticationState.Result.User.Identity.Name);
+    }
 
     protected override void OnParametersSet()
     {
@@ -113,14 +121,6 @@
         userName = authenticationState.Result.User.Identity.Name;
         return _event = eventService.GetEventById(Appointment.Id);
     }
-
-    /*
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
-    {
-        userName = authenticationState.Result.User.Identity.Name;
-        _event = eventService.GetEventById(Appointment.Id);
-    }
-    */
 
     void editEvent()
     {
@@ -146,10 +146,10 @@
         DialogService.Close(model);
         NavigationManager.NavigateTo("/", true);
     }
-    void migration()
+    void migration(int? projectIDforMutation)
     {
         _event = getEvent();
-        eventService.Mutatuion(_event, null, userName);
+        eventService.Mutatuion(_event, projectIDforMutation, userName);
         DialogService.Close(model);
         NavigationManager.NavigateTo("/", true);
     }

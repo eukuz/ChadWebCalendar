@@ -105,14 +105,10 @@
         userTasks = taskService.GetTasks(user);
         userProjects = taskService.GetProjects(user);
     }
-    void redirectToIndex()
-    {
-        NavigationManager.NavigateTo("/");
-    }
     void deleteTask()
     {
         taskService.Delete(task);
-        redirectToIndex();
+        NavigationManager.NavigateTo("/", true);
     }
     void updateTask()
     {
@@ -123,16 +119,15 @@
         }
         if (predecessorIdstr != "После любой")
             task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
-        if (taskService.Edit(task, projectId))
+        if (taskService.Edit(task, projectId, user))
         {
             OnInitializedAsync();
-            redirectToIndex();
         }
+        NavigationManager.NavigateTo("/", true);
     }
     void mutation()
     {
-        taskService.Mutatuion(task.Id);
-        redirectToIndex();
-
+        taskService.Mutatuion(task.Id, user);
+        NavigationManager.NavigateTo("/", true);
     }
 }
