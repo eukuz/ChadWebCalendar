@@ -59,7 +59,7 @@
     {
         _event = new Data.Event();
         _event.StartsAt = DateTime.Now;
-        _event.FinishesAt = _event.StartsAt?.AddMinutes(10);
+        _event.FinishesAt = _event.StartsAt.AddMinutes(10);
         userName = authenticationState.Result.User.Identity.Name;
     }
     void addEvent()

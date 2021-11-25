@@ -1,12 +1,14 @@
 ﻿@page "/"
+@using ChadWebCalendar.Data
 @using ChadWebCalendar.Data.Models
 @using ChadWebCalendar.Data.Services
+@using Microsoft.EntityFrameworkCore
 @inject IAccountService _accountService;
 @using ChadWebCalendar.Components.Events
 @using ChadWebCalendar.Components.Tasks
 @using ChadWebCalendar.Components
 @using ChadWebCalendar.Components.Projects
-@using AntDesign; 
+@using AntDesign;
 
 
 <div>
@@ -70,6 +72,11 @@
                     <ProjectEdit projectId="projectId"></ProjectEdit>
                 </Modal>
             </div>
+            <div>
+                <Button OnClick="DistributeTasks">
+                    Распределить задачи
+                </Button>
+            </div>
         </Authorized>
         <NotAuthorized>
             <LogIn />
@@ -90,6 +97,16 @@
         await _accountService.LogoutAsync();
     }
 
+    private void DistributeTasks()
+    {
+        Project p;
+        using (ApplicationContext db = new ApplicationContext())
+        {
+            p = db.Projects.Include(p => p.User).FirstOrDefault(p => p.Id == 10);
+
+        }
+        TaskDistributor.Distribute(p);
+    }
 
     bool visibleEvent = false;
     bool visibleProject = false;

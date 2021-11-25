@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,51 +17,51 @@ namespace ChadWebCalendar.Data
         public static void Distribute(Project project)
         {
 
-            List<Event> distributedTasks = new List<Event>();
+            List<Data.Event> distributedTasks = new List<Data.Event>();
             using (ApplicationContext db = new ApplicationContext())
             {
                 User u = db.Users.FirstOrDefault(u => u.Login == project.User.Login);
+                
                 DateTime endOfWeek = GetTheEndOfWorkingWeek(DayOfWeek.Saturday, u.WorkingHoursTo);
 
-                List<Event> eventsOfTheWeek = (List<Event>)db.Events
-                    .Where(e => e.User.Login == u.Login && e.FinishesAt > DateTime.Now && e.FinishesAt <= endOfWeek);
+                List<Data.Event> eventsOfTheWeek = new List<Data.Event>(db.Events
+                    .Where(e => e.User.Login == u.Login && e.FinishesAt > DateTime.Now && e.FinishesAt <= endOfWeek));
                 
                 AddNotWorkingHours(u.WorkingHoursFrom, u.WorkingHoursTo, eventsOfTheWeek, endOfWeek);
-                eventsOfTheWeek.OrderBy(e => e.StartsAt);
+                eventsOfTheWeek = eventsOfTheWeek.OrderBy(e => e.StartsAt).ToList();
 
-                List<TimeSlot> freeTimeSlots = findFreeTimeSlots(eventsOfTheWeek,endOfWeek);
-                freeTimeSlots.OrderByDescending(e => e.GetTimeSpan);
+                List<TimeSlot> freeTimeSlots = findFreeTimeSlots(eventsOfTheWeek, endOfWeek);
+                freeTimeSlots = freeTimeSlots.OrderBy(e => e.GetTimeSpan).ToList();
 
-                List<Task> tasks = new List<Task>(db.Tasks.Where(t => t.Project.Id == project.Id));
-                tasks.OrderByDescending(t => t.TimeTakes);
+                List<Task> tasks = new List<Task>(db.Tasks.Where(t => t.Project.Id == project.Id && t.AllowedToDistribute));
+                tasks = tasks.OrderByDescending(t => t.TimeTakes).ToList();
 
-                bool noneApplropraiteSlots = freeTimeSlots.Count > 0;
-                int i = 0, j = 0;
-                while (!noneApplropraiteSlots && tasks.Count > 0)
+                bool[] pickedTasks = new bool[tasks.Count];
+
+                for (int i = 0; i < freeTimeSlots.Count; i++)
                 {
-                    if ( freeTimeSlots[i].GetTimeSpan > tasks[j].TimeTakes)
+                    for (int j = 0; j < tasks.Count; j++)
                     {
-                        distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].start, 10));
-                        freeTimeSlots[i].start += (TimeSpan)tasks[j].TimeTakes;
-                        if (freeTimeSlots[i].GetTimeSpan.TotalMinutes == 0) freeTimeSlots.RemoveAt(i);
+                        if (!pickedTasks[j])
+                        {
+                            if (tasks[j].TimeTakes < freeTimeSlots[i].GetTimeSpan)
+                            {
+                                pickedTasks[j] = true;
+                                distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].start, 15));
+                                freeTimeSlots[i].start += (TimeSpan)tasks[j].TimeTakes;
+                            }
+                        }
                     }
                 }
-                //for (int i = 0; i < freeTimeSlots.Count; i++)
-                //{
-                //    for (int j = 0; j < tasks.Count; j++)
-                //    {
-                //        if (!pickedTasks[j])
-                //        {
-                //            if (tasks[j].TimeTakes < freeTimeSlots[i].GetTimeSpan)
-                //            {
-                //                pickedTasks[j] = true;
-                //                distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].Item1, 10));
-                //                freeTimeSlots[i].Item1 += tasks[j].TimeTakes;
-                //            }
-                //        }
-                //    }
-                //}
-
+                db.Events.AddRange(distributedTasks);
+                for (int i = 0; i < tasks.Count; i++)
+                {
+                    if (pickedTasks[i])
+                    {
+                        db.Tasks.Remove(tasks[i]);
+                    }
+                }
+                db.SaveChanges();
             }
         }
         private static List<TimeSlot> findFreeTimeSlots(List<Event> eventsOfTheWeek, DateTime endOfWeek)
@@ -94,18 +95,18 @@ namespace ChadWebCalendar.Data
 
         private static void AddNotWorkingHours(int startWH, int finishWH, in List<Event> eventsOfTheWeek, DateTime endOfWeek)
         {
-            DateTime start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, finishWH, 0, 0);
-            DateTime finish = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, startWH, 0, 0);
+            DateTime startChill = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, finishWH, 0, 0);
+            DateTime finishChill = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, startWH, 0, 0);
 
             if (  finishWH > startWH )
-                finish.AddDays(1);
+                finishChill = finishChill.AddDays(1);
                 
 
             for (int i = 0; i < (endOfWeek - DateTime.Now).TotalDays; i++)
             {
-                eventsOfTheWeek.Add(new Event { Name = "Sleep", StartsAt = start, FinishesAt = finish });
-                start.AddDays(1);
-                finish.AddDays(1);
+                eventsOfTheWeek.Add(new Event { Name = "Sleep", StartsAt = startChill, FinishesAt = finishChill });
+                startChill = startChill.AddDays(1);
+                finishChill = finishChill.AddDays(1);
             } 
         }
         private static int GetHourDifference(int finishWH, int startWH)
@@ -117,15 +118,13 @@ namespace ChadWebCalendar.Data
 
         private static DateTime GetTheEndOfWorkingWeek(DayOfWeek lastWorkingDayOfWeek, int workingHoursTo)
         {
-            DateTime from = DateTime.Now;
+            DateTime from = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, workingHoursTo, 0, 0);
             int start = (int)from.DayOfWeek;
             int target = (int)lastWorkingDayOfWeek;
 
             if (target <= start)
                 target += 7;
-            from.AddDays(target - start);
-
-            return new DateTime(from.Year, from.Month, from.Day, workingHoursTo, 0, 0);
+            return from.AddDays(target - start);
         }
 
 
