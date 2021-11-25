@@ -5,9 +5,13 @@
 
 <div class="navbar bg-white">
     <div class="container-fluid">
-        <span class="hello">
-            Hello @authenticationState.Result.User.Identity.Name! &#9995;
-        </span>
+        <div>
+            <span class="hello">
+                Hello @authenticationState.Result.User.Identity.Name
+            </span>
+            <span class="hello_emoji">!&#128075;</span>
+        </div>
+       
         <div>
             <div class="nav-item dropdown">
                 <Dropdown Placement="@Placement.BottomCenter">
