@@ -7,15 +7,18 @@
 <div class="list-group" style="height: 800px; width: 100%; overflow: auto; font-size: 30px; word-wrap: break-word ">
     @foreach (var task in taskService.GetTasks(user))
     {
-        <button type="button" class="list-group-item list-group-item-success btn btn-light">
-            <span class="custom-checkbox">
-                <input class="form-check-input" type="checkbox">
-            </span>
-            @task.Name
-            <Button OnClick="@(()=>{ visibleEditTask = true; taskId = task.Id; })">
-                &#9881;
-            </Button>
-        </button>
+        if (task.Project.Id!=null && task.Project.Id == projectId)
+        {
+            <button type="button" class="list-group-item list-group-item-success btn btn-light">
+                <span class="custom-checkbox">
+                    <input class="form-check-input" type="checkbox">
+                </span>
+                @task.Name
+                <Button OnClick="@(() =>{ visibleEditTask = true; taskId = task.Id; })">
+                    &#9881;
+                </Button>
+            </button>
+        }
     }
     <Modal Title="Изменить таску"
            DestroyOnClose="@destroyModal"
@@ -35,9 +38,13 @@
         user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
     }
 
+    [Parameter] public int? projectId { get; set; }
+    
     public int? taskId { get; set; }
 
     bool destroyModal = false;
 
     bool visibleEditTask = false;
+
+    
 }

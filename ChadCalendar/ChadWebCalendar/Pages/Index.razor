@@ -7,6 +7,8 @@
 @using ChadWebCalendar.Components
 @using ChadWebCalendar.Components.Projects
 @using AntDesign; 
+@using ChadWebCalendar.Data
+@using ButtonType = AntDesign.ButtonType
 
 
 <div>
@@ -17,11 +19,16 @@
             </div>
             <div class="main_container">
                 <div class="projectlist">
-                    <ProjectList></ProjectList>
+                    <ProjectList GetProject="@GetProjectId" />
                 </div>
                 <div class="tasklist">
-                    <TaskList></TaskList>
-                </div>
+                    <div class="row d-lg-table-row">
+                        <Button Type="@ButtonType.Primary">Секрет</Button>
+                        <Button Type="@AntDesign.ButtonType.Primary">@projName</Button>
+                        <Button Type="@AntDesign.ButtonType.Primary">+</Button>
+                    </div>
+                        <TaskList projectId="@projId"></TaskList>
+                    </div>
                 <div class="scheduler">
                     <Scheduler></Scheduler>
                 </div>
@@ -67,7 +74,7 @@
                        Visible="@visibleEditProject"
                        OnOk="(e)=>{visibleEditProject = false;}"
                        OnCancel="(e)=>{visibleEditProject = false;}">
-                    <ProjectEdit projectId="projectId"></ProjectEdit>
+                    <ProjectEdit projectId="projId"></ProjectEdit>
                 </Modal>
             </div>
         </Authorized>
@@ -96,5 +103,15 @@
     bool visibleTask = false;
     bool visibleEditProject = false;
 
-    public int? projectId = 5;
+    public int? projId = 14;
+    public string? projName = "Базовый список задач";
+
+
+    private void GetProjectId(Project pr)
+    {
+        projId = pr.Id;
+        projName = pr.Name;
+    }
+
+    
 }
