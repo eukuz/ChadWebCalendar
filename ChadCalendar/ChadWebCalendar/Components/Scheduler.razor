@@ -1,47 +1,18 @@
 ﻿@page "/scheduler"
 @using ChadWebCalendar.Data
-@using AntDesign;
 @inject DialogService DialogService
-@using ChadWebCalendar.Components.Events
 
-<RadzenScheduler  @ref=@scheduler Data="@DataItems" TItem="DataItem" StartProperty="Start" EndProperty="End" TextProperty="Text" Style="height: 800px; width: 100%"
-                 SlotSelect=@OnSlotSelect>
-    <ChildContent>
-        <RadzenWeekView />
-        <RadzenDayView />
-        <RadzenMonthView />
-    </ChildContent>
+<RadzenScheduler @ref=@scheduler style="height: 800px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
+                 TextProperty="Text" SelectedIndex="2"
+                 SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect>
+    <RadzenDayView />
+    <RadzenWeekView />
+    <RadzenMonthView />
 </RadzenScheduler>
 
-<Modal Title="@("Создание события")"
-       Visible="@EventAddModal"
-       OnOk="@HideModal"
-       OnCancel="@HideModal"
-       OkText="@("Ок")"
-       CancelText="@("Закрыть")">
-    <EventAdd></EventAdd>
-</Modal>
-
-<Modal Title="@("Изменить событие")"
-       Visible="@EventEditModal"
-       OnOk="@HideModal"
-       OnCancel="@HideModal"
-       OkText="@("Ок")"
-       CancelText="@("Закрыть")">
-    <p>Bla bla ...</p>
-    <p>Bla bla ...</p>
-    <p>Bla bla ...</p>
-</Modal>
 
 @code {
-    class DataItem
-    {
-        public DateTime? Start { get; set; }
-        public DateTime? End { get; set; }
-        public string Text { get; set; }
-    }
-
-    RadzenScheduler<DataItem> scheduler;
+    RadzenScheduler<Appointment> scheduler;
     ApplicationContext db = new ApplicationContext();
 
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
@@ -50,44 +21,44 @@
     {
         return db.Events.Where(e => e != null && e.User.Login == @authenticationState.Result.User.Identity.Name);
     }
-     
-    List<DataItem> DataItems = new();
+
+    List<Appointment> appointments = new();
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         foreach (var item in GetEvents())
         {
-            DataItem d = new DataItem();
-            d.Start = item.StartsAt;
-            d.End = item.FinishesAt;
-            d.Text = item.Name;
-            DataItems.Add(d);
+            Appointment appointment = new Appointment();
+            appointment.Text = item.Name;
+            appointment.Description = item.Description;
+            appointment.Frequency = item.Frequency;
+            appointment.Start = item.StartsAt;
+            appointment.End = item.FinishesAt;
+            appointment.RemindNMinutesBefore = item.RemindNMinutesBefore;
+            appointment.Id = item.Id;
+            appointment.Accessed = item.Accessed;
+            appointments.Add(appointment);
         }
-    }
-
-    private int myValue = 0;
-
-    private bool EventAddModal = false;
-    private bool EventEditModal = false;
-
-    private void ShowEventAddModal()
-    {
-        EventAddModal = true;
-    }
-    private void ShowEventEditModal()
-    {
-        EventEditModal = true;
-    }
-
-    private void HideModal()
-    {
-        EventAddModal = false;
-        EventEditModal = false;
     }
 
     async System.Threading.Tasks.Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
     {
-        ShowEventAddModal();
+
+        Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Добавить событие",
+            new Dictionary<string, object> { { "Start", args.Start }, { "End", args.End }});
+
+        if (data != null)
+        {
+            appointments.Add(data);
+            await scheduler.Reload();
+        }
+    }
+
+    async System.Threading.Tasks.Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
+    {
+
+        await DialogService.OpenAsync<EditAppointmentPage>("Изменить событие", new Dictionary<string, object> { { "Appointment", args.Data } });
+
         await scheduler.Reload();
     }
 }

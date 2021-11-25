@@ -32,7 +32,6 @@ namespace ChadWebCalendar.Data
             RemindNMinutesBefore = remindNMunutesBefore;
             User = task.User;
         }
-        
     }
 }
 
