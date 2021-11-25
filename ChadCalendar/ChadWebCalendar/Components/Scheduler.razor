@@ -1,5 +1,4 @@
-﻿@page "/scheduler"
-@using ChadWebCalendar.Data
+﻿@using ChadWebCalendar.Data
 @inject DialogService DialogService
 
 <RadzenScheduler @ref=@scheduler style="height: 800px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
@@ -12,7 +11,8 @@
 
 
 @code {
-    RadzenScheduler<Appointment> scheduler;
+
+    public RadzenScheduler<Appointment> scheduler;
     ApplicationContext db = new ApplicationContext();
 
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
