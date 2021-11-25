@@ -6,9 +6,13 @@
 @using ChadWebCalendar.Components.Projects
 @using ChadWebCalendar.Components.Tasks
 @using ChadWebCalendar.Components
-
+@inject IJSRuntime JSRuntime
 @inject NotificationService _notice
 @inject IToastService toastService
+
+<head>
+    <title>showme</title>
+</head>
 <div>
     <AuthorizeView>
         <Authorized>
@@ -60,7 +64,6 @@
 
 
 
-
 @*<TableListTasks />*@
 @*<GetListTask />*@
 
@@ -70,10 +73,12 @@
     private Task<AuthenticationState> authenticationState { get; set; }
     private List<ChadWebCalendar.Data.Task> Tasks = new List<ChadWebCalendar.Data.Task>();
     private IList<Claim> userClaim = new List<Claim>();
+    string _title;
     private LoginModel model = new LoginModel();
     NotificationsWorker notificationWorker = new NotificationsWorker();
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        _title = DateTime.Now.ToString();
         if (!NotificationsWorker.IsStarted && authenticationState.Result.User.Identity.Name != null)
         {
             NotificationsWorker.Username = authenticationState.Result.User.Identity.Name;
@@ -84,8 +89,10 @@
     }
     private void showNotification()
     {
-        toastService.ShowInfo($"You have {NotificationsWorker.TypeOfNotification} at {NotificationsWorker.DeadlineNotification}");
+        toastService.ShowInfo($"{NotificationsWorker.TypeOfNotification}");
+        JSRuntime.InvokeVoidAsync("setTitle", "You have notification");
     }
+    
     private async void Logout()
     {
         notificationWorker.Stop();

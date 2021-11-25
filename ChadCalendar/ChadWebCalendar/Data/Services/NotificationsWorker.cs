@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
+
+
 
 namespace ChadWebCalendar.Data.Services
 {
@@ -10,6 +14,7 @@ namespace ChadWebCalendar.Data.Services
     {
         public static string Username;
         public static DateTime? FirstEventDT;
+        
         static bool WorkerIsWorking;
         public static DateTime? DeadlineNotification;
         public static string TypeOfNotification;
@@ -25,7 +30,7 @@ namespace ChadWebCalendar.Data.Services
             DateTime dt = DateTime.Now.AddMinutes(-1);
             List<DateTime?> deadlines = new List<DateTime?>();
 
-            var enumerableEvents = db.Events.OrderBy(e => e.StartsAt).Where(e => e.User.Login == Username);
+            var enumerableEvents = db.Events.AsNoTracking().OrderBy(e => e.StartsAt).Where(e => e.User.Login == Username && e.StartsAt >= dt);
             List<Data.Event> events = enumerableEvents.ToList();
             events.Add(null);
             if (events[0] != null)
@@ -36,41 +41,56 @@ namespace ChadWebCalendar.Data.Services
                     if (events[0].StartsAt < minDT)
                     {
                         minDT = events[0].StartsAt;
-                        TypeOfNotification = "event";
+                        string stripped;
+                        if (minDT.ToString().Count() == 18)
+                            stripped = minDT.ToString().Substring(11, 4);
+                        else
+                            stripped = minDT.ToString().Substring(11, 5);
+                        TypeOfNotification = $"Ваше событие {events[0].Name} начинается в {stripped}";
                         DeadlineNotification = events[0].StartsAt;
                     }
                 }
                 deadlines.Add(events[0].StartsAt);
             }
 
-            var enumerableProjects = db.Projects.OrderBy(p => p.Deadline).Where(p => p.User.Login == Username);
+            var enumerableProjects = db.Projects.AsNoTracking().OrderBy(p => p.Deadline).Where(p => p.User.Login == Username && p.Deadline >= dt);
             List<Data.Project> projectDeadlines = enumerableProjects.ToList();
             projectDeadlines.Add(null);
             if (projectDeadlines[0] != null)
             {
                 if (!DeadlinesIsInitializied)
-                    projectDeadlines[0].Deadline = projectDeadlines[0].Deadline; //?.AddMinutes(-30);
-                if (projectDeadlines[0].Deadline < minDT)
+                    projectDeadlines[0].Deadline = projectDeadlines[0].Deadline?.AddMinutes(-30);
+                if (projectDeadlines[0].Deadline < minDT && projectDeadlines[0].Deadline >= dt)
                 {
                     minDT = projectDeadlines[0].Deadline;
-                    TypeOfNotification = "project";
+                    string stripped;
+                    if (minDT.ToString().Count() == 18)
+                        stripped = minDT.ToString().Substring(11, 4);
+                    else
+                        stripped = minDT.ToString().Substring(11, 5);
+                    TypeOfNotification = $"Дедлайн проекта {projectDeadlines[0].Name} в {stripped}";
                     DeadlineNotification = projectDeadlines[0].Deadline;
                 }
                 deadlines.Add(projectDeadlines[0].Deadline);
             }
             //при редактировании не редактируется тут, при добавлении нужно DeadlinesIsInitializied делать false
-            var enumerableTasks = db.Tasks.OrderBy(t => t.Deadline).Where(t => t.User.Login == Username);
+            var enumerableTasks = db.Tasks.AsNoTracking().OrderBy(t => t.Deadline).Where(t => t.User.Login == Username && t.Deadline >= dt);
             List<Data.Task> taskDeadlines = enumerableTasks.ToList();
             taskDeadlines.Add(null);
             if (taskDeadlines[0] != null)
             {
                 taskDeadlines[0].Deadline = taskDeadlines[0].Deadline;
                 if (!DeadlinesIsInitializied)
-                    taskDeadlines[0].Deadline = taskDeadlines[0].Deadline; //?.AddMinutes(-30);
-                if (taskDeadlines[0].Deadline < minDT)
+                    taskDeadlines[0].Deadline = taskDeadlines[0].Deadline?.AddMinutes(-30);
+                if (taskDeadlines[0].Deadline < minDT && taskDeadlines[0].Deadline >= dt)
                 {
                     minDT = taskDeadlines[0].Deadline;
-                    TypeOfNotification = "task";
+                    string stripped;
+                    if (minDT.ToString().Count() == 18)
+                        stripped = minDT.ToString().Substring(11, 4);
+                    else
+                        stripped = minDT.ToString().Substring(11, 5);
+                    TypeOfNotification = $"Дедлайн задачи {taskDeadlines[0].Name} в {stripped}";
                     DeadlineNotification = taskDeadlines[0].Deadline;
                 }
                 deadlines.Add(taskDeadlines[0].Deadline);
@@ -113,7 +133,7 @@ namespace ChadWebCalendar.Data.Services
                     Debug.WriteLine("Fuck yeah");
                     NotificationReadyToShow.Invoke();
                 }
-                Thread.Sleep(60000);
+                Thread.Sleep(5000);
             }
         }
     }
