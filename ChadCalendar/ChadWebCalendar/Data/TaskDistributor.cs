@@ -10,7 +10,7 @@ namespace ChadWebCalendar.Data
     {
         MaxInTheBeginning,
         //Evenly,
-        MaxInTheEnd
+        //MaxInTheEnd
     }
     public static class TaskDistributor
     {
