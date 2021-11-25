@@ -2,8 +2,6 @@
 @inject TaskService taskService
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
-
-
 <EditForm Model="@taskValidation">
     <DataAnnotationsValidator />
     <ValidationSummary></ValidationSummary>
@@ -85,7 +83,8 @@
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     string predecessorIdstr = "После любой";
     Data.TaskValidation taskValidation = new Data.TaskValidation();
-    [Parameter] public int? taskId { get; set; }
+    [Parameter]
+    public int? taskId { get; set; }
     int projectId = 0;
     Data.Task task;
     Data.User user;

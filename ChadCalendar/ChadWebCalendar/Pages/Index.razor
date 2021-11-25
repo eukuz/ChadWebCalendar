@@ -6,12 +6,13 @@
 @inject IAccountService _accountService;
 @using ChadWebCalendar.Components.Events
 @using ChadWebCalendar.Components.Tasks
-@using ChadWebCalendar.Components 
+@using ChadWebCalendar.Components
 @using ChadWebCalendar.Components.Projects
-@using ChadWebCalendar.Pages 
-@using AntDesign; 
+@using ChadWebCalendar.Pages
+@using AntDesign;
 @using ChadWebCalendar.Data
 @using ButtonType = AntDesign.ButtonType
+@inject DialogService DialogService
 
 
 <div>
@@ -43,18 +44,12 @@
                                OnCancel="(e)=>{visibleEditProject = false;}">
                             <ProjectEdit projectId="projId" />
                         </Modal>
-                        <Button OnClick="@(() => { visibleTask = true; })">
+                        <Button OnClick="CreateTaskPage">
                             +
                         </Button>
-                        <Modal Title="Добавить таск"
-                               Visible="@visibleTask"
-                               OnOk="(e) => { visibleTask = false; }"
-                               OnCancel="(e) => { visibleTask = false; }">
-                            <TaskAdd />
-                        </Modal>
                     </div>
-                    <TaskList projectId="@projId"/>
-                    </div>
+                    <TaskList projectId="@projId" />
+                </div>
                 <div class="scheduler">
                     <Scheduler></Scheduler>
                 </div>
@@ -75,11 +70,11 @@
     private IList<Claim> userClaim = new List<Claim>();
     private LoginModel model = new LoginModel();
 
-
-    private async void Logout()
+    private async void CreateTaskPage()
     {
-        await _accountService.LogoutAsync();
+        await DialogService.OpenAsync<TaskAdd>("Добавить задачу");
     }
+
     private void GetProjectId(Project pr)
     {
         projId = pr.Id;
@@ -87,7 +82,6 @@
     }
     bool visibleEvent = false;
     bool visibleProject = false;
-    bool visibleTask = false;
     bool visibleEditProject = false;
     public int? projId;
     public string? projName;
