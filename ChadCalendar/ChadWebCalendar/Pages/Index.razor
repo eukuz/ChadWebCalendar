@@ -57,50 +57,6 @@
                     <Scheduler></Scheduler>
                 </div>
             </div>
-            <div>
-                <Button OnClick="@(()=>{ visibleEvent = true; })">
-                    Добавить событие
-                </Button>
-                <Modal Title="Добавить событие"
-                       Visible="@visibleEvent"
-                       OnOk="(e)=>{visibleEvent = false;}"
-                       OnCancel="(e)=>{visibleEvent = false;}">
-                    <EventAdd></EventAdd>
-                </Modal>
-            </div>
-            <div>
-                <Button OnClick="@(()=>{ visibleProject = true; })">
-                    Добавить проект
-                </Button>
-                <Modal Title="Добавить проект"
-                       Visible="@visibleProject"
-                       OnOk="(e)=>{visibleProject = false;}"
-                       OnCancel="(e)=>{visibleProject = false;}">
-                    <ProjectAdd/>
-                </Modal>
-            </div>
-            <div>
-                <Button OnClick="@(()=>{ visibleTask = true; })">
-                    Добавить таск
-                </Button>
-                <Modal Title="Добавить таск"
-                       Visible="@visibleTask"
-                       OnOk="(e)=>{visibleTask = false;}"
-                       OnCancel="(e)=>{visibleTask = false;}">
-                    <TaskAdd/>
-                </Modal>
-            </div>
-            <div>
-                <Button OnClick="@(()=>{ visibleEditProject = true; })">
-                    Изменить проект
-                </Button>
-                <Modal Title="Изменить проект"
-                       Visible="@visibleEditProject"
-                       OnOk="(e)=>{visibleEditProject = false;}"
-                       OnCancel="(e)=>{visibleEditProject = false;}">
-                    <ProjectEdit projectId="projId"/>
-                </Modal>
-            </div>
         </Authorized>
         <NotAuthorized>
             <LogIn />
