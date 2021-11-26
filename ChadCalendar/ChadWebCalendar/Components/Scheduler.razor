@@ -44,7 +44,7 @@
     {
 
         Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Добавить событие",
-            new Dictionary<string, object> { { "Start", args.Start }, { "End", args.End }});
+            new Dictionary<string, object> { { "Start", args.Start }, { "End", args.End } });
 
         if (data != null)
         {

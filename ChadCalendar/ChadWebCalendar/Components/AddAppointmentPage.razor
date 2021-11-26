@@ -82,6 +82,8 @@
     public DateTime End { get; set; }
 
     Appointment model = new Appointment();
+    private int? Id;
+
     Data.Event _event;
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     string userName;
@@ -100,12 +102,14 @@
             StartsAt = model.Start,
             FinishesAt = model.End,
             Frequency = model.Frequency,
-            RemindNMinutesBefore = model.RemindNMinutesBefore
+            RemindNMinutesBefore = model.RemindNMinutesBefore,
+            Id = model.Id
         };
         if (eventService.Create(_event, userName))
         {
             OnInitializedAsync();
         }
+        NavigationManager.NavigateTo("/", true);
     }
 
     protected override void OnParametersSet()

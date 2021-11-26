@@ -125,13 +125,13 @@
     void editEvent()
     {
         _event = getEvent();
-        _event.Name = model.Text + "";
+        _event.Name = model.Text + " ";
         _event.Description = model.Description + "";
         _event.Frequency = model.Frequency;
         _event.StartsAt = model.Start;
         _event.FinishesAt = model.End;
-        _event.Id = model.Id;
         _event.RemindNMinutesBefore = model.RemindNMinutesBefore;
+        _event.Id = model.Id;
 
         if (eventService.Edit(_event.Id, userName))
         {
