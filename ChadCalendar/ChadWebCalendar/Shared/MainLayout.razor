@@ -17,9 +17,9 @@
 </div>
 
 <BlazoredToasts Position="ToastPosition.TopRight"
-                Timeout="555">
+                Timeout="100000">
     <CloseButtonContent>
-        <h3 @onclick="@OnNotificationClosed">&#9746;</h3>
+        <a @onclick="@OnNotificationClosed">&#9746;</a>
     </CloseButtonContent>
 </BlazoredToasts>
 

@@ -7,15 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 
 
-
 namespace ChadWebCalendar.Data.Services
 {
     public class NotificationsWorker
     {
         public static string Username;
         public static DateTime? FirstEventDT;
-        
-        static bool WorkerIsWorking;
         public static DateTime? DeadlineNotification;
         public static string TypeOfNotification;
         public static bool DeadlinesIsInitializied = false;
@@ -26,8 +23,8 @@ namespace ChadWebCalendar.Data.Services
         static ApplicationContext db = new ApplicationContext();
         static public DateTime? GetFirstEventByTime()
         {
-            DateTime? minDT = DateTime.Now.AddMinutes(35);
-            DateTime dt = DateTime.Now.AddMinutes(-1);
+            DateTime? minDT = DateTime.Now.AddMinutes(Constants.AdditionInMinutesForMinDT);
+            DateTime dt = DateTime.Now.AddMinutes(Constants.MinutesBeforeForInterval);
             List<DateTime?> deadlines = new List<DateTime?>();
 
             var enumerableEvents = db.Events.AsNoTracking().OrderBy(e => e.StartsAt).Where(e => e.User.Login == Username && e.StartsAt >= dt);
@@ -42,10 +39,10 @@ namespace ChadWebCalendar.Data.Services
                     {
                         minDT = events[0].StartsAt;
                         string stripped;
-                        if (minDT.ToString().Count() == 18)
-                            stripped = minDT.ToString().Substring(11, 4);
+                        if (minDT.ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
+                            stripped = minDT.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT);
                         else
-                            stripped = minDT.ToString().Substring(11, 5);
+                            stripped = minDT.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForTrimmedDT);
                         TypeOfNotification = $"Ваше событие {events[0].Name} начинается в {stripped}";
                         DeadlineNotification = events[0].StartsAt;
                     }
@@ -64,10 +61,10 @@ namespace ChadWebCalendar.Data.Services
                 {
                     minDT = projectDeadlines[0].Deadline;
                     string stripped;
-                    if (minDT.ToString().Count() == 18)
-                        stripped = minDT.ToString().Substring(11, 4);
+                    if (minDT.ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
+                        stripped = minDT.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT);
                     else
-                        stripped = minDT.ToString().Substring(11, 5);
+                        stripped = minDT.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForTrimmedDT);
                     TypeOfNotification = $"Дедлайн проекта {projectDeadlines[0].Name} в {stripped}";
                     DeadlineNotification = projectDeadlines[0].Deadline;
                 }
@@ -86,10 +83,10 @@ namespace ChadWebCalendar.Data.Services
                 {
                     minDT = taskDeadlines[0].Deadline;
                     string stripped;
-                    if (minDT.ToString().Count() == 18)
-                        stripped = minDT.ToString().Substring(11, 4);
+                    if (minDT.ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
+                        stripped = minDT.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT);
                     else
-                        stripped = minDT.ToString().Substring(11, 5);
+                        stripped = minDT.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForTrimmedDT);
                     TypeOfNotification = $"Дедлайн задачи {taskDeadlines[0].Name} в {stripped}";
                     DeadlineNotification = taskDeadlines[0].Deadline;
                 }
@@ -133,7 +130,7 @@ namespace ChadWebCalendar.Data.Services
                     Debug.WriteLine("Fuck yeah");
                     NotificationReadyToShow.Invoke();
                 }
-                Thread.Sleep(5000);
+                Thread.Sleep(Constants.MillisecondsForSleepAfterWorkerIteration);
             }
         }
     }
