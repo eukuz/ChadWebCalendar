@@ -75,7 +75,7 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
-            <button @onclick="editEvent" class="btn btn-danger">Изменить</button>
+            <button @onclick="editEvent" class="btn btn-primary">Готово</button>
             <button @onclick="deleteEvent" class="btn btn-danger">Удалить</button>
             <Dropdown Placement="@Placement.BottomCenter">
                 <Overlay>
@@ -90,7 +90,7 @@
                     </Menu>
                 </Overlay>
                 <ChildContent>
-                    <button class="btn btn-danger">Сделать задачей</button>
+                    <button class="btn btn-dark">Сделать задачей</button>
                 </ChildContent>
             </Dropdown>
         </div>
@@ -124,9 +124,13 @@
 
     void editEvent()
     {
+        if (String.IsNullOrWhiteSpace(model.Text))
+        {
+            model.Text = "(Нет заголовка)";
+        }
         _event = getEvent();
-        _event.Name = model.Text + " ";
-        _event.Description = model.Description + "";
+        _event.Name = model.Text;
+        _event.Description = model.Description;
         _event.Frequency = model.Frequency;
         _event.StartsAt = model.Start;
         _event.FinishesAt = model.End;
