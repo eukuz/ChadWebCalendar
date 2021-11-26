@@ -95,6 +95,10 @@
 
     void addEvent()
     {
+        if (String.IsNullOrWhiteSpace(model.Text))
+        {
+            model.Text = "(Нет заголовка)";
+        }
         _event = new Event
         {
             Name = model.Text,
