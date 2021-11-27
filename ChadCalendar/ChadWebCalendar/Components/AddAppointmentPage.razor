@@ -67,6 +67,14 @@
             </div>
         </div>
     </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Выберите цвет" />
+        </div>
+        <div class="col">
+            <input type="color" name="head" value="#e66465">
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
@@ -82,6 +90,8 @@
     public DateTime End { get; set; }
 
     Appointment model = new Appointment();
+    private int? Id;
+
     Data.Event _event;
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     string userName;
@@ -93,6 +103,10 @@
 
     void addEvent()
     {
+        if (String.IsNullOrWhiteSpace(model.Text))
+        {
+            model.Text = "(Нет заголовка)";
+        }
         _event = new Event
         {
             Name = model.Text,
@@ -100,12 +114,14 @@
             StartsAt = model.Start,
             FinishesAt = model.End,
             Frequency = model.Frequency,
-            RemindNMinutesBefore = model.RemindNMinutesBefore
+            RemindNMinutesBefore = model.RemindNMinutesBefore,
+            Id = model.Id
         };
         if (eventService.Create(_event, userName))
         {
             OnInitializedAsync();
         }
+        NavigationManager.NavigateTo("/", true);
     }
 
     protected override void OnParametersSet()

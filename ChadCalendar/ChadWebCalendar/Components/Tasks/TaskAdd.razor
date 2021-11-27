@@ -90,8 +90,7 @@
         protected override async System.Threading.Tasks.Task OnInitializedAsync()
         {
             tempDT = TimeSpan.Parse("00:00:00"); // инициализация для здравого показа
-            DateTime dt = DateTime.Now;
-            task.Deadline = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
+            task.Deadline = null;
             user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
             userTasks = taskService.GetTasks(user);
             userProjects = taskService.GetProjects(user);
@@ -113,7 +112,7 @@
             {
                 task = new Data.Task();
                 OnInitializedAsync();
-                NavigationManager.NavigateTo("/");
             }
+            NavigationManager.NavigateTo("/", true);
         }
     }
