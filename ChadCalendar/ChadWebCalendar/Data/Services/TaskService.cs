@@ -31,9 +31,9 @@ namespace ChadWebCalendar.Data.Services
         {
             return db.Projects.Where(proj => proj.User == user);
         }
-        public Data.Project GetFirstProject()
+        public Data.Project GetFirstProject(int? userId)
         {
-            return db.Projects.FirstOrDefault(p => p.Id != null);
+            return db.Projects.FirstOrDefault(p => p.User.Id == userId);
         }
         public Data.Task GetTask(int? id)
         {
