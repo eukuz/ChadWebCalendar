@@ -122,6 +122,7 @@ namespace ChadWebCalendar.Data.Services
         {
             while (IsStarted)
             {
+                db = new ApplicationContext();
                 Debug.WriteLine("Worker is working");
                 DateTime dt = DateTime.Now;
                 DateTime? FirstEventDT = GetFirstEventByTime();
