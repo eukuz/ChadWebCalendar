@@ -1,0 +1,44 @@
+﻿@attribute [Authorize]
+@using AntDesign;
+@using ChadWebCalendar.Data.Services
+@inject IAccountService _accountService
+
+<div class="navbar bg-white">
+    <div class="container-fluid">
+        <div>
+            <span class="hello">
+                Hello @authenticationState.Result.User.Identity.Name
+            </span>
+            <span class="hello_emoji">!&#128075;</span>
+        </div>
+       
+        <div>
+            <div class="nav-item dropdown">
+                <Dropdown Placement="@Placement.BottomCenter">
+                    <Overlay>
+                        <Menu>
+                            <MenuItem @key="0">
+                                <button type="button" class="btn btn-primary" @onclick="Logout">Выйти</button>
+                            </MenuItem>
+                            <MenuItem @key="1">
+                                <a type="button" href="/settings" class="btn btn-primary">Настройки</a>
+                            </MenuItem>
+                        </Menu>
+                    </Overlay>
+                    <ChildContent>
+                        <Button class="btn-lg">@authenticationState.Result.User.Identity.Name <Icon Type="user" /></Button>
+                    </ChildContent>
+                </Dropdown>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+
+    private async void Logout()
+    {
+        await _accountService.LogoutAsync();
+    }
+}

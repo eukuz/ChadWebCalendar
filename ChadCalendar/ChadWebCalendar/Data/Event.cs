@@ -8,9 +8,9 @@ namespace ChadWebCalendar.Data
     public class Event : Duty
     {
         [Required]
-        public DateTime? StartsAt { get; set; }
+        public DateTime StartsAt { get; set; }
         [Required]
-        public DateTime? FinishesAt { get; set; }
+        public DateTime FinishesAt { get; set; }
         public int RemindNMinutesBefore { get; set; }
         public bool IsCorrect()
         {
@@ -25,14 +25,13 @@ namespace ChadWebCalendar.Data
             Accessed = DateTime.Now;
             Description = task.Description;
             StartsAt = startsAt;
-            FinishesAt = startsAt+task.TimeTakes;
+            FinishesAt = (DateTime)(startsAt +(task.TimeTakes == null ? (new TimeSpan(0,15,0)) : task.TimeTakes));
             Frequency = task.Frequency;
             Name = task.Name;
             NRepetitions = task.NRepetitions;
             RemindNMinutesBefore = remindNMunutesBefore;
             User = task.User;
         }
-        
     }
 }
 

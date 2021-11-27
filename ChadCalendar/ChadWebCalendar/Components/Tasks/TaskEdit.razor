@@ -84,7 +84,7 @@
         string predecessorIdstr = "После любой";
         Data.TaskValidation taskValidation = new Data.TaskValidation();
         [Parameter]
-        public int taskId { get; set; }
+        public int? taskId { get; set; }
         int projectId = 0;
         Data.Task task;
         Data.User user;

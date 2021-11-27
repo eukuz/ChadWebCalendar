@@ -4,13 +4,11 @@
 @using System.Diagnostics
 @inject IJSRuntime JSRuntime
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<RadzenDialog />
 
+<div class="page">
     <div class="main">
-        <div class="content px-4">
+        <div>
             @Body
         </div>
     </div>

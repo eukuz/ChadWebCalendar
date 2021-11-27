@@ -1,0 +1,14 @@
+.navbar {
+    border-bottom: 1px solid;
+    border-color: gray;
+}
+
+.hello {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.hello_emoji 
+{
+    font-size: 1.5rem;
+}
