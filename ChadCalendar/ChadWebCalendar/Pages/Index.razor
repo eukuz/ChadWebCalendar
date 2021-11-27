@@ -7,7 +7,7 @@
 @inject IAccountService _accountService;
 @using ChadWebCalendar.Components.Events
 @using ChadWebCalendar.Components.Tasks
-@using ChadWebCalendar.Components 
+@using ChadWebCalendar.Components
 @using ChadWebCalendar.Components.Projects
 @using ChadWebCalendar.Pages 
 @using ChadWebCalendar.Data.Models
@@ -17,6 +17,7 @@
 @using ButtonType = AntDesign.ButtonType
 @inject IToastService toastService
 @inject IJSRuntime JSRuntime
+@inject DialogService DialogService
 
 <div>
     <AuthorizeView>
@@ -47,15 +48,9 @@
                                OnCancel="(e)=>{visibleEditProject = false;}">
                             <ProjectEdit projectId="projId" />
                         </Modal>
-                        <Button OnClick="@(() => { visibleTask = true; })">
+                        <Button OnClick="CreateTaskPage">
                             +
                         </Button>
-                        <Modal Title="Добавить таск"
-                               Visible="@visibleTask"
-                               OnOk="(e) => { visibleTask = false; }"
-                               OnCancel="(e) => { visibleTask = false; }">
-                            <TaskAdd />
-                        </Modal>
                     </div>
                     <TaskList projectId="@projId" />
                 </div>
@@ -101,10 +96,14 @@
         JSRuntime.InvokeVoidAsync("setTitle", "You have notification");
     }
     private async void Logout()
+
+    private async void CreateTaskPage()
     {
+        await DialogService.OpenAsync<TaskAdd>("Добавить задачу");
         notificationWorker.Stop();
         await _accountService.LogoutAsync();
     }
+
     private void GetProjectId(Project pr)
     {
         projId = pr.Id;
@@ -112,7 +111,6 @@
     }
     bool visibleEvent = false;
     bool visibleProject = false;
-    bool visibleTask = false;
     bool visibleEditProject = false;
     public int? projId;
     public string? projName;

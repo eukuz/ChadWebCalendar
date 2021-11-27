@@ -8,6 +8,7 @@
 @using ChadWebCalendar.Components
 @inject NavigationManager NavigationManager
 @using AntDesign;
+@inject ProjectService projectService
 
 
 <RadzenTemplateForm TItem="Appointment" Data="@model">
@@ -74,25 +75,24 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
-            <button @onclick="editEvent" class="btn btn-danger">Изменить</button>
+            <button @onclick="editEvent" class="btn btn-primary">Готово</button>
             <button @onclick="deleteEvent" class="btn btn-danger">Удалить</button>
-            <button @onclick="migration" class="btn btn-danger">
-                <Dropdown Placement="@Placement.BottomCenter">
-                    <Overlay>
-                        <Menu>
-                            <MenuItem @key="0">
-                                <button type="button" class="btn btn-primary" >Выйти</button>
+            <Dropdown Placement="@Placement.BottomCenter">
+                <Overlay>
+                    <Menu>
+                        <span>Выберите проект</span>
+                        @foreach (var project in projectService.GetProjects(user))
+                        {
+                            <MenuItem @key="project.Id">
+                                <input class="list-group-item" type="button" @onclick="() => migration(project.Id)" value="@project.Name" />
                             </MenuItem>
-                            <MenuItem @key="1">
-                                <a type="button" href="/settings" class="btn btn-primary">Настройки</a>
-                            </MenuItem>
-                        </Menu>
-                    </Overlay>
-                    <ChildContent>
-                        <Button class="btn-lg">@authenticationState.Result.User.Identity.Name <Icon Type="user" /></Button>
-                    </ChildContent>
-                </Dropdown>
-            </button>
+                        }
+                    </Menu>
+                </Overlay>
+                <ChildContent>
+                    <button class="btn btn-dark">Сделать задачей</button>
+                </ChildContent>
+            </Dropdown>
         </div>
     </div>
 </RadzenTemplateForm>
@@ -105,6 +105,11 @@
     string userName;
     Data.Event _event;
 
+    Data.User user;
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        user = projectService.GetUser(authenticationState.Result.User.Identity.Name);
+    }
 
     protected override void OnParametersSet()
     {
@@ -117,24 +122,20 @@
         return _event = eventService.GetEventById(Appointment.Id);
     }
 
-    /*
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
-    {
-        userName = authenticationState.Result.User.Identity.Name;
-        _event = eventService.GetEventById(Appointment.Id);
-    }
-    */
-
     void editEvent()
     {
+        if (String.IsNullOrWhiteSpace(model.Text))
+        {
+            model.Text = "(Нет заголовка)";
+        }
         _event = getEvent();
-        _event.Name = model.Text + "";
-        _event.Description = model.Description + "";
+        _event.Name = model.Text;
+        _event.Description = model.Description;
         _event.Frequency = model.Frequency;
         _event.StartsAt = model.Start;
         _event.FinishesAt = model.End;
-        _event.Id = model.Id;
         _event.RemindNMinutesBefore = model.RemindNMinutesBefore;
+        _event.Id = model.Id;
 
         if (eventService.Edit(_event.Id, userName))
         {
@@ -149,10 +150,10 @@
         DialogService.Close(model);
         NavigationManager.NavigateTo("/", true);
     }
-    void migration()
+    void migration(int? projectIDforMutation)
     {
         _event = getEvent();
-        eventService.Mutatuion(_event, null, userName);
+        eventService.Mutatuion(_event, projectIDforMutation, userName);
         DialogService.Close(model);
         NavigationManager.NavigateTo("/", true);
     }

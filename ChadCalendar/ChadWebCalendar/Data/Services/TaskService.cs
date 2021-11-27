@@ -26,6 +26,7 @@ namespace ChadWebCalendar.Data.Services
                 db.SaveChanges();
             }
         }
+
         public IEnumerable<Project> GetProjects(User user)
         {
             return db.Projects.Where(proj => proj.User == user);
