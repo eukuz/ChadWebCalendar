@@ -77,8 +77,8 @@
     private IList<Claim> userClaim = new List<Claim>();
     string _title;
     private LoginModel model = new LoginModel();
- 
-  NotificationsWorker notificationWorker = new NotificationsWorker();
+
+    NotificationsWorker notificationWorker = new NotificationsWorker();
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         _title = DateTime.Now.ToString();
@@ -99,10 +99,12 @@
     private async void CreateTaskPage()
     {
         await DialogService.OpenAsync<TaskAdd>("Добавить задачу");
+    }
+    private async void Logout()
+    {
         notificationWorker.Stop();
         await _accountService.LogoutAsync();
     }
-
     private void GetProjectId(Project pr)
     {
         projId = pr.Id;
