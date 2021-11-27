@@ -34,7 +34,7 @@ namespace ChadWebCalendar.Data.Services
             {
                 if (!DeadlinesIsInitializied)
                 {
-                    events[0].StartsAt = events[0].StartsAt?.AddMinutes(-events[0].RemindNMinutesBefore);
+                    events[0].StartsAt = events[0].StartsAt.AddMinutes(-events[0].RemindNMinutesBefore);
                     if (events[0].StartsAt < minDT)
                     {
                         minDT = events[0].StartsAt;
