@@ -24,23 +24,9 @@
             <div class="navmenu">
                 <NavigationMenu></NavigationMenu>
             </div>
-            <div style="display:flex">
-                <div>
-                    <div style="display:flex">
-                        <input class="btn btn-primary" color="" type="button" value="Input">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                проект
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                        <input class="btn btn-primary" type="button" @onclick="showNotification" value="+">
-                    </div>
-                    <TaskRendering />jectList GetProject="GetProjectId" />
+            <div class="main_container">
+                <div class="projectlist">
+                    <ProjectList GetProject="GetProjectId" />
                 </div>
                 <div class="tasklist">
                     <div class="row d-md-table-row">
@@ -71,8 +57,8 @@
                             <TaskAdd />
                         </Modal>
                     </div>
-                    <TaskList projectId="@projId"/>
-                    </div>
+                    <TaskList projectId="@projId" />
+                </div>
                 <div class="scheduler">
                     <Scheduler></Scheduler>
                 </div>
