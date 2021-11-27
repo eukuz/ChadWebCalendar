@@ -1,7 +1,8 @@
 ﻿@page "/"
-@using ChadWebCalendar.Data
-@using ChadWebCalendar.Data.Models
-@using ChadWebCalendar.Data.Services
+<head>
+    <title>showme</title>
+</head>
+
 @using Microsoft.EntityFrameworkCore
 @inject IAccountService _accountService;
 @using ChadWebCalendar.Components.Events
@@ -9,10 +10,13 @@
 @using ChadWebCalendar.Components 
 @using ChadWebCalendar.Components.Projects
 @using ChadWebCalendar.Pages 
+@using ChadWebCalendar.Data.Models
+@using ChadWebCalendar.Data.Services
 @using AntDesign; 
 @using ChadWebCalendar.Data
 @using ButtonType = AntDesign.ButtonType
-
+@inject IToastService toastService
+@inject IJSRuntime JSRuntime
 
 <div>
     <AuthorizeView>
@@ -20,9 +24,23 @@
             <div class="navmenu">
                 <NavigationMenu></NavigationMenu>
             </div>
-            <div class="main_container">
-                <div class="projectlist">
-                    <ProjectList GetProject="GetProjectId" />
+            <div style="display:flex">
+                <div>
+                    <div style="display:flex">
+                        <input class="btn btn-primary" color="" type="button" value="Input">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                проект
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                        <input class="btn btn-primary" type="button" @onclick="showNotification" value="+">
+                    </div>
+                    <TaskRendering />jectList GetProject="GetProjectId" />
                 </div>
                 <div class="tasklist">
                     <div class="row d-md-table-row">
@@ -68,16 +86,37 @@
     </AuthorizeView>
 </div>
 
+@*<TableListTasks />*@
+@*<GetListTask />*@
+
 @code{
     [CascadingParameter]
     private Task<AuthenticationState> authenticationState { get; set; }
     private List<ChadWebCalendar.Data.Task> Tasks = new List<ChadWebCalendar.Data.Task>();
     private IList<Claim> userClaim = new List<Claim>();
+    string _title;
     private LoginModel model = new LoginModel();
-
-
+ 
+  NotificationsWorker notificationWorker = new NotificationsWorker();
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        _title = DateTime.Now.ToString();
+        if (!NotificationsWorker.IsStarted && authenticationState.Result.User.Identity.Name != null)
+        {
+            NotificationsWorker.Username = authenticationState.Result.User.Identity.Name;
+            notificationWorker.Start();
+            NotificationsWorker.NotificationReadyToShow += showNotification;
+            NotificationsWorker.IsStarted = true;
+        }
+    }
+    private void showNotification()
+    {
+        toastService.ShowInfo($"{NotificationsWorker.TypeOfNotification}");
+        JSRuntime.InvokeVoidAsync("setTitle", "You have notification");
+    }
     private async void Logout()
     {
+        notificationWorker.Stop();
         await _accountService.LogoutAsync();
     }
     private void GetProjectId(Project pr)

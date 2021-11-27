@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="_content/Radzen.Blazor/css/default-base.css">
     <link rel="stylesheet" href="_content/Radzen.Blazor/css/default.css">
     <link rel="stylesheet" href="_content/Blazored.Modal/blazored-modal.css" />
+    <link href="_ content / Blazored.Toast / blazored-toast.min.css" rel="stylesheet" />
+    <link href="_content/Blazored.Toast/blazored-toast.css" rel="stylesheet" />
     <link href="_content/AntDesign/css/ant-design-blazor.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +40,9 @@
         <a class="dismiss">🗙</a>
     </div>
 
-
+    <script>
+        setTitle = (title) => { document.title = title; };
+    </script>
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
     <script src="_content/Blazored.Modal/blazored.modal.js"></script>

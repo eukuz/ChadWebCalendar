@@ -68,9 +68,9 @@ namespace ChadWebCalendar.Data.Services
             }
             return false;
         }
-        public bool Edit(Data.Task task, int projectId)
+        public bool Edit(Data.Task task, int projectId, string Name)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+            User user = db.Users.FirstOrDefault(u => u.Login == Name);
             task.Accessed = DateTime.Now;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId); // это странное выражение нужно потому что в модели передается только Id
             //Models.Task tempTask = task.Predecessor;
@@ -93,9 +93,9 @@ namespace ChadWebCalendar.Data.Services
                 await db.SaveChangesAsync();
             }
         }
-        public async void Mutatuion(int? id)
+        public async void Mutatuion(int? id, string Name)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+            User user = db.Users.FirstOrDefault(u => u.Login == Name);
             Data.Task task = db.Tasks.FirstOrDefault(t => id == t.Id); // это странное выражение нужно потому что в модели передается только Id
             removeDependencies(task); // избавляемся от зависимостей
             DateTime dt = DateTime.Now;

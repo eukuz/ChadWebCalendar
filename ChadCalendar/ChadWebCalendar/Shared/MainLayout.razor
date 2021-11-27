@@ -1,5 +1,10 @@
 ﻿@inherits LayoutComponentBase
-    <RadzenDialog />
+@using ChadWebCalendar
+@using Blazored.Toast.Configuration
+@using System.Diagnostics
+@inject IJSRuntime JSRuntime
+
+<RadzenDialog />
 
 <div class="page">
     <div class="main">
@@ -9,4 +14,16 @@
     </div>
 </div>
 
-<BlazoredToasts />
+<BlazoredToasts Position="ToastPosition.TopRight"
+                Timeout="100000">
+    <CloseButtonContent>
+        <a @onclick="@OnNotificationClosed">&#9746;</a>
+    </CloseButtonContent>
+</BlazoredToasts>
+
+@code {
+    void OnNotificationClosed()
+    {
+        JSRuntime.InvokeVoidAsync("setTitle", "ChadWebCalendar");
+    }
+}
