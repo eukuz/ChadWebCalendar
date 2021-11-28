@@ -38,6 +38,7 @@ namespace ChadWebCalendar
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationProvider>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<Radzen.NotificationService>();
             services.AddBlazoredLocalStorage();
             services.AddAuthorizationCore();
 
