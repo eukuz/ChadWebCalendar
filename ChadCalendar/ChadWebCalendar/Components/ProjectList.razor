@@ -2,6 +2,7 @@
 @using Task = System.Threading.Tasks.Task
 @inject Data.Services.ProjectService projectService
 @inject NavigationManager NavigationManager
+@inject DialogService DialogService
 @attribute [Authorize]
 @using AntDesign;
 @using ChadWebCalendar.Components.Projects
@@ -13,14 +14,9 @@
     }
 <div>
     <p></p>
-    <input class="list-group-item" type="button" style="width: 100%"
-           @onclick="@(()=>{ visibleProject = true; })" value=➕/>
-    <Modal Title="Добавить проект"
-           Visible="@visibleProject"
-           OnOk="(e)=>{visibleProject = false;}"
-           OnCancel="(e)=>{visibleProject = false;}">
-        <ProjectAdd />
-    </Modal>
+    <Button OnClick="@(() => AddProjectPage())" Style="width:100%; overflow-wrap: break-word">
+        ➕
+    </Button>
 </div>
 </div>
 
@@ -35,4 +31,8 @@
 
     [Parameter] public EventCallback<Project> GetProject { get; set; }
     bool visibleProject = false;
+    private async void AddProjectPage()
+    {
+        await DialogService.OpenAsync<ProjectAdd>("Создать проект");
+    }
 }
