@@ -5,21 +5,22 @@ using System.Threading;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
-
+using System.ComponentModel;
 
 namespace ChadWebCalendar.Data.Services
 {
     public class NotificationsWorker
     {
         public static string Username;
+        public bool isFirstStart = true;
         public static DateTime? FirstEventDT;
         public static DateTime? DeadlineNotification;
         public static string TypeOfNotification;
         public static bool DeadlinesIsInitializied = false;
-        public static bool IsStarted = false;
+        public bool IsStarted = false;
         public delegate void NotificationShowHandler();
-        static public event NotificationShowHandler NotificationReadyToShow;
-        Thread NotificationsCheckThread = new Thread(new ThreadStart(NotificationChecker));
+        public event NotificationShowHandler NotificationReadyToShow;
+        BackgroundWorker NotificationsCheckThread = new BackgroundWorker();
         static ApplicationContext db = new ApplicationContext();
         static public DateTime? GetFirstEventByTime()
         {
@@ -158,14 +159,21 @@ namespace ChadWebCalendar.Data.Services
         }
         public void Start()
         {
+            if (isFirstStart)
+            {
+                NotificationsCheckThread.DoWork += NotificationChecker;
+                isFirstStart = false;
+            }
+
             IsStarted = true;
-            NotificationsCheckThread.Start();
+            NotificationsCheckThread.RunWorkerAsync();
         }
         public void Stop()
         {
             IsStarted = false;
+            Thread.Sleep(500);
         }
-        private static void NotificationChecker()
+        private void NotificationChecker(object sender, DoWorkEventArgs e)
         {
             while (IsStarted)
             {
@@ -175,7 +183,7 @@ namespace ChadWebCalendar.Data.Services
                 DateTime? FirstEventDT = GetFirstEventByTime();
                 if (dt >= FirstEventDT)
                 {
-                    Debug.WriteLine("Fuck yeah");
+                    Debug.WriteLine("NotificationShow");
                     NotificationReadyToShow.Invoke();
                 }
                 Thread.Sleep(Constants.MillisecondsForSleepAfterWorkerIteration);
