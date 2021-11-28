@@ -32,10 +32,10 @@
                     <ProjectList GetProject="GetProjectId" />
                 </div>
                 <div class="tasklist">
-                    <div display:flex>
+                    <div Style="display: flex; justify-content: space-between;">
                         <Button Type="@ButtonType.Default">👩‍💼</Button>
-
-                            <Button OnClick="@(() => EditProjectPage(projId))">
+                        
+                        <Button OnClick="@(() => EditProjectPage(projId))" Style="width:100%;" >
                                 @projName
                             </Button>
 
