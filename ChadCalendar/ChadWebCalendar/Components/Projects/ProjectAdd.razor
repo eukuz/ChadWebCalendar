@@ -33,8 +33,7 @@
 <div class="form-group">
     <label>Выберите иконку</label>
     <select @bind="project.IconNumber">
-        <option>😈</option>
-        <option>😍</option>
+        <option selected>😍</option>
         <option>🤠</option>
         <option>😀</option>
         <option>⛹</option>
@@ -67,6 +66,10 @@
     }
     void addProject()
     {
+        if (project.IconNumber == null)
+        {
+            project.IconNumber = "😍";
+        }
         if (projectService.Create(project, userName))
         {
             OnInitializedAsync();
