@@ -2,9 +2,9 @@
 @using ChadWebCalendar.Data.Models
 @inherits LoginModel
 
-<div class=" col-md-6 offset-md-3" style="display: flex;">
+<div class=" col-md-6 offset-md-3" style="display: flex; margin: 5px;">
     <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
+        <div class="carousel-inner" style="width: 500px;">
             <div class="carousel-item active" data-bs-interval="2000">
                 <img src="/img/GigaChad1.jpg" class="d-block w-100 h-100" alt="...">
             </div>
@@ -36,15 +36,15 @@
             <div class="form-floating mb-3">
 
                 <InputText id="login" @bind-Value="LoginData.model.Login" class="form-control" placeholder="Login" />
-                <label for="login">Login</label>
+                <label for="login">Логин</label>
             </div>
             <div class="form-floating">
 
                 <InputText id="password" @bind-Value="LoginData.model.Password" class="form-control" placeholder="Password" type="password" />
-                <label for="password">Password</label>
+                <label for="password">Пароль</label>
             </div>
-            <p class="my-4"><div style="display: inline-block"><button type="submit" class="btn btn-primary">Log in</button></div></p>
-                            <div style="display: inline-block"><a type="button" href="/register" class="btn btn-primary">Register</a></div>
+            <p class="my-4"><div style="display: inline-block"><button type="submit" class="btn btn-primary">Войти</button></div></p>
+                            <div style="display: inline-block"><a href="/register"><button class="btn btn-primary">Регистрация</button></a></div>
 
         </EditForm>
         

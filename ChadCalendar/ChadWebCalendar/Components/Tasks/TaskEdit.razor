@@ -7,20 +7,20 @@
     <ValidationSummary></ValidationSummary>
     <div class="form-group">
         <label>Название задачи</label>
-        <input type="text" placeholder="" @bind="task.Name">
+        <input class="form-control" type="text" placeholder="" @bind="task.Name" style="width: 25%;">
         <ValidationMessage For="() => task" />
     </div>
     <div class="form-group">
         <label>Время на задачу</label>
-        <input type="text" @bind="tempDT" min="0">
+        <input class="form-control" type="text" @bind="tempDT" min="0" style="width: 25%;">
     </div>
     <div class="form-group">
         <label>Описание</label>
-        <textarea class="form-control" type="text" placeholder="" @bind="task.Description"></textarea>
+        <textarea class="form-control" type="text" placeholder="" @bind="task.Description" style="width: 25%;"></textarea>
     </div>
     <div class="form-group">
         <label>Дедлайн</label>
-        <input class="form-control" type="datetime-local" @bind="task.Deadline" @bind:format="yyyy-MM-ddTHH:mm" />
+        <input class="form-control" type="datetime-local" @bind="task.Deadline" @bind:format="yyyy-MM-ddTHH:mm" style="width: 25%;"/>
     </div>
     <div class="form-group">
         <label>Выберите проект для задачи</label>
@@ -56,7 +56,7 @@
     </div>
     <div class="form-group">
         <label>Максимум в день</label>
-        <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
+        <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0" style="width: 25%;">
     </div>
     <div class="form-group">
         <label>Частота</label>
@@ -76,7 +76,7 @@
     </div>
     <button @onclick="updateTask" class="btn btn-primary">Готово</button>
     <button @onclick="deleteTask" class="btn btn-danger">Удалить задачу</button>
-    <button @onclick="mutation" class="btn-dark">Сделать событием</button>
+    <button @onclick="mutation" class="btn btn-dark">Сделать событием</button>
 </EditForm>
 
     @code {
