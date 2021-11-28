@@ -32,29 +32,16 @@
                     <ProjectList GetProject="GetProjectId" />
                 </div>
                 <div class="tasklist">
-                    <div display:inline-block>
+                    <div display:flex>
                         <Button Type="@ButtonType.Default">👩‍💼</Button>
-                        @if (projName != null)
-                        {
-                            <Button OnClick="@(() => { visibleEditProject = true; })">
+
+                            <Button OnClick="@(() => EditProjectPage(projId))">
                                 @projName
                             </Button>
-                        }
-                        else
-                        {
-                            <Button Type="@ButtonType.Default">Выберите проект</Button>
-                        }
-                        <Modal Title="Изменить проект"
-                               Visible="@visibleEditProject"
-                               OnOk="(e) => { visibleEditProject = false; }"
-                               OnCancel="(e) => { visibleEditProject = false; }">
-                            <ProjectEdit projectId="projId"/>
-                        </Modal>
-                        
-                            <Button OnClick="CreateTaskPage">
-                                +
-                            </Button>
 
+                            <Button OnClick="CreateTaskPage">
+                            +
+                        </Button>
                     </div>
                     <TaskList projectId="@projId" />
                 </div>
@@ -92,15 +79,13 @@
         }
         if (authenticationState.Result.User.Identity.Name != null)
         {
-            using (ApplicationContext db = new ApplicationContext()) // для получения первого прое
+            using (ApplicationContext db = new ApplicationContext()) // для получения первого проекта
             {
                 User user = db.Users.FirstOrDefault(u => u.Login == authenticationState.Result.User.Identity.Name);
-                projId = projectService.GetProjects(user).FirstOrDefault().Id;
-                projName = projectService.GetProjects(user).FirstOrDefault().Name;
+                projId = projectService.GetProjects(user).FirstOrDefault()?.Id;
+                projName = projectService.GetProjects(user).FirstOrDefault()?.Name;
             }
         }
-
-
     }
     
     private void showNotification()
@@ -112,10 +97,16 @@
     private async void CreateTaskPage()
     {
         await DialogService.OpenAsync<TaskAdd>("Добавить задачу");
-        notificationWorker.Stop();
-        await _accountService.LogoutAsync();
+        //notificationWorker.Stop();
+        //await _accountService.LogoutAsync();
     }
-
+    private async void EditProjectPage(int? projectId)
+    {
+        await DialogService.OpenAsync<ProjectEdit>("Редактировать проект", 
+            new Dictionary<string, object>{{ "projectId", projectId } });
+        //notificationWorker.Stop();
+        // await _accountService.LogoutAsync();
+    }
     private void GetProjectId(Project pr)
     {
         projId = pr.Id;
