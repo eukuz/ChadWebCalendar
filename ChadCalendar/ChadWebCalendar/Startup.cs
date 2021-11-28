@@ -36,7 +36,7 @@ namespace ChadWebCalendar
 
             using (ApplicationContext db = new ApplicationContext())
             {
-                db.Database.Migrate();
+                db.Database.EnsureCreated();
             }
 
             services.AddRazorPages();
