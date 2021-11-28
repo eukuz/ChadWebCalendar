@@ -77,18 +77,17 @@
     private List<ChadWebCalendar.Data.Task> Tasks = new List<ChadWebCalendar.Data.Task>();
     private IList<Claim> userClaim = new List<Claim>();
     string _title;
+    NotificationsWorker notificationsWorker = new NotificationsWorker();
     private LoginModel model = new LoginModel();
-
-    NotificationsWorker notificationWorker = new NotificationsWorker();
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         _title = DateTime.Now.ToString();
-        if (!NotificationsWorker.IsStarted && authenticationState.Result.User.Identity.Name != null)
+        if (!notificationsWorker.IsStarted && authenticationState.Result.User.Identity.Name != null)
         {
             NotificationsWorker.Username = authenticationState.Result.User.Identity.Name;
-            notificationWorker.Start();
-            NotificationsWorker.NotificationReadyToShow += showNotification;
-            NotificationsWorker.IsStarted = true;
+            notificationsWorker.NotificationReadyToShow += showNotification;
+            notificationsWorker.Start();
+            notificationsWorker.IsStarted = true;
         }
     }
 
@@ -111,7 +110,7 @@
     }
     private async void Logout()
     {
-        notificationWorker.Stop();
+        notificationsWorker.Stop();
         await _accountService.LogoutAsync();
     }
     private void GetProjectId(Project pr)
