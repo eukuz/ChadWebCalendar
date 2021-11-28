@@ -3,18 +3,18 @@
     <title>showme</title>
 </head>
 
-@using Microsoft.EntityFrameworkCore
-@inject IAccountService _accountService;
 @using ChadWebCalendar.Components.Events
 @using ChadWebCalendar.Components.Tasks
 @using ChadWebCalendar.Components
 @using ChadWebCalendar.Components.Projects
-@using ChadWebCalendar.Pages 
+@using ChadWebCalendar.Pages
 @using ChadWebCalendar.Data.Models
 @using ChadWebCalendar.Data.Services
-@using AntDesign; 
+@using AntDesign;
 @using ChadWebCalendar.Data
 @using ButtonType = AntDesign.ButtonType
+@inject IAccountService _accountService
+@inject NavigationManager NavigationManager
 @inject IToastService toastService
 @inject IJSRuntime JSRuntime
 @inject DialogService DialogService
@@ -31,7 +31,7 @@
                 </div>
                 <div class="tasklist">
                     <div class="row d-md-table-row">
-                        <Button Type="@ButtonType.Default">👩‍💼</Button>
+                        <Button Type="@ButtonType.Default" OnClick="Distribute">👩‍💼</Button>
                         @if (projName != null)
                         {
                             <Button OnClick="@(() => { visibleEditProject = true; })">
@@ -71,14 +71,15 @@
 @*<GetListTask />*@
 
 @code{
+
     [CascadingParameter]
     private Task<AuthenticationState> authenticationState { get; set; }
     private List<ChadWebCalendar.Data.Task> Tasks = new List<ChadWebCalendar.Data.Task>();
     private IList<Claim> userClaim = new List<Claim>();
     string _title;
     private LoginModel model = new LoginModel();
- 
-  NotificationsWorker notificationWorker = new NotificationsWorker();
+
+    NotificationsWorker notificationWorker = new NotificationsWorker();
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         _title = DateTime.Now.ToString();
@@ -90,6 +91,14 @@
             NotificationsWorker.IsStarted = true;
         }
     }
+
+    private void Distribute()
+    {
+
+        TaskDistributor.Distribute((int)projId);
+        NavigationManager.NavigateTo("/", true);
+    }
+
     private void showNotification()
     {
         toastService.ShowInfo($"{NotificationsWorker.TypeOfNotification}");

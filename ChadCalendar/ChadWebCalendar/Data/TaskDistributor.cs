@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,20 +15,21 @@ namespace ChadWebCalendar.Data
     }
     public static class TaskDistributor
     {
-        public static void Distribute(Project project)
+        public static void Distribute(int projId)
         {
 
             List<Data.Event> distributedTasks = new List<Data.Event>();
             using (ApplicationContext db = new ApplicationContext())
             {
-                User u = db.Users.FirstOrDefault(u => u.Login == project.User.Login);
+                Project project = db.Projects.Include(p=> p.User).FirstOrDefault(p => p.Id == projId);
+                User user = project.User;
                 
-                DateTime endOfWeek = GetTheEndOfWorkingWeek(DayOfWeek.Saturday, u.WorkingHoursTo);
+                DateTime endOfWeek = GetTheEndOfWorkingWeek(DayOfWeek.Saturday, user.WorkingHoursTo);
 
                 List<Data.Event> eventsOfTheWeek = new List<Data.Event>(db.Events
-                    .Where(e => e.User.Login == u.Login && e.FinishesAt > DateTime.Now && e.FinishesAt <= endOfWeek));
+                    .Where(e => e.User.Login == user.Login && e.FinishesAt > DateTime.Now && e.FinishesAt <= endOfWeek));
                 
-                AddNotWorkingHours(u.WorkingHoursFrom, u.WorkingHoursTo, eventsOfTheWeek, endOfWeek);
+                AddNotWorkingHours(user.WorkingHoursFrom, user.WorkingHoursTo, eventsOfTheWeek, endOfWeek);
                 eventsOfTheWeek = eventsOfTheWeek.OrderBy(e => e.StartsAt).ToList();
 
                 List<TimeSlot> freeTimeSlots = findFreeTimeSlots(eventsOfTheWeek, endOfWeek);
