@@ -64,6 +64,7 @@ public class RegisterViewModel
 {
     [Required]
     [UniqueLoginValidator]
+    [NoSpaceValidator]
     public string Login { get; set; }
     [Required]
     public string Password { get; set; }
