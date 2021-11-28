@@ -34,12 +34,10 @@
                 <div class="tasklist">
                     <div Style="display: flex; justify-content: space-between;">
                         <Button Type="@ButtonType.Default">👩‍💼</Button>
-                        
-                        <Button OnClick="@(() => EditProjectPage(projId))" Style="width:100%;" >
-                                @projName
-                            </Button>
-
-                            <Button OnClick="CreateTaskPage">
+                        <Button OnClick="@(() => EditProjectPage(projId))" Style="width:100%; overflow-wrap: break-word" >
+                            @projName
+                        </Button>
+                        <Button OnClick="CreateTaskPage">
                             +
                         </Button>
                     </div>
