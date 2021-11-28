@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using System.Threading.Tasks;
 using ChadWebCalendar.Data.Models;
 using System.Text.Json;
+using System.Linq;
 
 namespace ChadWebCalendar.Data.Services
 {
@@ -24,17 +25,17 @@ namespace ChadWebCalendar.Data.Services
         public async Task<bool> LoginAsync(LoginModel lModel)
         {
 
-            //using (ApplicationContext db = new ApplicationContext())
-            //{
-            //    User user = db.Users.FirstOrDefault(u => u.Login == lModel.LoginData.model.Login && u.Password == lModel.LoginData.model.Password);
-            //    if (user == null)
-            //        return false;
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                User user = db.Users.FirstOrDefault(u => u.Login == lModel.LoginData.model.Login && u.Password == lModel.LoginData.model.Password);
+                if (user == null)
+                    return false;
 
                 await _localStorageService.SetItemAsync("token", JsonSerializer.Serialize(lModel.LoginData.model));
                 (_customAuthenticationProvider as CustomAuthenticationProvider).Notify();
                 return true;
-            //}  
-           
+            }
+
         }
         public string GetLogin()
         {
