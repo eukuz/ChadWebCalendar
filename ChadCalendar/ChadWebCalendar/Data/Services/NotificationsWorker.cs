@@ -53,19 +53,43 @@ namespace ChadWebCalendar.Data.Services
             var enumerableProjects = db.Projects.AsNoTracking().OrderBy(p => p.Deadline).Where(p => p.User.Login == Username && p.Deadline >= dt);
             List<Data.Project> projectDeadlines = enumerableProjects.ToList();
             projectDeadlines.Add(null);
-            if (projectDeadlines[0] != null)
+            string tempOfNotification = "";
+            if (projectDeadlines[0] != null && projectDeadlines[0].Deadline - dt > (dt - dt))
             {
-                if (!DeadlinesIsInitializied)
+                string stripped;
+                if (projectDeadlines[0].ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
+                    stripped = projectDeadlines[0].ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT);
+                else
+                    stripped = projectDeadlines[0].ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForTrimmedDT);
+                if ((projectDeadlines[0].Deadline - dt) < (dt.AddMinutes(60) - dt))
+                {
                     projectDeadlines[0].Deadline = projectDeadlines[0].Deadline?.AddMinutes(-30);
+                    tempOfNotification = $"Дедлайн проекта {projectDeadlines[0].Name} в {stripped}";
+                }
+                else if ((projectDeadlines[0].Deadline - dt) < (dt.AddHours(3) - dt))
+                {
+                    projectDeadlines[0].Deadline = projectDeadlines[0].Deadline?.AddHours(-2);
+                    tempOfNotification = $"Дедлайн проекта {projectDeadlines[0].Name} в {stripped}";
+                }
+                else if ((projectDeadlines[0].Deadline - dt) < (dt.AddDays(2) - dt))
+                {
+                    projectDeadlines[0].Deadline = projectDeadlines[0].Deadline?.AddDays(-1);
+                    tempOfNotification = $"Дедлайн проекта {projectDeadlines[0].Name} уже завтра в {stripped}";
+                }
+                else if ((projectDeadlines[0].Deadline - dt) < (dt.AddDays(8) - dt))
+                {
+                    projectDeadlines[0].Deadline = projectDeadlines[0].Deadline?.AddDays(-7);
+                    tempOfNotification = $"Дедлайн проекта {projectDeadlines[0].Name} через неделю";
+                }
+                else if ((projectDeadlines[0].Deadline - dt) < (dt.AddDays(32) - dt))
+                {
+                    projectDeadlines[0].Deadline = projectDeadlines[0].Deadline?.AddDays(-30);
+                    tempOfNotification = $"Дедлайн проекта {projectDeadlines[0].Name} через 30 дней";
+                }
                 if (projectDeadlines[0].Deadline < minDT && projectDeadlines[0].Deadline >= dt)
                 {
                     minDT = projectDeadlines[0].Deadline;
-                    string stripped;
-                    if (minDT.ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
-                        stripped = minDT.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT);
-                    else
-                        stripped = minDT.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForTrimmedDT);
-                    TypeOfNotification = $"Дедлайн проекта {projectDeadlines[0].Name} в {stripped}";
+                    TypeOfNotification = tempOfNotification;
                     DeadlineNotification = projectDeadlines[0].Deadline;
                 }
                 deadlines.Add(projectDeadlines[0].Deadline);
@@ -74,20 +98,43 @@ namespace ChadWebCalendar.Data.Services
             var enumerableTasks = db.Tasks.AsNoTracking().OrderBy(t => t.Deadline).Where(t => t.User.Login == Username && t.Deadline >= dt);
             List<Data.Task> taskDeadlines = enumerableTasks.ToList();
             taskDeadlines.Add(null);
-            if (taskDeadlines[0] != null)
+            tempOfNotification = "";
+            if (taskDeadlines[0] != null && taskDeadlines[0].Deadline - dt > (dt - dt))
             {
-                taskDeadlines[0].Deadline = taskDeadlines[0].Deadline;
-                if (!DeadlinesIsInitializied)
+                string stripped;
+                if (taskDeadlines[0].ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
+                    stripped = taskDeadlines[0].ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT);
+                else
+                    stripped = taskDeadlines[0].ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForTrimmedDT);
+                if ((taskDeadlines[0].Deadline - dt) < (dt.AddMinutes(60) - dt))
+                {
                     taskDeadlines[0].Deadline = taskDeadlines[0].Deadline?.AddMinutes(-30);
+                    tempOfNotification = $"Дедлайн задачи {taskDeadlines[0].Name} в {stripped}";
+                }
+                else if ((taskDeadlines[0].Deadline - dt) < (dt.AddHours(3) - dt))
+                {
+                    taskDeadlines[0].Deadline = taskDeadlines[0].Deadline?.AddHours(-2);
+                    tempOfNotification = $"Дедлайн задачи {taskDeadlines[0].Name} в {stripped}";
+                }
+                else if ((taskDeadlines[0].Deadline - dt) < (dt.AddDays(2) - dt))
+                {
+                    taskDeadlines[0].Deadline = taskDeadlines[0].Deadline?.AddDays(-1);
+                    tempOfNotification = $"Дедлайн задачи {taskDeadlines[0].Name} завтра в {stripped}";
+                }
+                else if ((taskDeadlines[0].Deadline - dt) < (dt.AddDays(8) - dt))
+                {
+                    taskDeadlines[0].Deadline = taskDeadlines[0].Deadline?.AddDays(-7);
+                    tempOfNotification = $"Дедлайн задачи {taskDeadlines[0].Name} через неделю";
+                }
+                else if ((taskDeadlines[0].Deadline - dt) < (dt.AddDays(32) - dt))
+                {
+                    taskDeadlines[0].Deadline = taskDeadlines[0].Deadline?.AddDays(-30);
+                    tempOfNotification = $"Дедлайн задачи {taskDeadlines[0].Name} через 30 дней";
+                }
                 if (taskDeadlines[0].Deadline < minDT && taskDeadlines[0].Deadline >= dt)
                 {
                     minDT = taskDeadlines[0].Deadline;
-                    string stripped;
-                    if (minDT.ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
-                        stripped = minDT.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT);
-                    else
-                        stripped = minDT.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForTrimmedDT);
-                    TypeOfNotification = $"Дедлайн задачи {taskDeadlines[0].Name} в {stripped}";
+                    TypeOfNotification = tempOfNotification;
                     DeadlineNotification = taskDeadlines[0].Deadline;
                 }
                 deadlines.Add(taskDeadlines[0].Deadline);
@@ -122,6 +169,7 @@ namespace ChadWebCalendar.Data.Services
         {
             while (IsStarted)
             {
+                db = new ApplicationContext();
                 Debug.WriteLine("Worker is working");
                 DateTime dt = DateTime.Now;
                 DateTime? FirstEventDT = GetFirstEventByTime();

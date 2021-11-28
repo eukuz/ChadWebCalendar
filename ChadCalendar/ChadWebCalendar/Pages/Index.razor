@@ -108,10 +108,12 @@
     private async void CreateTaskPage()
     {
         await DialogService.OpenAsync<TaskAdd>("Добавить задачу");
+    }
+    private async void Logout()
+    {
         notificationWorker.Stop();
         await _accountService.LogoutAsync();
     }
-
     private void GetProjectId(Project pr)
     {
         projId = pr.Id;

@@ -31,9 +31,9 @@ namespace ChadWebCalendar.Data.Services
         {
             return db.Projects.Where(proj => proj.User == user);
         }
-        public Data.Project GetFirstProject()
+        public Data.Project GetFirstProject(int? userId)
         {
-            return db.Projects.FirstOrDefault(p => p.Id != null);
+            return db.Projects.FirstOrDefault(p => p.User.Id == userId);
         }
         public Data.Task GetTask(int? id)
         {
@@ -61,6 +61,10 @@ namespace ChadWebCalendar.Data.Services
             task.NRepetitions = 1;
             task.Predecessor = GetPredecessor(91);
             task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId);
+            if (String.IsNullOrWhiteSpace(task.Name))
+            {
+                task.Name = "(Нет заголовка)";
+            }
             if (IsCorrect(task))
             {
                 db.Add(task);

@@ -12,7 +12,7 @@ namespace ChadWebCalendar.Data.Services
 
         bool IsCorrect(ref Data.Event _event)
         {
-            if (_event.Name != null && _event.Name != "")
+            if (_event.StartsAt < _event.FinishesAt)
                 return true;
             else
                 return false;
