@@ -34,10 +34,16 @@ namespace ChadWebCalendar
             Directory.CreateDirectory(path);
             services.AddDbContext<ApplicationContext>(options => options.UseSqlite($"Data Source = { Path.Combine(path, "Calendar.db")}"));
 
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                db.Database.EnsureCreated();
+            }
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationProvider>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<Radzen.NotificationService>();
             services.AddBlazoredLocalStorage();
             services.AddAuthorizationCore();
 

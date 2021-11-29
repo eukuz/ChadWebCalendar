@@ -26,9 +26,13 @@
             @if (userProjects != null)
             {
                 <select @bind="projectId">
+                    <option value="@firstProject.Id">@firstProject.Name</option>
                     @foreach (var proj in userProjects)
                     {
-                        <option value="@proj.Id">@proj.Name</option>
+                        if (proj.Id != firstProject.Id)
+                        {
+                            <option value="@proj.Id">@proj.Name</option>
+                        }
                     }
                 </select>
             }
@@ -94,7 +98,7 @@
             user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
             userTasks = taskService.GetTasks(user);
             userProjects = taskService.GetProjects(user);
-            firstProject = taskService.GetFirstProject();
+            firstProject = taskService.GetFirstProject(user.Id);
             projectId = firstProject.Id;
 
             taskValidation.TimeTakes = task.TimeTakes;

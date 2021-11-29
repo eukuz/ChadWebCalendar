@@ -5,6 +5,7 @@
 @inject DialogService DialogService
 @attribute [Authorize]
 @using ChadWebCalendar.Data
+@inject NotificationService NotificationService
 
 <RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
     <div class="row" style="margin-bottom: 16px">
@@ -47,6 +48,7 @@
             <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true" />
         </div>
     </div>
+    <ValidationMessage For="() => _event" />
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
             <RadzenLabel Text="Конец" />
@@ -78,7 +80,7 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
-            <RadzenButton ButtonType="ButtonType.Submit" Text="Сохранить" />
+            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Сохранить" />
         </div>
     </div>
 </RadzenTemplateForm>
@@ -101,7 +103,7 @@
         userName = authenticationState.Result.User.Identity.Name;
     }
 
-    void addEvent()
+    private async System.Threading.Tasks.Task addEvent()
     {
         if (String.IsNullOrWhiteSpace(model.Text))
         {
@@ -119,13 +121,19 @@
         };
         if (eventService.Create(_event, userName))
         {
-            OnInitializedAsync();
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Событие добавлено", Detail = "Добавление события", Duration = 2000 });
+            await OnInitializedAsync();
+            DialogService.Close(model);
         }
-        NavigationManager.NavigateTo("/", true);
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Введена некорректная дата", Detail = "Добавление события", Duration = 3000 });
+        }
     }
 
     protected override void OnParametersSet()
     {
+
         model.Start = Start;
         model.End = End;
     }
@@ -133,6 +141,10 @@
     void OnSubmit(Appointment model)
     {
         addEvent();
-        DialogService.Close(model);
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
     }
 }
