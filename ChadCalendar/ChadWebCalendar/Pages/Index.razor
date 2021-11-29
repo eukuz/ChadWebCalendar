@@ -69,12 +69,12 @@
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         _title = DateTime.Now.ToString();
-        if (!notificationsWorker.IsStarted && authenticationState.Result.User.Identity.Name != null)
+        if (!notificationWorker.IsStarted && authenticationState.Result.User.Identity.Name != null)
         {
             NotificationsWorker.Username = authenticationState.Result.User.Identity.Name;
             notificationWorker.Start();
-            NotificationsWorker.NotificationReadyToShow += showNotification;
-            NotificationsWorker.IsStarted = true;
+            notificationWorker.NotificationReadyToShow += showNotification;
+            notificationWorker.IsStarted = true;
         }
         if (authenticationState.Result.User.Identity.Name != null)
         {
