@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ChadWebCalendar.Data
 {
     public class Appointment
     {
+        [Required]
+        [NameLengthValidator]
         public string Text { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
@@ -15,3 +18,4 @@ namespace ChadWebCalendar.Data
         public DateTime? Accessed { get; set; }
     }
 }
+

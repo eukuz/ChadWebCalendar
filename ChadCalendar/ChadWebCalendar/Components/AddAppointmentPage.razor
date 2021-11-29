@@ -8,6 +8,8 @@
 @inject NotificationService NotificationService
 
 <RadzenTemplateForm TItem="Appointment" Data="@model">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
             <RadzenLabel Text="Название" />
