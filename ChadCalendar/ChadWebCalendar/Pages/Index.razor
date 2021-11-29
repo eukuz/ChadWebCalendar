@@ -9,16 +9,16 @@
 @using ChadWebCalendar.Components.Tasks
 @using ChadWebCalendar.Components
 @using ChadWebCalendar.Components.Projects
-@using ChadWebCalendar.Pages 
+@using ChadWebCalendar
+@using ChadWebCalendar.Pages
 @using ChadWebCalendar.Data.Models
 @using ChadWebCalendar.Data.Services
-@using AntDesign; 
+@using AntDesign;
 @using ChadWebCalendar.Data
 @using ButtonType = AntDesign.ButtonType
 @inject IToastService toastService
 @inject IJSRuntime JSRuntime
 @inject DialogService DialogService
-@using ChadWebCalendar.Data.Services
 @inject ProjectService projectService
 
 <div>
@@ -33,8 +33,8 @@
                 </div>
                 <div class="tasklist">
                     <div Style="display: flex; justify-content: space-between;">
-                        <Button Type="@ButtonType.Default">👩‍💼</Button>
-                        <Button OnClick="@(() => EditProjectPage(projId))" Style="width:100%; overflow-wrap: break-word" >
+                        <Button Type="@ButtonType.Default" OnClick="Distribute">👩‍💼</Button>
+                        <Button OnClick="@(() => EditProjectPage(projId))" Style="width:100%; overflow-wrap: break-word">
                             @projName
                         </Button>
                         <Button OnClick="CreateTaskPage">
@@ -58,13 +58,14 @@
 
 
 @code{
+
     [CascadingParameter]
     private Task<AuthenticationState> authenticationState { get; set; }
     private List<ChadWebCalendar.Data.Task> Tasks = new List<ChadWebCalendar.Data.Task>();
     private IList<Claim> userClaim = new List<Claim>();
     string _title;
-    private LoginModel model = new LoginModel();
     NotificationsWorker notificationWorker = new NotificationsWorker();
+    private LoginModel model = new LoginModel();
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         _title = DateTime.Now.ToString();
@@ -85,7 +86,14 @@
             }
         }
     }
-    
+
+    private void Distribute()
+    {
+
+        //TaskDistributor.Distribute((int)projId);
+        //NavigationManager.NavigateTo("/", true);
+    }
+
     private void showNotification()
     {
         toastService.ShowInfo($"{NotificationsWorker.TypeOfNotification}");
@@ -98,12 +106,19 @@
         //notificationWorker.Stop();
         //await _accountService.LogoutAsync();
     }
+
     private async void EditProjectPage(int? projectId)
     {
-        await DialogService.OpenAsync<ProjectEdit>("Редактировать проект", 
-            new Dictionary<string, object>{{ "projectId", projectId } });
+        await DialogService.OpenAsync<ProjectEdit>("Редактировать проект",
+            new Dictionary<string, object> { { "projectId", projectId } });
         //notificationWorker.Stop();
         // await _accountService.LogoutAsync();
+    }
+
+    private async void Logout()
+    {
+        notificationWorker.Stop();
+        await _accountService.LogoutAsync();
     }
     private void GetProjectId(Project pr)
     {
