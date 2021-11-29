@@ -26,13 +26,14 @@ namespace ChadWebCalendar.Data.Services
                 db.SaveChanges();
             }
         }
+
         public IEnumerable<Project> GetProjects(User user)
         {
             return db.Projects.Where(proj => proj.User == user);
         }
-        public Data.Project GetFirstProject()
+        public Data.Project GetFirstProject(int? userId)
         {
-            return db.Projects.FirstOrDefault(p => p.Id != null);
+            return db.Projects.FirstOrDefault(p => p.User.Id == userId);
         }
         public Data.Task GetTask(int? id)
         {
@@ -40,7 +41,7 @@ namespace ChadWebCalendar.Data.Services
         }
         public IEnumerable<Data.Task> GetTasks(User user)
         {
-            return db.Tasks.Where(task => task.User == user);
+            return db.Tasks.Include(t =>t.Project).Where(task => task.User == user);
         }
         public Data.Task GetPredecessor(int? id)
         {
@@ -56,11 +57,14 @@ namespace ChadWebCalendar.Data.Services
         public bool AddTask(Data.Task task, int? projectId, User user)
         {
             task.User = user;
-            //task.Predecessor = getPredecessor(task.Predecessor.Id);
             task.Accessed = DateTime.Now;
             task.NRepetitions = 1;
             task.Predecessor = GetPredecessor(91);
-            task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId); // это странное выражение нужно потому что в модели передается только Id
+            task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId);
+            if (String.IsNullOrWhiteSpace(task.Name))
+            {
+                task.Name = "(Нет заголовка)";
+            }
             if (IsCorrect(task))
             {
                 db.Add(task);
@@ -69,9 +73,9 @@ namespace ChadWebCalendar.Data.Services
             }
             return false;
         }
-        public bool Edit(Data.Task task, int projectId)
+        public bool Edit(Data.Task task, int projectId, string Name)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+            User user = db.Users.FirstOrDefault(u => u.Login == Name);
             task.Accessed = DateTime.Now;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId); // это странное выражение нужно потому что в модели передается только Id
             //Models.Task tempTask = task.Predecessor;
@@ -94,9 +98,9 @@ namespace ChadWebCalendar.Data.Services
                 await db.SaveChangesAsync();
             }
         }
-        public async void Mutatuion(int? id)
+        public async void Mutatuion(int? id, string Name)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+            User user = db.Users.FirstOrDefault(u => u.Login == Name);
             Data.Task task = db.Tasks.FirstOrDefault(t => id == t.Id); // это странное выражение нужно потому что в модели передается только Id
             removeDependencies(task); // избавляемся от зависимостей
             DateTime dt = DateTime.Now;

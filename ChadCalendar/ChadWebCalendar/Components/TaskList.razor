@@ -1,0 +1,48 @@
+﻿@inject Data.Services.TaskService taskService
+@inject NavigationManager NavigationManager
+@using ChadWebCalendar.Components.Tasks
+@attribute [Authorize]
+@using AntDesign;
+@inject DialogService DialogService
+
+<div class="list-group" style="height: 800px; width: 100%; overflow: auto; font-size: 30px; word-wrap: break-word ">
+    @foreach (var task in taskService.GetTasks(user))
+    {
+        if (task.Project.Id != null && task.Project.Id == projectId)
+        {
+            <button type="button" class="list-group-item list-group-item-success btn btn-light">
+                <span class="custom-checkbox">
+                    <input class="form-check-input" type="checkbox">
+                </span>
+                @task.Name
+                <Button @onclick="() => EditTaskPage(task.Id)">
+                     &#9881;
+                </Button>
+            </button>
+        }
+    }
+</div>
+
+@code {
+    Data.User user;
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
+    }
+
+    [Parameter] public int? projectId { get; set; }
+
+    public int? taskId { get; set; }
+
+    bool destroyModal = false;
+
+    bool visibleEditTask = false;
+
+    private async Task EditTaskPage(int? taskId)
+    {
+        await DialogService.OpenAsync<TaskEdit>("Изменить задачу",
+            new Dictionary<string, object> { { "taskId", taskId } });
+    }
+
+}

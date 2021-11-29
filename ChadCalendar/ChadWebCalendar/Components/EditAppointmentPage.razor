@@ -1,0 +1,160 @@
+﻿@using ChadWebCalendar.Data.Services
+@inject EventService eventService
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+@inject DialogService DialogService
+@attribute [Authorize]
+@using ChadWebCalendar.Data
+@using ChadWebCalendar.Components
+@inject NavigationManager NavigationManager
+@using AntDesign;
+@inject ProjectService projectService
+
+
+<RadzenTemplateForm TItem="Appointment" Data="@model">
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Название" />
+        </div>
+        <div class="col">
+            <RadzenTextBox @bind-Value="@model.Text" Name="Название" />
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Описание" />
+        </div>
+        <div class="col">
+            <RadzenTextArea @bind-Value="@model.Description" Name="Description" />
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Частота" />
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label></label>
+                <select @bind="model.Frequency">
+                    <option><RadzenLabel Text="Никогда" /></option>
+                    <option><RadzenLabel Text="Каждый день" /></option>
+                    <option><RadzenLabel Text="Каждую неделю" /></option>
+                    <option><RadzenLabel Text="Каждый месяц" /></option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Начало" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true" />
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Конец" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true" />
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Напомнить за" />
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Напомнить за</label>
+                <input class="form-control" type="number" @bind="model.RemindNMinutesBefore" min="0">
+                <label>минут</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col">
+            <button @onclick="editEvent" class="btn btn-primary">Готово</button>
+            <button @onclick="deleteEvent" class="btn btn-danger">Удалить</button>
+            <Dropdown Placement="@Placement.BottomCenter">
+                <Overlay>
+                    <Menu>
+                        <span>Выберите проект</span>
+                        @foreach (var project in projectService.GetProjects(user))
+                        {
+                            <MenuItem @key="project.Id">
+                                <input class="list-group-item" type="button" @onclick="() => migration(project.Id)" value="@project.Name" />
+                            </MenuItem>
+                        }
+                    </Menu>
+                </Overlay>
+                <ChildContent>
+                    <button class="btn btn-dark">Сделать задачей</button>
+                </ChildContent>
+            </Dropdown>
+        </div>
+    </div>
+</RadzenTemplateForm>
+@code {
+    [Parameter]
+    public Appointment Appointment { get; set; }
+    Appointment model = new Appointment();
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+
+    string userName;
+    Data.Event _event;
+
+    Data.User user;
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        user = projectService.GetUser(authenticationState.Result.User.Identity.Name);
+    }
+
+    protected override void OnParametersSet()
+    {
+        model = Appointment;
+    }
+
+    private Data.Event getEvent()
+    {
+        userName = authenticationState.Result.User.Identity.Name;
+        return _event = eventService.GetEventById(Appointment.Id);
+    }
+
+    void editEvent()
+    {
+        if (String.IsNullOrWhiteSpace(model.Text))
+        {
+            model.Text = "(Нет заголовка)";
+        }
+        _event = getEvent();
+        _event.Name = model.Text;
+        _event.Description = model.Description;
+        _event.Frequency = model.Frequency;
+        _event.StartsAt = model.Start;
+        _event.FinishesAt = model.End;
+        _event.RemindNMinutesBefore = model.RemindNMinutesBefore;
+        _event.Id = model.Id;
+
+        if (eventService.Edit(_event.Id, userName))
+        {
+            DialogService.Close(model);
+        }
+    }
+
+    void deleteEvent()
+    {
+        _event = getEvent();
+        eventService.Delete(_event.Id);
+        DialogService.Close(model);
+        NavigationManager.NavigateTo("/", true);
+    }
+    void migration(int? projectIDforMutation)
+    {
+        _event = getEvent();
+        eventService.Mutatuion(_event, projectIDforMutation, userName);
+        DialogService.Close(model);
+        NavigationManager.NavigateTo("/", true);
+    }
+}

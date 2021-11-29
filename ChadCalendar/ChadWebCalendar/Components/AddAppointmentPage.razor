@@ -1,0 +1,150 @@
+﻿@using ChadWebCalendar.Data.Services
+@inject EventService eventService
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+@inject DialogService DialogService
+@attribute [Authorize]
+@using ChadWebCalendar.Data
+@inject NotificationService NotificationService
+
+<RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Название" />
+        </div>
+        <div class="col">
+            <RadzenTextBox @bind-Value="@model.Text" Name="Text" />
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Описание" />
+        </div>
+        <div class="col">
+            <RadzenTextArea @bind-Value="@model.Description" Name="Description" />
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Частота" />
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label></label>
+                <select @bind="model.Frequency">
+                    <option><RadzenLabel Text="Никогда" /></option>
+                    <option><RadzenLabel Text="Каждый день" /></option>
+                    <option><RadzenLabel Text="Каждую неделю" /></option>
+                    <option><RadzenLabel Text="Каждый месяц" /></option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Начало" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true" />
+        </div>
+    </div>
+    <ValidationMessage For="() => _event" />
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Конец" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true" />
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Напомнить за" />
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Напомнить за</label>
+                <input class="form-control" type="number" @bind="model.RemindNMinutesBefore" min="0">
+                <label>минут</label>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Выберите цвет" />
+        </div>
+        <div class="col">
+            <input type="color" name="head" value="#e66465">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col">
+            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Сохранить" />
+        </div>
+    </div>
+</RadzenTemplateForm>
+@code {
+    [Parameter]
+    public DateTime Start { get; set; }
+
+    [Parameter]
+    public DateTime End { get; set; }
+
+    Appointment model = new Appointment();
+    private int? Id;
+
+    Data.Event _event;
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    string userName;
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        userName = authenticationState.Result.User.Identity.Name;
+    }
+
+    private async System.Threading.Tasks.Task addEvent()
+    {
+        if (String.IsNullOrWhiteSpace(model.Text))
+        {
+            model.Text = "(Нет заголовка)";
+        }
+        _event = new Event
+        {
+            Name = model.Text,
+            Description = model.Description,
+            StartsAt = model.Start,
+            FinishesAt = model.End,
+            Frequency = model.Frequency,
+            RemindNMinutesBefore = model.RemindNMinutesBefore,
+            Id = model.Id
+        };
+        if (eventService.Create(_event, userName))
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Событие добавлено", Detail = "Добавление события", Duration = 2000 });
+            await OnInitializedAsync();
+            DialogService.Close(model);
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Введена некорректная дата", Detail = "Добавление события", Duration = 3000 });
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+
+        model.Start = Start;
+        model.End = End;
+    }
+
+    void OnSubmit(Appointment model)
+    {
+        addEvent();
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+}

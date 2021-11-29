@@ -9,7 +9,6 @@ namespace ChadWebCalendar.Data.Services
     public class ProjectService
     {
         ApplicationContext db = new ApplicationContext();
-        string tempLogin = "defourtend";
         public Data.Project GetProjectById(int? id)
         {
             if (id != null)
@@ -17,42 +16,62 @@ namespace ChadWebCalendar.Data.Services
             else
                 return null;
         }
+        bool IsCorrect(ref Data.Project project)
+        {
+            if (project.Name != null && project.Name != "")
+                return true;
+            else
+                return false;
+        }
         public IEnumerable<Project> GetProjects(User user)
         {
             return db.Projects.Where(proj => proj.User == user);
         }
-        public Data.User GetUser()
+        public Data.User GetUser(string Name)
         {
-            return db.Users.FirstOrDefault(u => u.Login == "defourtend"/*User.Identity.Name*/);
+            return db.Users.FirstOrDefault(u => u.Login == Name);
         }
 
-        public async void Create(Project project)
+        public bool Create(Project project, string Name)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == tempLogin/*User.Identity.Name*/);
+            User user = db.Users.FirstOrDefault(u => u.Login == Name);
             project.User = user;
             project.Accessed = DateTime.Now;
-            db.Projects.Add(project);
-            await db.SaveChangesAsync();
-        }
-        public async void Edit(int? id)
-        {
-            User user = db.Users.FirstOrDefault(u => u.Login == tempLogin/*User.Identity.Name*/);
-            if (id != null)
+            if (IsCorrect(ref project))
             {
-                Project project = await db.Projects.Include(e => e.User).FirstOrDefaultAsync(p => p.Id == id);
-                db.Projects.Update(project);
-                await db.SaveChangesAsync();
+                db.Projects.Add(project);
+                db.SaveChangesAsync();
+                return true;
             }
+            return false;
+        }
+        public bool Edit(int? id, string Name)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Login == Name);
+            Project project = db.Projects.Include(e => e.User).FirstOrDefault(p => p.Id == id);
+            if (IsCorrect(ref project))
+            {
+                db.Projects.Update(project);
+                db.SaveChanges();
+                return true;
+            }
+            return false;
         }
         public async void Delete(int? id)
         {
             if (id != null)
             {
-                Project project = await db.Projects.FirstOrDefaultAsync(p => p.Id == id);
+                Project project = db.Projects.FirstOrDefault(p => p.Id == id);
                 if (project != null)
                 {
+                    var projectDependencies = db.Tasks.Where(t => t.Project == project);
+                    foreach (var item in projectDependencies)
+                    {
+                        item.Project = null;
+                    }
+                    db.SaveChanges();
                     db.Projects.Remove(project);
-                    await db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
             }
         }

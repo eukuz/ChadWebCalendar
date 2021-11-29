@@ -2,6 +2,8 @@
 @inject TaskService taskService
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
+
+
 <EditForm Model="@taskValidation">
     <DataAnnotationsValidator />
     <ValidationSummary></ValidationSummary>
@@ -76,7 +78,7 @@
     </div>
     <button @onclick="updateTask" class="btn btn-primary">Готово</button>
     <button @onclick="deleteTask" class="btn btn-danger">Удалить задачу</button>
-    <button @onclick="mutation" class="btn-dark">Сделать событием</button>
+    <button @onclick="mutation" class="btn btn-dark">Сделать событием</button>
 </EditForm>
 
     @code {
@@ -84,7 +86,7 @@
         string predecessorIdstr = "После любой";
         Data.TaskValidation taskValidation = new Data.TaskValidation();
         [Parameter]
-        public int taskId { get; set; }
+        public int? taskId { get; set; }
         int projectId = 0;
         Data.Task task;
         Data.User user;
@@ -122,7 +124,7 @@
             }
             if (predecessorIdstr != "После любой")
                 task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
-            if (taskService.Edit(task, projectId))
+            if (taskService.Edit(task, projectId, authenticationState.Result.User.Identity.Name))
             {
                 OnInitializedAsync();
                 redirectToIndex();
@@ -130,7 +132,7 @@
         }
         void mutation()
         {
-            taskService.Mutatuion(task.Id);
+            taskService.Mutatuion(task.Id, authenticationState.Result.User.Identity.Name);
             redirectToIndex();
 
         }
