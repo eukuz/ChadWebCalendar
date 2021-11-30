@@ -2,6 +2,7 @@
 @inject TaskService taskService
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
+@using AntDesign;
 
 
 <EditForm Model="@taskValidation">
@@ -78,62 +79,87 @@
     </div>
     <button @onclick="updateTask" class="btn btn-primary">Готово</button>
     <button @onclick="deleteTask" class="btn btn-danger">Удалить задачу</button>
-    <button @onclick="mutation" class="btn btn-dark">Сделать событием</button>
+    <Dropdown Placement="@Placement.BottomCenter">
+        <Overlay>
+            <Menu>
+                <div class="col-md-3">
+                    <RadzenLabel Text="Время начала события" />
+                </div>
+                <div class="col">
+                    <RadzenDatePicker @bind-Value="@startsAt" Name="Start" ShowTime="true" />
+                </div>
+                <div class="col-md-3">
+                    <RadzenLabel Text="Время окончания события" />
+                </div>
+                <div class="col">
+                    <RadzenDatePicker Name="End" @bind-Value="@finishesAt" ShowTime="true" />
+                </div>
+                <div class="col-md-3" style="margin-top: 15px">
+                    <button @onclick="mutation" class="btn btn-info">Сохранить</button>
+                </div>
+            </Menu>
+        </Overlay>
+        <ChildContent>
+            <button class="btn btn-dark">Сделать событием</button>
+        </ChildContent>
+    </Dropdown>
 </EditForm>
 
-    @code {
-        [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
-        string predecessorIdstr = "После любой";
-        Data.TaskValidation taskValidation = new Data.TaskValidation();
-        [Parameter]
-        public int? taskId { get; set; }
-        int projectId = 0;
-        Data.Task task;
-        Data.User user;
-        TimeSpan? tempDT;
-        IEnumerable<Data.Project> userProjects;
-        IEnumerable<Data.Task> userTasks;
-        bool isValidationError = false;
-        protected override async System.Threading.Tasks.Task OnInitializedAsync()
+@code {
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    string predecessorIdstr = "После любой";
+    Data.TaskValidation taskValidation = new Data.TaskValidation();
+    [Parameter]
+    public int? taskId { get; set; }
+    int projectId = 0;
+    DateTime startsAt;
+    DateTime finishesAt;
+    Data.Task task;
+    Data.User user;
+    TimeSpan? tempDT;
+    IEnumerable<Data.Project> userProjects;
+    IEnumerable<Data.Task> userTasks;
+    bool isValidationError = false;
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        task = taskService.GetTask(taskId);
+        if (task.Predecessor != null)
+            predecessorIdstr = task.Predecessor.ToString();
+        if (task.Project != null)
+            projectId = (int)task.Project.Id;
+        tempDT = task.TimeTakes;
+        user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
+        userTasks = taskService.GetTasks(user);
+        userProjects = taskService.GetProjects(user);
+    }
+    void redirectToIndex()
+    {
+        NavigationManager.NavigateTo("/", true);
+    }
+    void deleteTask()
+    {
+        taskService.Delete(task);
+        redirectToIndex();
+    }
+    void updateTask()
+    {
+        if (tempDT != null)
         {
-            task = taskService.GetTask(taskId);
-            if (task.Predecessor != null)
-                predecessorIdstr = task.Predecessor.ToString();
-            if (task.Project != null)
-                projectId = (int)task.Project.Id;
-            tempDT = task.TimeTakes;
-            user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
-            userTasks = taskService.GetTasks(user);
-            userProjects = taskService.GetProjects(user);
+            task.TimeTakes = tempDT;
+            taskValidation.TimeTakes = task.TimeTakes;
         }
-        void redirectToIndex()
+        if (predecessorIdstr != "После любой")
+            task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
+        if (taskService.Edit(task, projectId, authenticationState.Result.User.Identity.Name))
         {
-            NavigationManager.NavigateTo("/", true);
-        }
-        void deleteTask()
-        {
-            taskService.Delete(task);
+            OnInitializedAsync();
             redirectToIndex();
-        }
-        void updateTask()
-        {
-            if (tempDT != null)
-            {
-                task.TimeTakes = tempDT;
-                taskValidation.TimeTakes = task.TimeTakes;
-            }
-            if (predecessorIdstr != "После любой")
-                task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
-            if (taskService.Edit(task, projectId, authenticationState.Result.User.Identity.Name))
-            {
-                OnInitializedAsync();
-                redirectToIndex();
-            }
-        }
-        void mutation()
-        {
-            taskService.Mutatuion(task.Id, authenticationState.Result.User.Identity.Name);
-            redirectToIndex();
-
         }
     }
+    void mutation()
+    {
+        taskService.Mutatuion(task.Id, authenticationState.Result.User.Identity.Name, startsAt, finishesAt);
+        redirectToIndex();
+
+    }
+}
