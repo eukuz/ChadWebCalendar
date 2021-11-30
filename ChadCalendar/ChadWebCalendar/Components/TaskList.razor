@@ -12,9 +12,8 @@
         if (task.Project.Id != null && task.Project.Id == projectId)
         {
             <button type="button" class="list-group-item list-group-item-success btn btn-light" @onclick="() => ChangeIsCompleted(task.Id)">
-                <div class="task_container">
-                    <div class="task_name">
-                        @if (task.IsCompleted == false)
+                <div class="task_container" Style="justify-content: space-between;">
+                    @if (task.IsCompleted == false)
                         {
                             @task.Name
                         }
@@ -22,13 +21,9 @@
                         {
                             <s>@task.Name</s>
                         }
-
-                    </div>
-                    <div class="edit_task_btn">
-                        <Button @onclick="() => EditTaskPage(task.Id)">
+                    <Button @onclick="() => EditTaskPage(task.Id)">
                             &#9881;
                         </Button>
-                    </div>
                 </div>
             </button>
         }
