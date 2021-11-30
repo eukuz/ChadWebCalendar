@@ -10,7 +10,7 @@ namespace ChadWebCalendar.Data.Services
         // constants for NotificationsService
         public const int MillisecondsForSleepAfterWorkerIteration = 5000;
         public const int AdditionInMinutesForMinDT = 35;
-        public const int MinutesBeforeForInterval = -1;
+        public const int MinutesBeforeForInterval = 0;
         public const int CountOfSymbolsForFullDateTime = 18;
         public const int NumberOfInitialTimePosition = 11;
         public const int LenForFullDT = 4;

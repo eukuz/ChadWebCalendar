@@ -96,7 +96,8 @@
 
     private void showNotification()
     {
-        toastService.ShowInfo($"{NotificationsWorker.TypeOfNotification}");
+        foreach (var item in notificationWorker.TypesOfNotification)
+            toastService.ShowInfo($"{item}");
         JSRuntime.InvokeVoidAsync("setTitle", "You have notification");
     }
 
