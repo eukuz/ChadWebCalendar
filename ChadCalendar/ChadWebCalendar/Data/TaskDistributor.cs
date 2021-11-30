@@ -46,7 +46,7 @@ namespace ChadWebCalendar.Data
                     {
                         if (!pickedTasks[j])
                         {
-                            if (tasks[j].TimeTakes < freeTimeSlots[i].GetTimeSpan)
+                            if (tasks[j].TimeTakes <= freeTimeSlots[i].GetTimeSpan)
                             {
                                 pickedTasks[j] = true;
                                 distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].start, 15));

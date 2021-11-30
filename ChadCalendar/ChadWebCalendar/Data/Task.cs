@@ -11,7 +11,7 @@ namespace ChadWebCalendar.Data
         [Required]
         public bool IsCompleted { get; set; } = false; // false т.к при создании Task задача еще не выполнена
         [Required]
-        public bool AllowedToDistribute { get; set; } = false; // избежание null
+        public bool AllowedToDistribute { get; set; } = true; // избежание null
         [Required(ErrorMessage = "Поле не может быть пустым")]
         public TimeSpan? TimeTakes { get; set; }
         public int? MaxPerDay { get; set; }
