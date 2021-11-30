@@ -11,6 +11,7 @@ namespace ChadWebCalendar.Data
         [Required]
         public int? Id { get; set; }
         [Required(ErrorMessage = "Не указано название")]
+        [NameLengthValidator]
         public string Name { get; set; }
         public string Description { get; set; }
         [Required]
