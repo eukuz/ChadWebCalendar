@@ -24,7 +24,7 @@ namespace ChadWebCalendar.Data.Services
         public void GetReadyNotifications()
         {
             DateTime dt = DateTime.Now.AddMinutes(Constants.MinutesBeforeForInterval);
-
+            dt = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
             var enumerableEvents = db.Events.AsNoTracking().OrderBy(e => e.StartsAt).Where(e => e.User.Login == Username && e.StartsAt >= dt);
             List<Data.Event> events = enumerableEvents.ToList();
             foreach (var item in events)
@@ -32,7 +32,7 @@ namespace ChadWebCalendar.Data.Services
                 if (item != null)
                 {
                     item.StartsAt = item.StartsAt.AddMinutes(-item.RemindNMinutesBefore);
-                    if (item.StartsAt <= dt.AddMinutes(1))
+                    if (item.StartsAt <= dt)
                     {
                         string stripped;
                         if (item.StartsAt.ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
@@ -50,39 +50,35 @@ namespace ChadWebCalendar.Data.Services
             string tempOfNotification = "";
             foreach (var item in projectDeadlines)
             {
-                if (item != null && item.Deadline - dt > (dt - dt))
+                if (item != null && item.Deadline - dt >= (dt - dt))
                 {
                     string stripped;
                     if (item.ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
                         stripped = item.Deadline.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT);
                     else
                         stripped = item.Deadline.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForTrimmedDT);
-                    if ((item.Deadline - dt) < (dt.AddMinutes(60) - dt))
+                    if ((item.Deadline - dt) == (dt.AddMinutes(30) - dt))
                     {
-                        item.Deadline = item.Deadline?.AddMinutes(-30);
+                        Debug.WriteLine(item.Deadline - dt);
                         tempOfNotification = $"Дедлайн проекта {item.Name} в {stripped}";
                     }
-                    else if ((item.Deadline - dt) < (dt.AddHours(3) - dt))
+                    else if ((item.Deadline - dt) == (dt.AddHours(2) - dt))
                     {
-                        item.Deadline = item.Deadline?.AddHours(-2);
                         tempOfNotification = $"Дедлайн проекта {item.Name} в {stripped}";
                     }
-                    else if ((item.Deadline - dt) < (dt.AddDays(2) - dt))
+                    else if ((item.Deadline - dt) == (dt.AddDays(1) - dt))
                     {
-                        item.Deadline = item.Deadline?.AddDays(-1);
                         tempOfNotification = $"Дедлайн проекта {item.Name} уже завтра в {stripped}";
                     }
-                    else if ((item.Deadline - dt) < (dt.AddDays(8) - dt))
+                    else if ((item.Deadline - dt) == (dt.AddDays(7) - dt))
                     {
-                        item.Deadline = item.Deadline?.AddDays(-7);
                         tempOfNotification = $"Дедлайн проекта {item.Name} через неделю";
                     }
-                    else if ((item.Deadline - dt) < (dt.AddDays(32) - dt))
+                    else if ((item.Deadline - dt) == (dt.AddDays(30) - dt))
                     {
-                        item.Deadline = item.Deadline?.AddDays(-30);
                         tempOfNotification = $"Дедлайн проекта {item.Name} через 30 дней";
                     }
-                    if (item.Deadline < dt.AddMinutes(2) && item.Deadline >= dt)
+                    if (tempOfNotification != String.Empty)
                     {
                         TypesOfNotification.Add(tempOfNotification);
                     }
@@ -101,32 +97,27 @@ namespace ChadWebCalendar.Data.Services
                         stripped = item.Deadline.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT);
                     else
                         stripped = item.Deadline.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForTrimmedDT);
-                    if ((item.Deadline - dt) <= (dt.AddMinutes(60) - dt))
+                    if ((item.Deadline - dt) == (dt.AddMinutes(30) - dt))
                     {
-                        item.Deadline = item.Deadline?.AddMinutes(-30);
                         tempOfNotification = $"Дедлайн задачи {item.Name} в {stripped}";
                     }
-                    else if ((item.Deadline - dt) < (dt.AddHours(3) - dt))
+                    else if ((item.Deadline - dt) == (dt.AddHours(2) - dt))
                     {
-                        item.Deadline = item.Deadline?.AddHours(-2);
                         tempOfNotification = $"Дедлайн задачи {item.Name} в {stripped}";
                     }
-                    else if ((item.Deadline - dt) < (dt.AddDays(2) - dt))
+                    else if ((item.Deadline - dt) == (dt.AddDays(1) - dt))
                     {
-                        item.Deadline = item.Deadline?.AddDays(-1);
                         tempOfNotification = $"Дедлайн задачи {item.Name} завтра в {stripped}";
                     }
-                    else if ((item.Deadline - dt) < (dt.AddDays(8) - dt))
+                    else if ((item.Deadline - dt) == (dt.AddDays(7) - dt))
                     {
-                        item.Deadline = item.Deadline?.AddDays(-7);
                         tempOfNotification = $"Дедлайн задачи {item.Name} через неделю";
                     }
-                    else if ((item.Deadline - dt) < (dt.AddDays(32) - dt))
+                    else if ((item.Deadline - dt) == (dt.AddDays(30) - dt))
                     {
-                        item.Deadline = item.Deadline?.AddDays(-30);
                         tempOfNotification = $"Дедлайн задачи {item.Name} через 30 дней";
                     }
-                    if (item.Deadline < dt.AddMinutes(2) && item.Deadline >= dt)
+                    if (tempOfNotification != String.Empty)
                     {
                         TypesOfNotification.Add(tempOfNotification);
                     }

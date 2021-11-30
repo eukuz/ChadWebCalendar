@@ -20,7 +20,7 @@
 @inject IJSRuntime JSRuntime
 @inject DialogService DialogService
 @inject ProjectService projectService
-
+@implements IDisposable
 <div>
     <AuthorizeView>
         <Authorized>
@@ -86,12 +86,15 @@
             }
         }
     }
-
+    public void Dispose()
+    {
+        notificationWorker.Stop();
+    }
     private void Distribute()
     {
 
-        //TaskDistributor.Distribute((int)projId);
-        //NavigationManager.NavigateTo("/", true);
+        TaskDistributor.Distribute((int)projId,DistributionType.Evenly);
+        NavigationManager.NavigateTo("/", true);
     }
 
     private void showNotification()
