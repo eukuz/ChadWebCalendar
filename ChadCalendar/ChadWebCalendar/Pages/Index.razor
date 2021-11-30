@@ -93,8 +93,8 @@
     private void Distribute()
     {
 
-        //TaskDistributor.Distribute((int)projId);
-        //NavigationManager.NavigateTo("/", true);
+        TaskDistributor.Distribute((int)projId,DistributionType.Evenly);
+        NavigationManager.NavigateTo("/", true);
     }
 
     private void showNotification()
