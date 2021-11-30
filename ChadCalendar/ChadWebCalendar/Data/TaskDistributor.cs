@@ -10,6 +10,7 @@ namespace ChadWebCalendar.Data
     public enum DistributionType
     {
         MaxInTheBeginning,
+        Evenly,
         BestFit,
         MaxInTheEnd
     }
@@ -34,33 +35,43 @@ namespace ChadWebCalendar.Data
 
                 List<TimeSlot> freeTimeSlots = findFreeTimeSlots(eventsOfTheWeek, endOfWeek);
                 List<Task> tasks = new List<Task>(db.Tasks.Where(t => t.Project.Id == project.Id && t.AllowedToDistribute));
-
-
-                switch (distributionType)
-                {
-                    case DistributionType.MaxInTheBeginning:
-                        freeTimeSlots = freeTimeSlots.OrderBy(e => e.start).ToList();
-                        break;
-                    case DistributionType.MaxInTheEnd:
-                        freeTimeSlots = freeTimeSlots.OrderByDescending(e => e.start).ToList();
-                        break;
-                    case DistributionType.BestFit:
-                        freeTimeSlots = freeTimeSlots.OrderBy(e => e.GetTimeSpan).ToList();
-                        break;
-                }
-
                 tasks = tasks.OrderByDescending(t => t.TimeTakes).ToList();
-
                 bool[] pickedTasks = new bool[tasks.Count];
 
-                for (int i = 0; i < freeTimeSlots.Count; i++)
+                if (distributionType == DistributionType.Evenly)
+                {
+                    freeTimeSlots = freeTimeSlots.OrderBy(e => e.start).ToList();
+
                     for (int j = 0; j < tasks.Count; j++)
-                        if (!pickedTasks[j] && (tasks[j].TimeTakes <= freeTimeSlots[i].GetTimeSpan))
-                        {
-                            pickedTasks[j] = true;
-                            distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].start, 15));
-                            freeTimeSlots[i].start += (TimeSpan)tasks[j].TimeTakes;
-                        }
+                        for (int i = 0; i < freeTimeSlots.Count; i++)
+                            if (!pickedTasks[j] && (tasks[j].TimeTakes <= freeTimeSlots[i].GetTimeSpan))
+                            {
+                                pickedTasks[j] = true;
+                                distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].start, 15));
+                                freeTimeSlots[i].start += (TimeSpan)tasks[j].TimeTakes;
+
+                                switchTimeSlots(freeTimeSlots, i);
+
+                                break;
+                            }
+
+                }
+                else
+                {
+                    if (distributionType == DistributionType.MaxInTheBeginning) freeTimeSlots = freeTimeSlots.OrderBy(e => e.start).ToList();
+                    else if ( distributionType == DistributionType.MaxInTheEnd) freeTimeSlots = freeTimeSlots.OrderByDescending(e => e.start).ToList();
+                    else if (distributionType == DistributionType.BestFit) freeTimeSlots = freeTimeSlots.OrderBy(e => e.GetTimeSpan).ToList();
+
+                    for (int i = 0; i < freeTimeSlots.Count; i++)
+                        for (int j = 0; j < tasks.Count; j++)
+                            if (!pickedTasks[j] && (tasks[j].TimeTakes <= freeTimeSlots[i].GetTimeSpan))
+                            {
+                                pickedTasks[j] = true;
+                                distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].start, 15));
+                                freeTimeSlots[i].start += (TimeSpan)tasks[j].TimeTakes;
+                            }
+                }
+
 
                 db.Events.AddRange(distributedTasks);
 
@@ -71,6 +82,13 @@ namespace ChadWebCalendar.Data
                 db.SaveChanges();
             }
         }
+        private static void switchTimeSlots(in List<TimeSlot> freeTimeSlots, int i)
+        {
+            var t = freeTimeSlots[freeTimeSlots.Count - 1];
+            freeTimeSlots[freeTimeSlots.Count - 1] = freeTimeSlots[i];
+            freeTimeSlots[i] = t;
+        }
+
         private static List<TimeSlot> findFreeTimeSlots(List<Event> eventsOfTheWeek, DateTime endOfWeek)
         {
             List<TimeSlot> freeTimeSlots = new List<TimeSlot>();

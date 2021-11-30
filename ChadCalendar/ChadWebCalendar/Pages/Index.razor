@@ -90,7 +90,7 @@
     private void Distribute()
     {
 
-        TaskDistributor.Distribute((int)projId,DistributionType.MaxInTheBeginning);
+        TaskDistributor.Distribute((int)projId,DistributionType.Evenly);
         NavigationManager.NavigateTo("/", true);
     }
 
