@@ -100,7 +100,7 @@
             user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
             userTasks = taskService.GetTasks(user);
             userProjects = taskService.GetProjects(user);
-            firstProject = taskService.GetFirstProject(user.Id);
+            firstProject = taskService.GetSelectedProject(user);
             projectId = firstProject.Id;
 
             taskValidation.TimeTakes = task.TimeTakes;
