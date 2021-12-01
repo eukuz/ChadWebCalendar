@@ -2,20 +2,20 @@
 @using ChadWebCalendar.Data.Models
 @inherits LoginModel
 
-<div class=" col-md-6 offset-md-3" style="display: flex; margin: 5px;">
-    <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+<div class="row justify-content-between">
+    <div id="carouselExampleInterval" class="carousel slide col-4" data-bs-ride="carousel">
         <div class="carousel-inner" style="width: 500px;">
             <div class="carousel-item active" data-bs-interval="2000">
-                <img src="/img/GigaChad1.jpg" class="d-block w-100 h-100" alt="...">
+                <img src="/img/GigaChad1.jpg" class="d-block" alt="...">
             </div>
             <div class="carousel-item" data-bs-interval="2000">
-                <img src="/img/GigaChad2.jpg" class="d-block w-100 h-100" alt="...">
+                <img src="/img/GigaChad2.jpg" class="d-block" alt="...">
             </div>
             <div class="carousel-item" data-bs-interval="2000">
-                <img src="/img/GigaChad3.jpg" class="d-block w-100 h-100" alt="...">
+                <img src="/img/GigaChad3.jpg" class="d-block" alt="...">
             </div>
             <div class="carousel-item" data-bs-interval="2000">
-                <img src="/img/GigaChad4.jpg" class="d-block w-100 h-100" alt="...">
+                <img src="/img/GigaChad4.jpg" class="d-block" alt="...">
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <div style="margin: 50px">
+    <div class="col-4" style="margin: 50px">
         <h1>Войдите в систему</h1>
         <EditForm Model="LoginData" OnValidSubmit="LoginAsync">
             <DataAnnotationsValidator />
