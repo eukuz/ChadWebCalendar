@@ -33,11 +33,11 @@
                 </div>
                 <div class="tasklist">
                     <div Style="display: flex; justify-content: space-between;">
-                        <Button Type="@ButtonType.Default" OnClick="Distribute">👩‍💼</Button>
-                        <Button OnClick="@(() => EditProjectPage(projId))" Style="width:100%; overflow: hidden; overflow-wrap: break-word">
+                        <Button Type="@ButtonType.Default" OnClick="Distribute" style="height: 50px">👩‍💼</Button>
+                        <Button OnClick="@(() => EditProjectPage(projId))" Style="height: 50px; width:100%; overflow: hidden; overflow-wrap: break-word">
                             @projName
                         </Button>
-                        <Button OnClick="CreateTaskPage">
+                        <Button OnClick="CreateTaskPage" style="height: 50px">
                             +
                         </Button>
                     </div>
