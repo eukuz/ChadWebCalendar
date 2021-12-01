@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChadWebCalendar.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20211201101031_Init")]
-    partial class Init
+    [Migration("20211201114040_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,7 +64,7 @@ namespace ChadWebCalendar.Migrations
                     b.Property<int>("RemindEveryNDays")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SelectedProject")
+                    b.Property<int?>("SelectedProjectId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("TimeZone")
@@ -77,6 +77,8 @@ namespace ChadWebCalendar.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SelectedProjectId");
 
                     b.ToTable("Users");
                 });
@@ -149,6 +151,15 @@ namespace ChadWebCalendar.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ChadWebCalendar.Data.User", b =>
+                {
+                    b.HasOne("ChadWebCalendar.Data.Project", "SelectedProject")
+                        .WithMany()
+                        .HasForeignKey("SelectedProjectId");
+
+                    b.Navigation("SelectedProject");
                 });
 
             modelBuilder.Entity("ChadWebCalendar.Data.Event", b =>

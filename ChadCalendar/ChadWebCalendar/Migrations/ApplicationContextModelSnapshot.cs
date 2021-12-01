@@ -18,7 +18,7 @@ namespace ChadWebCalendar.Migrations
 
             modelBuilder.Entity("ChadWebCalendar.Data.Duty", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 

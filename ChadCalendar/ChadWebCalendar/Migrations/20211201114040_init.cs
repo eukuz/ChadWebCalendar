@@ -3,10 +3,39 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ChadWebCalendar.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    StartsAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    FinishesAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    RemindNMinutesBefore = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Projects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Deadline = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    IconNumber = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projects", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -19,11 +48,17 @@ namespace ChadWebCalendar.Migrations
                     WorkingHoursTo = table.Column<int>(type: "INTEGER", nullable: false),
                     TimeZone = table.Column<int>(type: "INTEGER", nullable: false),
                     RemindEveryNDays = table.Column<int>(type: "INTEGER", nullable: false),
-                    SelectedProject = table.Column<int>(type: "INTEGER", nullable: false)
+                    SelectedProjectId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Projects_SelectedProjectId",
+                        column: x => x.SelectedProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,47 +83,6 @@ namespace ChadWebCalendar.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Events",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    StartsAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    FinishesAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    RemindNMinutesBefore = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Events", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Events_Duties_Id",
-                        column: x => x.Id,
-                        principalTable: "Duties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Projects",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Deadline = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    IconNumber = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Projects", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Projects_Duties_Id",
-                        column: x => x.Id,
-                        principalTable: "Duties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -142,10 +136,35 @@ namespace ChadWebCalendar.Migrations
                 name: "IX_Tasks_ProjectId",
                 table: "Tasks",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_SelectedProjectId",
+                table: "Users",
+                column: "SelectedProjectId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Events_Duties_Id",
+                table: "Events",
+                column: "Id",
+                principalTable: "Duties",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Projects_Duties_Id",
+                table: "Projects",
+                column: "Id",
+                principalTable: "Duties",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Duties_Users_UserId",
+                table: "Duties");
+
             migrationBuilder.DropTable(
                 name: "Events");
 
@@ -153,13 +172,13 @@ namespace ChadWebCalendar.Migrations
                 name: "Tasks");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "Projects");
 
             migrationBuilder.DropTable(
                 name: "Duties");
-
-            migrationBuilder.DropTable(
-                name: "Users");
         }
     }
 }

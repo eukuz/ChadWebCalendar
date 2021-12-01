@@ -16,12 +16,12 @@ namespace ChadWebCalendar.Data.Services
             else
                 return null;
         }
-        public void UpdateSelectedProject(string UserLogin, int projectId)
+        public void UpdateSelectedProject(string UserLogin, int? projectId)
         {
             using (ApplicationContext db = new ApplicationContext()) // обновить выбранный проект
             {
                 User user = db.Users.FirstOrDefault(u => u.Login == UserLogin);
-                user.SelectedProject = db.Projects.FirstOrDefault(p => p.Id == projectId);
+                user.SelectedProjectId = projectId;
                 db.SaveChangesAsync();
             }
         }
@@ -70,9 +70,10 @@ namespace ChadWebCalendar.Data.Services
         {
             if (id != null)
             {
-                Project project = db.Projects.FirstOrDefault(p => p.Id == id);
+                Project project = db.Projects.Include(p=>p.User).FirstOrDefault(p => p.Id == id);
                 if (project != null)
                 {
+                    UpdateSelectedProject(project.User.Login, null);
                     var projectDependencies = db.Tasks.Where(t => t.Project == project);
                     foreach (var item in projectDependencies)
                     {
