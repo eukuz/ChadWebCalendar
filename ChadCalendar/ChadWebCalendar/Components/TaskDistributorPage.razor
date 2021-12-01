@@ -1,17 +1,23 @@
 ﻿@using ChadWebCalendar.Data
 @using ChadWebCalendar.Data.Services
+@inject NavigationManager navigationManager 
 
 <div>
     <h1>@projectId</h1>
-    <button class="btn btn-light">Равномерно</button>
-    <button class="btn btn-light">Лучшее соответствие</button>
-    <button class="btn btn-light">Максимум в начале</button>
-    <button class="btn btn-light">Максимум в конце</button>
+    <button class="btn btn-light" @onclick="Distribute">Равномерно</button>
+    <button class="btn btn-light" @onclick="Distribute">Лучшее соответствие</button>
+    <button class="btn btn-light" @onclick="Distribute">Максимум в начале</button>
+    <button class="btn btn-light" @onclick="Distribute">Максимум в конце</button>
 </div>
 
 
 @code {
     [Parameter]
     public int projectId { get; set; }
+
+    private void Distribute() {
+        TaskDistributor.Distribute(projectId, DistributionType.Evenly);
+        navigationManager.NavigateTo("/", true);
+    }
 
 }
