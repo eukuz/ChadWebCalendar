@@ -8,18 +8,14 @@ namespace ChadWebCalendar.Data
     [Table("Tasks")]
     public class Task : Duty
     {
-        [Required]
         public bool IsCompleted { get; set; } = false; // false т.к при создании Task задача еще не выполнена
-        [Required]
         public bool AllowedToDistribute { get; set; } = true; // избежание null
-        [Required(ErrorMessage = "Поле не может быть пустым")]
         public TimeSpan? TimeTakes { get; set; }
         public int? MaxPerDay { get; set; }
         public DateTime? Deadline { get; set; }
         public int? PredecessorFK { get; set; }
         [ForeignKey("PredecessorFK")]
         public Task Predecessor { get; set; }
-        [Required]
         public Project Project { get; set; }
 
         public bool IsCorrect()

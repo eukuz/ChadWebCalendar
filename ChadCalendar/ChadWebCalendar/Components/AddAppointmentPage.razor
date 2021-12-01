@@ -126,6 +126,7 @@
             await OnInitializedAsync();
             DialogService.Close(model);
         }
+        NavigationManager.NavigateTo("/", true);
     }
 
     protected override void OnParametersSet()

@@ -6,7 +6,6 @@ namespace ChadWebCalendar.Data
 {
     public class Appointment
     {
-        [Required]
         [NameLengthValidator]
         public string Text { get; set; }
         public DateTime Start { get; set; }
