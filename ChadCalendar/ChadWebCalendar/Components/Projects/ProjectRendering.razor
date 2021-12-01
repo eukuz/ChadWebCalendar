@@ -5,10 +5,10 @@
      @foreach (var project in projectService.GetProjects(user))
      {
          <div width="100%">
-             <input @onclick="(() => redirectToEdit(project.Id))" class="btn btn-info"  color="" type="button" value="@project.IconNumber">
+             <input @onclick="(() => redirectToEdit(project.Id))" class="btn btn-info"  color="" type="button" value="@project.IconNumber" style="width: 40px">
          </div>
      }
-     <input @onclick="(() => redirectToAdd())" class="btn btn-info"  color="" type="button" value="+">
+     <input @onclick="(() => redirectToAdd())" class="btn btn-info"  color="" type="button" value="+" style="width: 40px">
 </div>
 
 @code {
