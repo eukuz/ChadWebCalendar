@@ -11,7 +11,7 @@ namespace ChadWebCalendar.Data
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Project> Projects { get; set; }
-        public ApplicationContext(DbContextOptions<ApplicationContext> options): base(options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             Database.EnsureCreated();
         }

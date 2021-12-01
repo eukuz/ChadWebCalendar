@@ -8,7 +8,7 @@ namespace ChadWebCalendar.Data
     [Table("Duties")]
     public abstract class Duty
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [NameLengthValidator]
         public string Name { get; set; }

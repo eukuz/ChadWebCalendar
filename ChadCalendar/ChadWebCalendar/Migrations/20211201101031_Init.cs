@@ -18,7 +18,8 @@ namespace ChadWebCalendar.Migrations
                     WorkingHoursFrom = table.Column<int>(type: "INTEGER", nullable: false),
                     WorkingHoursTo = table.Column<int>(type: "INTEGER", nullable: false),
                     TimeZone = table.Column<int>(type: "INTEGER", nullable: false),
-                    RemindEveryNDays = table.Column<int>(type: "INTEGER", nullable: false)
+                    RemindEveryNDays = table.Column<int>(type: "INTEGER", nullable: false),
+                    SelectedProject = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,12 +32,12 @@ namespace ChadWebCalendar.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Accessed = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    NRepetitions = table.Column<int>(type: "INTEGER", nullable: false),
+                    Accessed = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    NRepetitions = table.Column<int>(type: "INTEGER", nullable: true),
                     Frequency = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -46,7 +47,7 @@ namespace ChadWebCalendar.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,7 +99,7 @@ namespace ChadWebCalendar.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     IsCompleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     AllowedToDistribute = table.Column<bool>(type: "INTEGER", nullable: false),
-                    TimeTakes = table.Column<TimeSpan>(type: "TEXT", nullable: false),
+                    TimeTakes = table.Column<TimeSpan>(type: "TEXT", nullable: true),
                     MaxPerDay = table.Column<int>(type: "INTEGER", nullable: true),
                     Deadline = table.Column<DateTime>(type: "TEXT", nullable: true),
                     PredecessorFK = table.Column<int>(type: "INTEGER", nullable: true),

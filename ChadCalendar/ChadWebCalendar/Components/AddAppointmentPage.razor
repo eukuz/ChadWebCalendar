@@ -119,7 +119,7 @@
             FinishesAt = model.End,
             Frequency = model.Frequency,
             RemindNMinutesBefore = model.RemindNMinutesBefore,
-            Id = model.Id
+            Id = (int)model.Id
         };
         if (eventService.Create(_event, userName))
         {

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChadWebCalendar.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20211128161755_Init")]
+    [Migration("20211201101031_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,12 +20,11 @@ namespace ChadWebCalendar.Migrations
 
             modelBuilder.Entity("ChadWebCalendar.Data.Duty", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("Accessed")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -35,14 +34,12 @@ namespace ChadWebCalendar.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("NRepetitions")
-                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -65,6 +62,9 @@ namespace ChadWebCalendar.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("RemindEveryNDays")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SelectedProject")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("TimeZone")
@@ -133,7 +133,6 @@ namespace ChadWebCalendar.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<TimeSpan?>("TimeTakes")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasIndex("PredecessorFK");
@@ -147,9 +146,7 @@ namespace ChadWebCalendar.Migrations
                 {
                     b.HasOne("ChadWebCalendar.Data.User", "User")
                         .WithMany("Duties")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
