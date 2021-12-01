@@ -18,7 +18,7 @@ namespace ChadWebCalendar.Migrations
 
             modelBuilder.Entity("ChadWebCalendar.Data.Duty", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -62,7 +62,7 @@ namespace ChadWebCalendar.Migrations
                     b.Property<int>("RemindEveryNDays")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SelectedProject")
+                    b.Property<int?>("SelectedProjectId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("TimeZone")
@@ -75,6 +75,8 @@ namespace ChadWebCalendar.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SelectedProjectId");
 
                     b.ToTable("Users");
                 });
@@ -147,6 +149,15 @@ namespace ChadWebCalendar.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ChadWebCalendar.Data.User", b =>
+                {
+                    b.HasOne("ChadWebCalendar.Data.Project", "SelectedProject")
+                        .WithMany()
+                        .HasForeignKey("SelectedProjectId");
+
+                    b.Navigation("SelectedProject");
                 });
 
             modelBuilder.Entity("ChadWebCalendar.Data.Event", b =>
