@@ -1,36 +1,35 @@
 ﻿@page "/register"
 @using ChadWebCalendar.Data.Models
 @inherits RegisterModel 
+<div class="container" style="max-width: 600px;">
+    <h1 style="text-align: center;">Регистрация</h1>
+    <div class="container" style="max-width: 300px;">
 
-<div class=" col-md-6 offset-md-3">
+        <EditForm Model="RegisterData" OnValidSubmit="RegisterAsync">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-    <h1>Регистрация</h1>
+            <label for="login">Логин</label>
+            <InputText id="login" @bind-Value="RegisterData.Login" class="form-control" />
 
-    <EditForm Model="RegisterData" OnValidSubmit="RegisterAsync">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+            <label for="password">Пароль</label>
+            <InputText id="password" @bind-Value="RegisterData.Password" class="form-control" />
 
-        <label for="login">Логин</label>
-        <InputText id="login" @bind-Value="RegisterData.Login" class="form-control" />
+            <label for="confirmpassword">Подтвердите пароль</label>
+            <InputText id="ConfirmPassword" @bind-Value="RegisterData.ConfirmPassword" class="form-control" />
 
-        <label for="password">Пароль</label>
-        <InputText id="password" @bind-Value="RegisterData.Password" class="form-control" />
+            <label for="workinghoursfrom">Рабочие часы начинаются с</label>
+            <InputNumber id="workinghoursfrom" @bind-Value="RegisterData.WorkingHoursFrom" class="form-control" />
 
-        <label for="confirmpassword">Подтвердите пароль</label>
-        <InputText id="ConfirmPassword" @bind-Value="RegisterData.ConfirmPassword" class="form-control" />
+            <label for="workinghoursto">Рабочие часы длятся до</label>
+            <InputNumber id="workinghoursto" @bind-Value="RegisterData.WorkingHoursTo" class="form-control" />
 
-        <label for="workinghoursfrom">Рабочие часы начинаются с</label>
-        <InputNumber id="workinghoursfrom" @bind-Value="RegisterData.WorkingHoursFrom" class="form-control" />
+            <label for="timezone">Часовой пояс UTC</label>
+            <InputNumber id="timezone" @bind-Value="RegisterData.Timezone" class="form-control" />
 
-        <label for="workinghoursto">Рабочие часы длятся до</label>
-        <InputNumber id="workinghoursto" @bind-Value="RegisterData.WorkingHoursTo" class="form-control" />
+            <p class="my-4"><button type="submit" class="btn btn-primary">Зарегистрироваться</button></p>
+            <p class="my-4"><a type="button" href="/" class="btn btn-primary">Назад</a></p>
 
-        <label for="timezone">Часовой пояс UTC</label>
-        <InputNumber id="timezone" @bind-Value="RegisterData.Timezone" class="form-control" />
-
-        <p class="my-4"><button type="submit" class="btn btn-primary">Зарегистрироваться</button></p>
-        <p class="my-4"><a type="button" href="/" class="btn btn-primary">Назад</a></p>
-
-    </EditForm>
-    
+        </EditForm>
+    </div>
 </div>

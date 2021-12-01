@@ -18,7 +18,7 @@
 </div>
 <div class="form-group">
     <label>Частота</label>
-    <select @bind="project.Frequency">
+    <select class="form-select" @bind="project.Frequency" style="width: 150px">
         <option disabled>Частота</option>
         <option>Никогда</option>
         <option>Каждый день</option>
@@ -28,11 +28,11 @@
 </div>
 <div class="form-group">
     <label>Введите время дедлайна</label>
-    <input type="datetime-local" @bind="project.Deadline" @bind:format="yyyy-MM-ddTHH:mm" style="width: 180px"/>
+    <input class="form-control" type="datetime-local" @bind="project.Deadline" @bind:format="yyyy-MM-ddTHH:mm" style="width: 250px"/>
 </div>
 <div class="form-group">
     <label>Выберите иконку</label>
-    <select @bind="project.IconNumber">
+    <select class="form-select" @bind="project.IconNumber" style="width: 100px">
         <option selected>😍</option>
         <option>🤠</option>
         <option>😀</option>
