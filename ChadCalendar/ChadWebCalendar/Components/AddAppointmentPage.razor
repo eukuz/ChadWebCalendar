@@ -7,9 +7,9 @@
 @using ChadWebCalendar.Data
 @inject NotificationService NotificationService
 
-<RadzenTemplateForm TItem="Appointment" Data="@model">
+<RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
     <DataAnnotationsValidator />
-    <ValidationSummary />
+    <ValidationSummary></ValidationSummary>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
             <RadzenLabel Text="Название" />
@@ -82,7 +82,7 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
-            <button @onclick="addEvent" class="btn btn-primary">Готово</button>
+            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Style="background-color: blue" Text="Готово" />
         </div>
     </div>
 </RadzenTemplateForm>
@@ -123,24 +123,20 @@
         };
         if (eventService.Create(_event, userName))
         {
-            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Событие добавлено", Detail = "Добавление события", Duration = 2000 });
             await OnInitializedAsync();
             DialogService.Close(model);
-        }
-        else
-        {
-            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Введена некорректная дата", Detail = "Добавление события", Duration = 3000 });
         }
     }
 
     protected override void OnParametersSet()
     {
+
         model.Start = Start;
         model.End = End;
     }
 
-    void ShowNotification(NotificationMessage message)
+    void OnSubmit(Appointment model)
     {
-        NotificationService.Notify(message);
+        addEvent();
     }
 }

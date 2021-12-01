@@ -1,0 +1,11 @@
+.task_container {
+    display: flex;
+}
+
+.task_name {
+    margin-left: 55px;
+    margin-right: 20px;
+    width: 150px;
+    word-wrap: break-word;
+    text-align: center;
+}

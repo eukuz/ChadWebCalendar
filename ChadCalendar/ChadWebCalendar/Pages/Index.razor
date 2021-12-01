@@ -30,7 +30,7 @@
                 <div class="tasklist">
                     <div Style="display: flex; justify-content: space-between;">
                         <Button Type="@ButtonType.Default" OnClick="Distribute">👩‍💼</Button>
-                        <Button OnClick="@(() => EditProjectPage(projId))" Style="width:100%; overflow-wrap: break-word">
+                        <Button OnClick="@(() => EditProjectPage(projId))" Style="width:100%; overflow: hidden; overflow-wrap: break-word">
                             @projName
                         </Button>
                         <Button OnClick="CreateTaskPage">
