@@ -1,8 +1,4 @@
 ﻿@page "/"
-<head>
-    <title>showme</title>
-</head>
-
 @using ChadWebCalendar.Components.Events
 @using ChadWebCalendar.Components.Tasks
 @using ChadWebCalendar.Components
@@ -63,19 +59,13 @@
     private Task<AuthenticationState> authenticationState { get; set; }
     private List<ChadWebCalendar.Data.Task> Tasks = new List<ChadWebCalendar.Data.Task>();
     private IList<Claim> userClaim = new List<Claim>();
-    string _title;
     NotificationsWorker notificationWorker = new NotificationsWorker();
     private LoginModel model = new LoginModel();
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        _title = DateTime.Now.ToString();
-        if (!notificationWorker.IsStarted && authenticationState.Result.User.Identity.Name != null)
-        {
-            NotificationsWorker.Username = authenticationState.Result.User.Identity.Name;
-            notificationWorker.Start();
-            notificationWorker.NotificationReadyToShow += showNotification;
-            notificationWorker.IsStarted = true;
-        }
+        notificationWorker.WorkerInitialization(authenticationState.Result.User.Identity.Name);
+        notificationWorker.NotificationReadyToShow += showNotification;
+
         if (authenticationState.Result.User.Identity.Name != null)
         {
             using (ApplicationContext db = new ApplicationContext()) // для получения первого проекта

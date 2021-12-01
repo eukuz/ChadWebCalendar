@@ -21,6 +21,15 @@ namespace ChadWebCalendar.Data.Services
         public event NotificationShowHandler NotificationReadyToShow;
         BackgroundWorker NotificationsCheckThread = new BackgroundWorker();
         static ApplicationContext db = new ApplicationContext();
+        public void WorkerInitialization(string Login)
+        {
+            if (!IsStarted && Login != null)
+            {
+                Username = Login;
+                Start();
+                IsStarted = true;
+            }
+        }
         public void GetReadyNotifications()
         {
             DateTime dt = DateTime.Now.AddMinutes(Constants.MinutesBeforeForInterval);
