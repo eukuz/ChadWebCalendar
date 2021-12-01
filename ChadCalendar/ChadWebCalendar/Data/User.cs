@@ -13,7 +13,7 @@ namespace ChadWebCalendar.Data
         public int WorkingHoursTo { get; set; }
         public int TimeZone { get; set; }
         public int RemindEveryNDays { get; set; }
-        public int SelectedProject{ get; set; }
+        public int SelectedProjectId{ get; set; }
         public List<Duty> Duties { get; set; }
     }
 }

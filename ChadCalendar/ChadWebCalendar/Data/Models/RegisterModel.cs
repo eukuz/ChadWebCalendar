@@ -46,7 +46,7 @@ namespace ChadWebCalendar.Data.Models
                 db.Tasks.Add(new Task { Name = "Создать задачу", TimeTakes = new TimeSpan(0, 5, 0), NRepetitions = 0, User = user, Project = project, Accessed = DateTime.Now });
                 db.Tasks.Add(new Task { Name = "Создать событие", TimeTakes = new TimeSpan(0, 10, 0), NRepetitions = 0, User = user, Project = project, Accessed = DateTime.Now });
                 db.SaveChanges();
-                user.SelectedProject = project.Id;
+                user.SelectedProjectId = project.Id;
                 db.SaveChanges();
                 LoginModel login = new LoginModel();
                 login.LoginData.model.Login = user.Login;
