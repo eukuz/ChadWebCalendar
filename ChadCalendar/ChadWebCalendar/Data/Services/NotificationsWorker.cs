@@ -11,16 +11,17 @@ namespace ChadWebCalendar.Data.Services
 {
     public class NotificationsWorker
     {
-        public static string Username;
-        public bool isFirstStart = true;
-        public static DateTime? FirstEventDT;
+        BackgroundWorker NotificationsCheckThread = new BackgroundWorker();
         public List<string> TypesOfNotification = new List<string>();
-        public static bool DeadlinesIsInitializied = false;
-        public bool IsStarted = false;
+        static ApplicationContext db = new ApplicationContext();
+
         public delegate void NotificationShowHandler();
         public event NotificationShowHandler NotificationReadyToShow;
-        BackgroundWorker NotificationsCheckThread = new BackgroundWorker();
-        static ApplicationContext db = new ApplicationContext();
+
+        public static string Username;
+        public bool isFirstStart = true;
+        public bool IsStarted = false;
+
         public void WorkerInitialization(string Login)
         {
             if (!IsStarted && Login != null)
@@ -33,7 +34,8 @@ namespace ChadWebCalendar.Data.Services
         public void GetReadyNotifications()
         {
             DateTime dt = DateTime.Now.AddMinutes(Constants.MinutesBeforeForInterval);
-            dt = dt.Date.AddHours(dt.Hour).AddMinutes(dt.Minute);
+            removeSecondsAndMilliseconds(ref dt);
+
             var enumerableEvents = db.Events.AsNoTracking().OrderBy(e => e.StartsAt).Where(e => e.User.Login == Username && e.StartsAt >= dt);
             List<Data.Event> events = enumerableEvents.ToList();
             foreach (var item in events)
@@ -53,7 +55,6 @@ namespace ChadWebCalendar.Data.Services
                 }
             }
             
-
             var enumerableProjects = db.Projects.AsNoTracking().OrderBy(p => p.Deadline).Where(p => p.User.Login == Username && p.Deadline >= dt);
             List<Data.Project> projectDeadlines = enumerableProjects.ToList();
             string tempOfNotification = "";
@@ -93,7 +94,7 @@ namespace ChadWebCalendar.Data.Services
                     }
                 }
             }
-            //при редактировании не редактируется тут, при добавлении нужно DeadlinesIsInitializied делать false
+
             var enumerableTasks = db.Tasks.AsNoTracking().OrderBy(t => t.Deadline).Where(t => t.User.Login == Username && t.Deadline >= dt);
             List<Data.Task> taskDeadlines = enumerableTasks.ToList();
             tempOfNotification = "";
@@ -165,6 +166,10 @@ namespace ChadWebCalendar.Data.Services
                 TypesOfNotification.Clear();
                 Thread.Sleep(Constants.MillisecondsForSleepAfterWorkerIteration);
             }
+        }
+        private void removeSecondsAndMilliseconds(ref DateTime dateTime)
+        {
+            dateTime = dateTime.Date.AddHours(dateTime.Hour).AddMinutes(dateTime.Minute);
         }
     }
 }
