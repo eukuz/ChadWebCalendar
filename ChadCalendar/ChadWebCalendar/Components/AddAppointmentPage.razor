@@ -7,9 +7,9 @@
 @using ChadWebCalendar.Data
 @inject NotificationService NotificationService
 
-<RadzenTemplateForm TItem="Appointment" Data="@model">
+<RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
     <DataAnnotationsValidator />
-    <ValidationSummary />
+    <ValidationSummary></ValidationSummary>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
             <RadzenLabel Text="Название" />
@@ -82,7 +82,7 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
-            <button @onclick="addEvent" class="btn btn-primary">Готово</button>
+            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Style="background-color: blue" Text="Готово" />
         </div>
     </div>
 </RadzenTemplateForm>
@@ -130,7 +130,13 @@
 
     protected override void OnParametersSet()
     {
+
         model.Start = Start;
         model.End = End;
+    }
+
+    void OnSubmit(Appointment model)
+    {
+        addEvent();
     }
 }
