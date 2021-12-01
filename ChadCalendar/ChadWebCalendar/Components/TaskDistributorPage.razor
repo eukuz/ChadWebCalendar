@@ -1,0 +1,17 @@
+﻿@using ChadWebCalendar.Data
+@using ChadWebCalendar.Data.Services
+
+<div>
+    <h1>@projectId</h1>
+    <button class="btn btn-light">Равномерно</button>
+    <button class="btn btn-light">Лучшее соответствие</button>
+    <button class="btn btn-light">Максимум в начале</button>
+    <button class="btn btn-light">Максимум в конце</button>
+</div>
+
+
+@code {
+    [Parameter]
+    public int projectId { get; set; }
+
+}

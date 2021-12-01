@@ -2,6 +2,8 @@
 @inject TaskService taskService
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
+
+
 <RadzenTemplateForm TItem="Data.Task" Data="@task" Submit=@OnSubmit>
     <DataAnnotationsValidator />
     <ValidationSummary></ValidationSummary>

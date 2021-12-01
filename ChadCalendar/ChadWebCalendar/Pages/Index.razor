@@ -29,7 +29,7 @@
                 </div>
                 <div class="tasklist">
                     <div Style="display: flex; justify-content: space-between;">
-                        <Button Type="@ButtonType.Default" OnClick="Distribute">👩‍💼</Button>
+                        <Button Type="@ButtonType.Default" OnClick="() => Distribute(projId)">👩‍💼</Button>
                         <Button OnClick="@(() => EditProjectPage(projId))" Style="width:100%; overflow: hidden; overflow-wrap: break-word">
                             @projName
                         </Button>
@@ -80,11 +80,12 @@
     {
         notificationWorker.Stop();
     }
-    private void Distribute()
+    private async void Distribute(int? projectId)
     {
-
-        TaskDistributor.Distribute((int)projId,DistributionType.Evenly);
-        NavigationManager.NavigateTo("/", true);
+        await DialogService.OpenAsync<TaskDistributorPage>($"👩‍💼 Распланировать задачи из проекта: {projName} 👩‍💼",
+            new Dictionary<string, object> { { "projectId", projectId } });
+        //TaskDistributor.Distribute((int)projId,DistributionType.Evenly);
+        //NavigationManager.NavigateTo("/", true);
     }
 
     private void showNotification()
