@@ -16,6 +16,15 @@ namespace ChadWebCalendar.Data.Services
             else
                 return null;
         }
+        public void UpdateSelectedProject(string UserLogin, int projectId)
+        {
+            using (ApplicationContext db = new ApplicationContext()) // обновить выбранный проект
+            {
+                User user = db.Users.FirstOrDefault(u => u.Login == UserLogin);
+                user.SelectedProject = db.Projects.FirstOrDefault(p => p.Id == projectId);
+                db.SaveChangesAsync();
+            }
+        }
         bool IsCorrect(ref Data.Project project)
         {
             if (project.Name != null && project.Name != "")

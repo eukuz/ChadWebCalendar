@@ -115,11 +115,14 @@
         notificationWorker.Stop();
         await _accountService.LogoutAsync();
     }
+
     private void GetProjectId(Project pr)
     {
         projId = pr.Id;
         projName = pr.Name;
+        projectService.UpdateSelectedProject(authenticationState.Result.User.Identity.Name,  (int)projId);
     }
+
     bool visibleEvent = false;
     bool visibleProject = false;
     bool visibleEditProject = false;
