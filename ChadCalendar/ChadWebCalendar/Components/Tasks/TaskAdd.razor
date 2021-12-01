@@ -7,19 +7,19 @@
     <ValidationSummary></ValidationSummary>
     <div class="form-group">
         <label for="Name">Название задачи</label>
-        <InputText type="text" placeholder="" class="form-control" @bind-Value=task.Name id="Name" />
+        <InputText type="text" placeholder="" class="form-control" @bind-Value=task.Name id="Name" style="width: 250px" />
     </div>
         <div class="form-group">
             <label>Время на задачу</label>
-            <input type="text" @bind="tempDT" min="0">
+            <input type="text" @bind="tempDT" min="0" style="width: 70px">
         </div>
         <div class="form-group">
             <label>Описание</label>
-            <textarea class="form-control" type="text" placeholder="" @bind="task.Description"></textarea>
+            <textarea class="form-control" type="text" placeholder="" @bind="task.Description" style="width: 250px"></textarea>
         </div>
         <div class="form-group">
             <label>Дедлайн</label>
-            <input class="form-control" type="datetime-local" @bind="task.Deadline" @bind:format="yyyy-MM-ddTHH:mm" />
+            <input class="form-control" type="datetime-local" @bind="task.Deadline" @bind:format="yyyy-MM-ddTHH:mm" style="width: 250px"/>
         </div>
         <div class="form-group">
             <label>Выберите проект для задачи</label>
@@ -55,7 +55,7 @@
         </div>
         <div class="form-group">
             <label>Максимум в день</label>
-            <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
+            <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0" style="width: 70px">
         </div>
         <div class="form-group">
             <label>Частота</label>
