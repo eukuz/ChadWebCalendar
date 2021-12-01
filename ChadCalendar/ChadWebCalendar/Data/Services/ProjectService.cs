@@ -34,7 +34,8 @@ namespace ChadWebCalendar.Data.Services
         }
         public IEnumerable<Project> GetProjects(User user)
         {
-            return db.Projects.Where(proj => proj.User == user);
+            ApplicationContext db1 = new ApplicationContext();
+            return db1.Projects.Where(proj => proj.User == user);
         }
         public Data.User GetUser(string Name)
         {

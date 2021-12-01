@@ -63,11 +63,11 @@
     private LoginModel model = new LoginModel();
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        notificationWorker.WorkerInitialization(authenticationState.Result.User.Identity.Name);
-        notificationWorker.NotificationReadyToShow += showNotification;
-
         if (authenticationState.Result.User.Identity.Name != null)
         {
+            notificationWorker.WorkerInitialization(authenticationState.Result.User.Identity.Name);
+            notificationWorker.NotificationReadyToShow += showNotification;
+
             using (ApplicationContext db = new ApplicationContext()) // для получения первого проекта
             {
                 User user = db.Users.FirstOrDefault(u => u.Login == authenticationState.Result.User.Identity.Name);
