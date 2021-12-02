@@ -1,13 +1,21 @@
 ﻿@using ChadWebCalendar.Data
 @using ChadWebCalendar.Data.Services
-@inject NavigationManager navigationManager 
+@inject NavigationManager navigationManager
+@inject TooltipService tooltipService
 
-<div>
-    <h1>@projectId</h1>
-    <button class="btn btn-light" @onclick="Distribute">Равномерно</button>
-    <button class="btn btn-light" @onclick="Distribute">Лучшее соответствие</button>
-    <button class="btn btn-light" @onclick="Distribute">Максимум в начале</button>
-    <button class="btn btn-light" @onclick="Distribute">Максимум в конце</button>
+<div style="display: flex; flex-direction: column; margin: 0 auto;">
+    <RadzenButton Text="Равномерно" MouseEnter="@(args => ShowTooltipEvenly(args, new TooltipOptions() { Position = TooltipPosition.Right, Duration = null, Style = "background-color: #000; color:#fff" }))" 
+                  Click="() => Distribute(DistributionType.Evenly)" 
+                  Style="background-color: #6c757d; min-width: 250px; min-height: 50px; margin: 20px auto;" />
+    <RadzenButton Text="Лучшее соответствие" MouseEnter="@(args => ShowTooltipBestFit(args, new TooltipOptions() { Position = TooltipPosition.Right, Duration = null, Style = "background-color: #000; color:#fff" }))" 
+                  Click="() => Distribute(DistributionType.BestFit)" 
+                  Style="background-color: #6c757d; min-width: 250px; min-height: 50px; margin: 20px auto;" />
+    <RadzenButton Text="Максимум в начале" MouseEnter="@(args => ShowTooltipBeginning(args, new TooltipOptions() { Position = TooltipPosition.Right, Duration = null, Style = "background-color: #000; color:#fff" }))" 
+                  Click="() => Distribute(DistributionType.MaxInTheBeginning)" 
+                  Style="background-color: #6c757d; min-width: 250px; min-height: 50px; margin: 20px auto;" />
+    <RadzenButton Text="Максимум в конце" MouseEnter="@(args => ShowTooltipEnd(args, new TooltipOptions() { Position = TooltipPosition.Right, Duration = null, Style = "background-color: #000; color:#fff" }))" 
+                  Click="() => Distribute(DistributionType.MaxInTheEnd)" 
+                  Style="background-color: #6c757d; min-width: 250px; min-height: 50px; margin: 20px auto;" />
 </div>
 
 
@@ -15,9 +23,27 @@
     [Parameter]
     public int projectId { get; set; }
 
-    private void Distribute() {
+    void ShowTooltipEvenly(ElementReference elementReference, TooltipOptions options = null)
+    {
+        tooltipService.Open(elementReference, "Равномерно", options);
+    }
+    void ShowTooltipBestFit(ElementReference elementReference, TooltipOptions options = null)
+    {
+        tooltipService.Open(elementReference, "Лучшее соответствие", options);
+    }
+    void ShowTooltipBeginning(ElementReference elementReference, TooltipOptions options = null)
+    {
+        tooltipService.Open(elementReference, "Максимум в начале", options);
+    }
+    void ShowTooltipEnd(ElementReference elementReference, TooltipOptions options = null)
+    {
+        tooltipService.Open(elementReference, "Максимум в конце", options);
+    }
+
+
+    private void Distribute(DistributionType distributionType)
+    {
         TaskDistributor.Distribute(projectId, DistributionType.Evenly);
         navigationManager.NavigateTo("/", true);
     }
-
 }
