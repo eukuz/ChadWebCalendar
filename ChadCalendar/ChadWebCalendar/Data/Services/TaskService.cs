@@ -33,7 +33,12 @@ namespace ChadWebCalendar.Data.Services
         }
         public Data.Project GetSelectedProject(Data.User _user)
         {
-            return db.Projects.FirstOrDefault(p => (p.User.Id == _user.Id) && (p.Id == _user.SelectedProjectId));
+            ApplicationContext db1 = new ApplicationContext();
+            return db1.Projects.FirstOrDefault(p => (p.User.Id == _user.Id) && (p.Id == _user.SelectedProjectId));
+        }
+        public Data.Project GetFirstProject(Data.User _user)
+        {
+            return db.Projects.FirstOrDefault(p => p.User.Id == _user.Id);
         }
         public Data.Task GetTask(int? id)
         {
@@ -53,7 +58,8 @@ namespace ChadWebCalendar.Data.Services
         }
         public Data.User GetUser(string Name)
         {
-            return db.Users.FirstOrDefault(u => u.Login == Name);
+            ApplicationContext db1 = new ApplicationContext();
+            return db1.Users.FirstOrDefault(u => u.Login == Name);
         }
         public bool AddTask(Data.Task task, int? projectId, User user)
         {

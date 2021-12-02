@@ -101,7 +101,10 @@
             userTasks = taskService.GetTasks(user);
             userProjects = taskService.GetProjects(user);
             firstProject = taskService.GetSelectedProject(user);
-            projectId = firstProject.Id;
+            if (firstProject != null)
+                projectId = firstProject.Id;
+            else
+                projectId = (taskService.GetFirstProject(user)).Id;
 
             taskValidation.TimeTakes = task.TimeTakes;
         }
