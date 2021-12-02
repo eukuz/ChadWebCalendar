@@ -87,9 +87,7 @@
         <Dropdown Placement="@Placement.BottomCenter">
             <Overlay>
                 <Menu>
-                    <div class="col-md-3">
-                        <RadzenLabel Text="Время начала события" />
-                    </div>
+                    <span style="padding: 15px">Укажите время начала события</span>
                     <div class="col">
                         <RadzenDatePicker @bind-Value="@startsAt" Name="Start" ShowTime="true" />
                     </div>
@@ -109,7 +107,6 @@
     @code {
         [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
         string predecessorIdstr = "После любой";
-        Data.TaskValidation taskValidation = new Data.TaskValidation();
         [Parameter]
         public int? taskId { get; set; }
         int projectId = 0;
@@ -146,7 +143,6 @@
             if (tempDT != null)
             {
                 task.TimeTakes = tempDT;
-                taskValidation.TimeTakes = task.TimeTakes;
             }
             if (predecessorIdstr != "После любой")
                 task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));

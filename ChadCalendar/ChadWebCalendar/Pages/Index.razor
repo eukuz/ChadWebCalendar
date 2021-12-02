@@ -1,5 +1,4 @@
 ﻿@page "/"
-@using ChadWebCalendar.Components.Events
 @using ChadWebCalendar.Components.Tasks
 @using ChadWebCalendar.Components
 @using ChadWebCalendar.Components.Projects
@@ -61,6 +60,9 @@
     private IList<Claim> userClaim = new List<Claim>();
     NotificationsWorker notificationWorker = new NotificationsWorker();
     private LoginModel model = new LoginModel();
+
+    public int? projId;
+    public string? projName;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         if (authenticationState.Result.User.Identity.Name != null)
@@ -122,10 +124,4 @@
         projName = pr.Name;
         projectService.UpdateSelectedProject(authenticationState.Result.User.Identity.Name,  (int)projId);
     }
-
-    bool visibleEvent = false;
-    bool visibleProject = false;
-    bool visibleEditProject = false;
-    public int? projId;
-    public string? projName;
 }

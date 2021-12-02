@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Validators\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

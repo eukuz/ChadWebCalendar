@@ -85,7 +85,6 @@
         [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
         string predecessorIdstr = "После любой";
         int? projectId = 0;
-        Data.TaskValidation taskValidation = new Data.TaskValidation();
         Data.Task task = new Data.Task();
         Data.User user;
         Data.Project firstProject;
@@ -106,15 +105,12 @@
                 projectId = firstProject.Id;
             else
                 projectId = (taskService.GetFirstProject(user)).Id;
-
-            taskValidation.TimeTakes = task.TimeTakes;
         }
         void addTask()
         {
             if (tempDT != null)
             {
                 task.TimeTakes = tempDT;
-                taskValidation.TimeTakes = task.TimeTakes;
             }
             if (predecessorIdstr != "После любой")
                 task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
