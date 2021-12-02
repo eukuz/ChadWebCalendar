@@ -28,13 +28,13 @@ namespace ChadWebCalendar.Data
     public static class TaskDistributor
     {
 
-        private static List<TimeSlot> SortForEvenly(List<TimeSlot> freeTimeSlots, DateTime endOfWeek)//For now, assyming timeslot.start.Date = timeslot.finish.Date
+        private static List<TimeSlot> SortForEvenly(List<TimeSlot> freeTimeSlots, DateTime endOfWeek, int workingHoursTo)//For now, assyming timeslot.start.Date = timeslot.finish.Date
         {
 
             int totalDays = (int)Math.Ceiling((endOfWeek - DateTime.Now).TotalDays);
             List<DayHolder> days = new List<DayHolder>();
-            for (int i = 0; i < totalDays; i++)
-                days.Add(new DayHolder(DateTime.Today.AddDays(i), new TimeSpan(0, 0, 0)));
+            for (int i = 0 ; i < totalDays; i++)
+                days.Add(new DayHolder(DateTime.Today.AddDays(i+(DateTime.Now.Hour < workingHoursTo ? 0 : 1)), new TimeSpan(0, 0, 0)));
 
             foreach (TimeSlot freeSlot in freeTimeSlots)
                 days.FirstOrDefault(d => d.date == freeSlot.start.Date).freetime += freeSlot.GetTimeSpan;
@@ -73,7 +73,7 @@ namespace ChadWebCalendar.Data
 
                 if (distributionType == DistributionType.Evenly)
                 {
-                    freeTimeSlots = SortForEvenly(freeTimeSlots, endOfWeek);
+                    freeTimeSlots = SortForEvenly(freeTimeSlots, endOfWeek, user.WorkingHoursTo);
 
                     for (int j = 0; j < tasks.Count; j++)
                         for (int i = 0; i < freeTimeSlots.Count; i++, i++)
@@ -84,7 +84,7 @@ namespace ChadWebCalendar.Data
                                 distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].start, 15));
                                 freeTimeSlots[i].start += (TimeSpan)tasks[j].TimeTakes;
 
-                                freeTimeSlots = SortForEvenly(freeTimeSlots, endOfWeek);
+                                freeTimeSlots = SortForEvenly(freeTimeSlots, endOfWeek, user.WorkingHoursTo);
 
                                 break;
                             }

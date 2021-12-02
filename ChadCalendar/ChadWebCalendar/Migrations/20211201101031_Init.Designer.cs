@@ -3,14 +3,16 @@ using System;
 using ChadWebCalendar.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ChadWebCalendar.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20211201101031_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -18,7 +20,7 @@ namespace ChadWebCalendar.Migrations
 
             modelBuilder.Entity("ChadWebCalendar.Data.Duty", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -62,7 +64,7 @@ namespace ChadWebCalendar.Migrations
                     b.Property<int>("RemindEveryNDays")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("SelectedProjectId")
+                    b.Property<int>("SelectedProject")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("TimeZone")
@@ -75,8 +77,6 @@ namespace ChadWebCalendar.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SelectedProjectId");
 
                     b.ToTable("Users");
                 });
@@ -149,15 +149,6 @@ namespace ChadWebCalendar.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ChadWebCalendar.Data.User", b =>
-                {
-                    b.HasOne("ChadWebCalendar.Data.Project", "SelectedProject")
-                        .WithMany()
-                        .HasForeignKey("SelectedProjectId");
-
-                    b.Navigation("SelectedProject");
                 });
 
             modelBuilder.Entity("ChadWebCalendar.Data.Event", b =>
