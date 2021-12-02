@@ -93,12 +93,6 @@
                     <div class="col">
                         <RadzenDatePicker @bind-Value="@startsAt" Name="Start" ShowTime="true" />
                     </div>
-                    <div class="col-md-3">
-                        <RadzenLabel Text="Время окончания события" />
-                    </div>
-                    <div class="col">
-                        <RadzenDatePicker Name="End" @bind-Value="@finishesAt" ShowTime="true" />
-                    </div>
                     <div class="col-md-3" style="margin-top: 15px">
                         <button @onclick="mutation" class="btn btn-dark">Сохранить</button>
                     </div>
@@ -120,7 +114,6 @@
         public int? taskId { get; set; }
         int projectId = 0;
         DateTime startsAt;
-        DateTime finishesAt;
         Data.Task task;
         Data.User user;
         TimeSpan? tempDT;
@@ -165,7 +158,7 @@
         }
         void mutation()
         {
-            taskService.Mutatuion(task.Id, authenticationState.Result.User.Identity.Name, startsAt, finishesAt);
+            taskService.Mutatuion(task.Id, authenticationState.Result.User.Identity.Name, startsAt);
             redirectToIndex();
 
         }

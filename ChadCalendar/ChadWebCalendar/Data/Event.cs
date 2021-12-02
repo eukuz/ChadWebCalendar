@@ -32,18 +32,6 @@ namespace ChadWebCalendar.Data
             RemindNMinutesBefore = remindNMunutesBefore;
             User = task.User;
         }
-        public Event (Task task, DateTime startsAt, DateTime finishesAt, int remindNMunutesBefore)
-        {
-            Accessed = DateTime.Now;
-            Description = task.Description;
-            StartsAt = startsAt;
-            FinishesAt = finishesAt;
-            Frequency = task.Frequency;
-            Name = task.Name;
-            NRepetitions = task.NRepetitions;
-            RemindNMinutesBefore = remindNMunutesBefore;
-            User = task.User;
-        }
     }
 }
 

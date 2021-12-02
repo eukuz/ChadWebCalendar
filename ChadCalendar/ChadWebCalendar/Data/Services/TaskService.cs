@@ -102,12 +102,12 @@ namespace ChadWebCalendar.Data.Services
                 await db.SaveChangesAsync();
             }
         }
-        public async void Mutatuion(int? id, string Name, DateTime StartsAt, DateTime FinishesAt)
+        public async void Mutatuion(int? id, string Name, DateTime StartsAt)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == Name);
             Data.Task task = db.Tasks.FirstOrDefault(t => id == t.Id); // это странное выражение нужно потому что в модели передается только Id
             removeDependencies(task); // избавляемся от зависимостей
-            Event _event = new Event(task, StartsAt, FinishesAt, 15);
+            Event _event = new Event(task, StartsAt, 15);
             _event.User = user;
             db.Events.Add(_event);
             db.Tasks.Remove(task);
