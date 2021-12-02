@@ -33,8 +33,7 @@ namespace ChadWebCalendar.Data.Services
         }
         public Data.Project GetSelectedProject(Data.User _user)
         {
-            ApplicationContext db1 = new ApplicationContext();
-            return db1.Projects.FirstOrDefault(p => (p.User.Id == _user.Id) && (p.Id == _user.SelectedProjectId));
+            return db.Projects.FirstOrDefault(p => (p.User.Id == _user.Id) && (p.Id == _user.SelectedProjectId));
         }
         public Data.Project GetFirstProject(Data.User _user)
         {
@@ -46,8 +45,7 @@ namespace ChadWebCalendar.Data.Services
         }
         public IEnumerable<Data.Task> GetTasks(User user)
         {
-            ApplicationContext db1 = new ApplicationContext();
-            return db1.Tasks.Include(t =>t.Project).Where(task => task.User == user);
+            return db.Tasks.Include(t =>t.Project).Where(task => task.User == user);
         }
         public Data.Task GetPredecessor(int? id)
         {
@@ -58,8 +56,7 @@ namespace ChadWebCalendar.Data.Services
         }
         public Data.User GetUser(string Name)
         {
-            ApplicationContext db1 = new ApplicationContext();
-            return db1.Users.FirstOrDefault(u => u.Login == Name);
+            return db.Users.FirstOrDefault(u => u.Login == Name);
         }
         public bool AddTask(Data.Task task, int? projectId, User user)
         {
