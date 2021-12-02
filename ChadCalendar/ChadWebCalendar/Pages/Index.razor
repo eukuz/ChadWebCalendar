@@ -32,12 +32,12 @@
                     <ProjectList GetProject="GetProjectId" />
                 </div>
                 <div class="tasklist">
-                    <div Style="display: flex; justify-content: space-between;">
+                    <div Style="display: flex; justify-content: space-between; width: 100%; overflow: hidden;">
                         <Button Type="@ButtonType.Default" OnClick="Distribute" style="height: 50px">👩‍💼</Button>
                         <Button OnClick="@(() => EditProjectPage(projId))" Style="height: 50px; width:100%; overflow: hidden; overflow-wrap: break-word">
                             @projName
                         </Button>
-                        <Button OnClick="CreateTaskPage" style="height: 50px">
+                        <Button OnClick="CreateTaskPage" style="height: 50px; width: 62px;">
                             +
                         </Button>
                     </div>
