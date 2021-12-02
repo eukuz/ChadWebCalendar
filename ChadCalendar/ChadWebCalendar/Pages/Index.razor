@@ -71,8 +71,10 @@
             using (ApplicationContext db = new ApplicationContext()) // для получения первого проекта
             {
                 User user = db.Users.FirstOrDefault(u => u.Login == authenticationState.Result.User.Identity.Name);
-                projId = projectService.GetProjects(user).FirstOrDefault()?.Id;
-                projName = projectService.GetProjects(user).FirstOrDefault()?.Name;
+                var project = projectService.GetProjectById(user.SelectedProjectId);
+                projId = project.Id;
+                projName = project.Name;
+
             }
         }
     }
