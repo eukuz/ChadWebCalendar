@@ -95,6 +95,7 @@
         bool isValidationError = false;
         protected override async System.Threading.Tasks.Task OnInitializedAsync()
         {
+            taskService.db = new Data.ApplicationContext();
             tempDT = TimeSpan.Parse("00:00:00"); // инициализация для здравого показа
             task.Deadline = null;
             user = taskService.GetUser(authenticationState.Result.User.Identity.Name);

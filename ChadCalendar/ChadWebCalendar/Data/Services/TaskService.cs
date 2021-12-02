@@ -8,7 +8,7 @@ namespace ChadWebCalendar.Data.Services
 {
     public class TaskService
     {
-        ApplicationContext db = new ApplicationContext();
+        public ApplicationContext db = new ApplicationContext();
         public bool IsCorrect(in Data.Task task)
         {
             if (task.Name != null && task.TimeTakes != null && task.Name != "")
