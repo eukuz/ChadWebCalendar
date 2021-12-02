@@ -85,5 +85,19 @@ namespace ChadWebCalendar.Data.Services
                 }
             }
         }
+        public void ReceiveSelectedProject(string? nameUser, ref int? projId, ref string projName)
+        {
+            if(nameUser!=null )
+            {
+                User user = db.Users.FirstOrDefault(u => u.Login == nameUser);
+                if (user.SelectedProjectId != null)
+                {
+                    var project = GetProjectById(user.SelectedProjectId);
+                    projId = project.Id;
+                    projName = project.Name;
+                }
+                
+            }
+        }
     }
 }
