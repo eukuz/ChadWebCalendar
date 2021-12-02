@@ -8,7 +8,7 @@ namespace ChadWebCalendar.Data.Services
 {
     public class TaskService
     {
-        ApplicationContext db = new ApplicationContext();
+        public ApplicationContext db = new ApplicationContext();
         public bool IsCorrect(in Data.Task task)
         {
             if (task.Name != null && task.TimeTakes != null && task.Name != "")
@@ -31,9 +31,13 @@ namespace ChadWebCalendar.Data.Services
         {
             return db.Projects.Where(proj => proj.User == user);
         }
-        public Data.Project GetFirstProject(int? userId)
+        public Data.Project GetSelectedProject(Data.User _user)
         {
-            return db.Projects.FirstOrDefault(p => p.User.Id == userId);
+            return db.Projects.FirstOrDefault(p => (p.User.Id == _user.Id) && (p.Id == _user.SelectedProjectId));
+        }
+        public Data.Project GetFirstProject(Data.User _user)
+        {
+            return db.Projects.FirstOrDefault(p => p.User.Id == _user.Id);
         }
         public Data.Task GetTask(int? id)
         {
@@ -98,12 +102,12 @@ namespace ChadWebCalendar.Data.Services
                 await db.SaveChangesAsync();
             }
         }
-        public async void Mutatuion(int? id, string Name, DateTime StartsAt, DateTime FinishesAt)
+        public async void Mutatuion(int? id, string Name, DateTime StartsAt)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == Name);
             Data.Task task = db.Tasks.FirstOrDefault(t => id == t.Id); // это странное выражение нужно потому что в модели передается только Id
             removeDependencies(task); // избавляемся от зависимостей
-            Event _event = new Event(task, StartsAt, FinishesAt, 15);
+            Event _event = new Event(task, StartsAt, 15);
             _event.User = user;
             db.Events.Add(_event);
             db.Tasks.Remove(task);
