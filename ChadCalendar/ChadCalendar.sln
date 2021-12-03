@@ -5,9 +5,7 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChadCalendar", "ChadCalendar\ChadCalendar.csproj", "{EE9E9119-24EC-4A31-8B22-A4D0111006D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorChadCalendar", "BlazorChadCalendar\BlazorChadCalendar.csproj", "{B9F9E921-26CF-49D4-BD7A-165E059DA4FB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChadWebCalendar", "ChadWebCalendar\ChadWebCalendar.csproj", "{D1732732-1670-4CEB-8D2F-8FD6D68E5628}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChadWebCalendar", "ChadWebCalendar\ChadWebCalendar.csproj", "{D1732732-1670-4CEB-8D2F-8FD6D68E5628}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		{EE9E9119-24EC-4A31-8B22-A4D0111006D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE9E9119-24EC-4A31-8B22-A4D0111006D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE9E9119-24EC-4A31-8B22-A4D0111006D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B9F9E921-26CF-49D4-BD7A-165E059DA4FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B9F9E921-26CF-49D4-BD7A-165E059DA4FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B9F9E921-26CF-49D4-BD7A-165E059DA4FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B9F9E921-26CF-49D4-BD7A-165E059DA4FB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D1732732-1670-4CEB-8D2F-8FD6D68E5628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D1732732-1670-4CEB-8D2F-8FD6D68E5628}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1732732-1670-4CEB-8D2F-8FD6D68E5628}.Release|Any CPU.ActiveCfg = Release|Any CPU

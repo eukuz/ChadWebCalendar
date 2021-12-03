@@ -34,8 +34,8 @@
 </div>
 
 @code {
-        Data.User user;
-        [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    Data.User user;
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         user = taskService.GetUser(authenticationState.Result.User.Identity.Name);

@@ -16,6 +16,15 @@ namespace ChadWebCalendar.Data.Services
             else
                 return null;
         }
+        public void UpdateSelectedProject(string UserLogin, int? projectId)
+        {
+            using (ApplicationContext db = new ApplicationContext()) // обновить выбранный проект
+            {
+                User user = db.Users.FirstOrDefault(u => u.Login == UserLogin);
+                user.SelectedProjectId = projectId;
+                db.SaveChangesAsync();
+            }
+        }
         bool IsCorrect(ref Data.Project project)
         {
             if (project.Name != null && project.Name != "")
@@ -25,7 +34,8 @@ namespace ChadWebCalendar.Data.Services
         }
         public IEnumerable<Project> GetProjects(User user)
         {
-            return db.Projects.Where(proj => proj.User == user);
+            ApplicationContext db1 = new ApplicationContext();
+            return db1.Projects.Where(proj => proj.User == user);
         }
         public Data.User GetUser(string Name)
         {
@@ -61,9 +71,10 @@ namespace ChadWebCalendar.Data.Services
         {
             if (id != null)
             {
-                Project project = db.Projects.FirstOrDefault(p => p.Id == id);
+                Project project = db.Projects.Include(p=>p.User).FirstOrDefault(p => p.Id == id);
                 if (project != null)
                 {
+                    UpdateSelectedProject(project.User.Login, null);
                     var projectDependencies = db.Tasks.Where(t => t.Project == project);
                     foreach (var item in projectDependencies)
                     {
@@ -73,6 +84,20 @@ namespace ChadWebCalendar.Data.Services
                     db.Projects.Remove(project);
                     db.SaveChanges();
                 }
+            }
+        }
+        public void ReceiveSelectedProject(string? nameUser, ref int? projId, ref string projName)
+        {
+            if(nameUser!=null )
+            {
+                User user = db.Users.FirstOrDefault(u => u.Login == nameUser);
+                if (user.SelectedProjectId != null)
+                {
+                    var project = GetProjectById(user.SelectedProjectId);
+                    projId = project.Id;
+                    projName = project.Name;
+                }
+                
             }
         }
     }

@@ -6,7 +6,6 @@ public class UniqueLoginValidator : ValidationAttribute
 {
     protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
-       
         using (ApplicationContext db = new ApplicationContext())
         {
             User u = db.Users.FirstOrDefault(u => u.Login == value.ToString());

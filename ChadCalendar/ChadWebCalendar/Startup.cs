@@ -55,6 +55,7 @@ namespace ChadWebCalendar
             services.AddScoped<NotificationService>();
             services.AddScoped<TooltipService>();
             services.AddScoped<ContextMenuService>();
+            services.AddScoped<TooltipService>();
             services.AddBlazoredModal();
             services.AddBlazoredToast();
             services.AddAntDesign();

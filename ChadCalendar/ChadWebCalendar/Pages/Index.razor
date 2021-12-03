@@ -1,9 +1,4 @@
 ﻿@page "/"
-<head>
-    <title>showme</title>
-</head>
-
-@using ChadWebCalendar.Components.Events
 @using ChadWebCalendar.Components.Tasks
 @using ChadWebCalendar.Components
 @using ChadWebCalendar.Components.Projects
@@ -66,38 +61,27 @@
     private Task<AuthenticationState> authenticationState { get; set; }
     private List<ChadWebCalendar.Data.Task> Tasks = new List<ChadWebCalendar.Data.Task>();
     private IList<Claim> userClaim = new List<Claim>();
-    string _title;
     NotificationsWorker notificationWorker = new NotificationsWorker();
     private LoginModel model = new LoginModel();
+
+    public int? projId;
+    public string? projName;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        _title = DateTime.Now.ToString();
-        if (!notificationWorker.IsStarted && authenticationState.Result.User.Identity.Name != null)
-        {
-            NotificationsWorker.Username = authenticationState.Result.User.Identity.Name;
-            notificationWorker.Start();
-            notificationWorker.NotificationReadyToShow += showNotification;
-            notificationWorker.IsStarted = true;
-        }
-        if (authenticationState.Result.User.Identity.Name != null)
-        {
-            using (ApplicationContext db = new ApplicationContext()) // для получения первого проекта
-            {
-                User user = db.Users.FirstOrDefault(u => u.Login == authenticationState.Result.User.Identity.Name);
-                projId = projectService.GetProjects(user).FirstOrDefault()?.Id;
-                projName = projectService.GetProjects(user).FirstOrDefault()?.Name;
-            }
-        }
+        notificationWorker.WorkerInitialization(authenticationState.Result.User.Identity.Name);
+        notificationWorker.NotificationReadyToShow += showNotification;
+        projectService.ReceiveSelectedProject(authenticationState.Result.User.Identity.Name, ref projId, ref projName);
     }
+    
     public void Dispose()
     {
         notificationWorker.Stop();
     }
-    private void Distribute()
+    private async void Distribute(int? projectId)
     {
+        await DialogService.OpenAsync<TaskDistributorPage>($"👩‍💼 Распланировать задачи из проекта: {projName} 👩‍💼",
+            new Dictionary<string, object> { { "projectId", projectId } });
 
-        TaskDistributor.Distribute((int)projId,DistributionType.Evenly);
-        NavigationManager.NavigateTo("/", true);
     }
 
     private void showNotification()
@@ -106,20 +90,16 @@
             toastService.ShowInfo($"{item}");
         JSRuntime.InvokeVoidAsync("setTitle", "You have notification");
     }
-
+    
     private async void CreateTaskPage()
     {
         await DialogService.OpenAsync<TaskAdd>("Добавить задачу");
-        //notificationWorker.Stop();
-        //await _accountService.LogoutAsync();
     }
 
     private async void EditProjectPage(int? projectId)
     {
         await DialogService.OpenAsync<ProjectEdit>("Редактировать проект",
             new Dictionary<string, object> { { "projectId", projectId } });
-        //notificationWorker.Stop();
-        // await _accountService.LogoutAsync();
     }
 
     private async void Logout()
@@ -127,14 +107,11 @@
         notificationWorker.Stop();
         await _accountService.LogoutAsync();
     }
+
     private void GetProjectId(Project pr)
     {
         projId = pr.Id;
         projName = pr.Name;
+        projectService.UpdateSelectedProject(authenticationState.Result.User.Identity.Name,  (int)projId);
     }
-    bool visibleEvent = false;
-    bool visibleProject = false;
-    bool visibleEditProject = false;
-    public int? projId;
-    public string? projName;
 }
