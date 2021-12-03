@@ -154,6 +154,7 @@
         }
         void mutation()
         {
+            updateTask();
             taskService.Mutatuion(task.Id, authenticationState.Result.User.Identity.Name, startsAt);
             redirectToIndex();
 
