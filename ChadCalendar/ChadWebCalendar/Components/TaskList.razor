@@ -9,23 +9,25 @@
 <div class="list-group" style="height: 800px; width: 100%; overflow: auto; font-size: 30px; word-wrap: break-word ">
     @foreach (var task in taskService.GetTasks(user))
     {
-        if (task.Project != null && task.Project.Id == projectId)
+        if (task.Project.Id != null && task.Project.Id == projectId)
         {
             <button type="button" class="list-group-item list-group-item-success btn btn-light" @onclick="() => ChangeIsCompleted(task.Id)">
                 <div class="task_container" Style="justify-content: space-between;">
                     @if (task.IsCompleted == false)
-                        {
-                            @task.Name
-                        }
-                        else
-                        {
-                            <s>@task.Name</s>
-                        }
-                    <Button @onclick="() => EditTaskPage(task.Id)">
-                            &#9881;
-                    </Button>
+                    {
+                        @task.Name
+                    }
+                    else
+                    {
+                        <s>@task.Name</s>
+                    }
+                    
                 </div>
+                
             </button>
+            <Button @onclick="() => EditTaskPage(task.Id)">
+                &#9881;
+            </Button>
         }
     }
 </div>
