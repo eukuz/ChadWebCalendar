@@ -85,7 +85,7 @@
             <Dropdown Placement="@Placement.BottomCenter">
                 <Overlay>
                     <Menu>
-                        <span style="padding: 15px">Выберите проект</span>
+                        <span style="margin: 15px">Выберите проект</span>
                         @foreach (var project in projectService.GetProjects(user))
                         {
                             <input style="width: 100%" class="list-group-item" type="button" @onclick="() => migration(project.Id)" value="@project.Name" />

@@ -92,17 +92,9 @@
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     string userName;
 
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    private void addEvent(Appointment model)
     {
         userName = authenticationState.Result.User.Identity.Name;
-    }
-
-    private async System.Threading.Tasks.Task addEvent()
-    {
-        if (String.IsNullOrWhiteSpace(model.Text))
-        {
-            model.Text = "(Нет заголовка)";
-        }
         _event = new Event
         {
             Name = model.Text,
@@ -110,12 +102,10 @@
             StartsAt = model.Start,
             FinishesAt = model.End,
             Frequency = model.Frequency,
-            RemindNMinutesBefore = model.RemindNMinutesBefore,
-            Id = (int)model.Id
+            RemindNMinutesBefore = model.RemindNMinutesBefore
         };
         if (eventService.Create(_event, userName))
         {
-            await OnInitializedAsync();
             DialogService.Close(model);
         }
         NavigationManager.NavigateTo("/", true);
@@ -129,6 +119,6 @@
 
     void OnSubmit(Appointment model)
     {
-        addEvent();
+        addEvent(model);
     }
 }
