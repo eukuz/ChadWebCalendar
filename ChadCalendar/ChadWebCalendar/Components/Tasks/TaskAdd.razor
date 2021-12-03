@@ -55,11 +55,11 @@
             }
         </select>
     </div>
-    <div class="form-group">
+    <div class="form-group" hidden>
         <label>Максимум в день</label>
         <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
     </div>
-    <div class="form-group">
+    <div class="form-group" hidden>
         <label>Частота</label>
         <select @bind="task.Frequency">
             <option disabled>Частота</option>
