@@ -43,7 +43,7 @@
 
     private void Distribute(DistributionType distributionType)
     {
-        TaskDistributor.Distribute(projectId, DistributionType.Evenly);
+        TaskDistributor.Distribute(projectId, distributionType);
         navigationManager.NavigateTo("/", true);
     }
 }
