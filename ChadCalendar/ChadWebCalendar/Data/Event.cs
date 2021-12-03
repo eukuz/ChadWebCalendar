@@ -20,12 +20,12 @@ namespace ChadWebCalendar.Data
                 return true;
         }
         public Event(){} // Default constructor
-        public Event (Task task, DateTime startsAt, int remindNMunutesBefore)
+        public Event(Task task, DateTime startsAt, int remindNMunutesBefore)
         {
             Accessed = DateTime.Now;
             Description = task.Description;
             StartsAt = startsAt;
-            FinishesAt = (DateTime)(startsAt +(task.TimeTakes == null ? (new TimeSpan(0,15,0)) : task.TimeTakes));
+            FinishesAt = (DateTime)(startsAt + (task.TimeTakes == null ? (new TimeSpan(0, 15, 0)) : task.TimeTakes));
             Frequency = task.Frequency;
             Name = task.Name;
             NRepetitions = task.NRepetitions;

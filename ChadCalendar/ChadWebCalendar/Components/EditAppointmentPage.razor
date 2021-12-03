@@ -85,18 +85,18 @@
             <Dropdown Placement="@Placement.BottomCenter">
                 <Overlay>
                     <Menu>
-                        <span style="padding: 15px">Выберите проект</span>
+                        <span style="margin: 15px">Выберите проект</span>
                         @foreach (var project in projectService.GetProjects(user))
                         {
                             <input style="width: 100%" class="list-group-item" type="button" @onclick="() => migration(project.Id)" value="@project.Name" />
                         }
                     </Menu>
                 </Overlay>
-        <ChildContent>
-            <RadzenButton ButtonType="Radzen.ButtonType.Button" Style="background-color: black; min-height: 50px">Сделать задачей</RadzenButton>
-        </ChildContent>
-        </Dropdown>
-    </div>
+                <ChildContent>
+                    <RadzenButton ButtonType="Radzen.ButtonType.Button" Style="background-color: black; min-height: 50px">Сделать задачей</RadzenButton>
+                </ChildContent>
+            </Dropdown>
+        </div>
     </div>
 </RadzenTemplateForm>
 @code {
@@ -132,10 +132,6 @@
 
     void editEvent()
     {
-        if (String.IsNullOrWhiteSpace(model.Text))
-        {
-            model.Text = "(Нет заголовка)";
-        }
         _event = getEvent();
         _event.Name = model.Text;
         _event.Description = model.Description;
@@ -143,7 +139,7 @@
         _event.StartsAt = model.Start;
         _event.FinishesAt = model.End;
         _event.RemindNMinutesBefore = model.RemindNMinutesBefore;
-        _event.Id = model.Id;
+        _event.Id = (int)model.Id;
 
         if (eventService.Edit(_event.Id, userName))
         {

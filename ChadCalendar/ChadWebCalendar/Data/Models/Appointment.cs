@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ChadWebCalendar.Data
@@ -16,3 +17,4 @@ namespace ChadWebCalendar.Data
         public DateTime? Accessed { get; set; }
     }
 }
+

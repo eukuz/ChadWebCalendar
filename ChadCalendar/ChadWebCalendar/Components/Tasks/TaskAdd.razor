@@ -2,80 +2,82 @@
 @inject TaskService taskService
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
-<EditForm Model="@taskValidation">
+
+
+<RadzenTemplateForm TItem="Data.Task" Data="@task" Submit=@OnSubmit>
     <DataAnnotationsValidator />
     <ValidationSummary></ValidationSummary>
     <div class="form-group">
         <label for="Name">Название задачи</label>
         <InputText type="text" placeholder="" class="form-control" @bind-Value=task.Name id="Name" />
     </div>
-        <div class="form-group">
-            <label>Время на задачу</label>
-            <input type="text" @bind="tempDT" min="0">
-        </div>
-        <div class="form-group">
-            <label>Описание</label>
-            <textarea class="form-control" type="text" placeholder="" @bind="task.Description"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Дедлайн</label>
-            <input class="form-control" type="datetime-local" @bind="task.Deadline" @bind:format="yyyy-MM-ddTHH:mm" />
-        </div>
-        <div class="form-group">
-            <label>Выберите проект для задачи</label>
-            @if (userProjects != null)
-            {
-                <select @bind="projectId">
-                    <option value="@firstProject.Id">@firstProject.Name</option>
-                    @foreach (var proj in userProjects)
-                    {
-                        if (proj.Id != firstProject.Id)
-                        {
-                            <option value="@proj.Id">@proj.Name</option>
-                        }
-                    }
-                </select>
-            }
-        </div>
-        <div class="form-group">
-            <input type="checkbox" @bind="task.AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
-        </div>
-        <div class="form-group">
-            <label> После какой задачи расположить</label>
-            <select @bind="predecessorIdstr">
-                <option value="После любой">После любой</option>
-                @if (userTasks != null)
+    <div class="form-group">
+        <label>Время на задачу</label>
+        <input type="text" @bind="tempDT" min="0">
+    </div>
+    <div class="form-group">
+        <label>Описание</label>
+        <textarea class="form-control" type="text" placeholder="" @bind="task.Description"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Дедлайн</label>
+        <input class="form-control" type="datetime-local" @bind="task.Deadline" @bind:format="yyyy-MM-ddTHH:mm" />
+    </div>
+    <div class="form-group">
+        <label>Выберите проект для задачи</label>
+        @if (userProjects != null)
+        {
+            <select @bind="projectId">
+                <option value="@firstProject.Id">@firstProject.Name</option>
+                @foreach (var proj in userProjects)
                 {
-                    foreach (var task in userTasks)
+                    if (proj.Id != firstProject.Id)
                     {
-                        <option value="@task.Id.ToString()"> @task.Name </option>
+                        <option value="@proj.Id">@proj.Name</option>
                     }
                 }
             </select>
-        </div>
-        <div class="form-group">
-            <label>Максимум в день</label>
-            <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
-        </div>
-        <div class="form-group">
-            <label>Частота</label>
-            <select @bind="task.Frequency">
-                <option disabled>Частота</option>
-                <option>Никогда</option>
-                <option>Каждый день</option>
-                <option>Каждую неделю</option>
-                <option>Каждый месяц</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            @if (isValidationError)
+        }
+    </div>
+    <div class="form-group">
+        <input type="checkbox" @bind="task.AllowedToDistribute"><label>Задачу можно автоматически распределить</label><br>
+    </div>
+    <div class="form-group">
+        <label> После какой задачи расположить</label>
+        <select @bind="predecessorIdstr">
+            <option value="После любой">После любой</option>
+            @if (userTasks != null)
             {
-                <label>Проверьте правильность заполнения полей</label>
+                foreach (var task in userTasks)
+                {
+                    <option value="@task.Id.ToString()"> @task.Name </option>
+                }
             }
-        </div>
-        <button @onclick="addTask" type="submit" class="btn btn-primary">Готово</button>
-</EditForm>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Максимум в день</label>
+        <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
+    </div>
+    <div class="form-group">
+        <label>Частота</label>
+        <select @bind="task.Frequency">
+            <option disabled>Частота</option>
+            <option>Никогда</option>
+            <option>Каждый день</option>
+            <option>Каждую неделю</option>
+            <option>Каждый месяц</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        @if (isValidationError)
+        {
+            <label>Проверьте правильность заполнения полей</label>
+        }
+    </div>
+    <RadzenButton ButtonType="Radzen.ButtonType.Submit" Style="background-color: blue" Text="Готово" />
+</RadzenTemplateForm>
 
 
 
@@ -83,7 +85,6 @@
         [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
         string predecessorIdstr = "После любой";
         int? projectId = 0;
-        Data.TaskValidation taskValidation = new Data.TaskValidation();
         Data.Task task = new Data.Task();
         Data.User user;
         Data.Project firstProject;
@@ -93,22 +94,23 @@
         bool isValidationError = false;
         protected override async System.Threading.Tasks.Task OnInitializedAsync()
         {
+            taskService.db = new Data.ApplicationContext();
             tempDT = TimeSpan.Parse("00:00:00"); // инициализация для здравого показа
             task.Deadline = null;
             user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
             userTasks = taskService.GetTasks(user);
             userProjects = taskService.GetProjects(user);
-            firstProject = taskService.GetFirstProject(user.Id);
-            projectId = firstProject.Id;
-
-            taskValidation.TimeTakes = task.TimeTakes;
+            firstProject = taskService.GetSelectedProject(user);
+            if (firstProject != null)
+                projectId = firstProject.Id;
+            else
+                projectId = (taskService.GetFirstProject(user)).Id;
         }
         void addTask()
         {
             if (tempDT != null)
             {
                 task.TimeTakes = tempDT;
-                taskValidation.TimeTakes = task.TimeTakes;
             }
             if (predecessorIdstr != "После любой")
                 task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
@@ -118,5 +120,10 @@
                 OnInitializedAsync();
             }
             NavigationManager.NavigateTo("/", true);
+        }
+
+        void OnSubmit()
+        {
+            addTask();
         }
     }

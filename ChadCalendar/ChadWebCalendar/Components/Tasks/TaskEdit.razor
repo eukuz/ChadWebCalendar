@@ -2,13 +2,14 @@
 @inject TaskService taskService
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
+@using AntDesign;
 
 
-<EditForm Model="@taskValidation">
+<RadzenTemplateForm TItem="Data.Task" Data="@task" Submit=@OnSubmit>
     <DataAnnotationsValidator />
     <ValidationSummary></ValidationSummary>
     <div class="form-group">
-        <label>Название задачи</label>
+        <label>Название задачи </label>
         <input type="text" placeholder="" @bind="task.Name">
         <ValidationMessage For="() => task" />
     </div>
@@ -76,18 +77,40 @@
             <label>Проверьте правильность заполнения полей</label>
         }
     </div>
-    <button @onclick="updateTask" class="btn btn-primary">Готово</button>
-    <button @onclick="deleteTask" class="btn btn-danger">Удалить задачу</button>
-    <button @onclick="mutation" class="btn btn-dark">Сделать событием</button>
-</EditForm>
+    <div class="row">
+        <div class="col-sm-3">
+            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Style="background-color: blue; min-height: 50px" Text="Готово" />
+        </div>
+        <div class="col-sm-3">
+            <RadzenButton ButtonType="Radzen.ButtonType.Button" Style="background-color: red; min-height: 50px" Text="Удалить" Click="@deleteTask" />
+        </div>
+        <Dropdown Placement="@Placement.BottomCenter">
+            <Overlay>
+                <Menu>
+                    <span style="padding: 15px">Укажите время начала события</span>
+                    <div class="col">
+                        <RadzenDatePicker @bind-Value="@startsAt" Name="Start" ShowTime="true" />
+                    </div>
+                    <div class="col-md-3" style="margin-top: 15px">
+                        <button @onclick="mutation" class="btn btn-dark">Сохранить</button>
+                    </div>
+                </Menu>
+            </Overlay>
+            <ChildContent>
+                <RadzenButton ButtonType="Radzen.ButtonType.Button" Style="background-color: black; min-height: 50px">Сделать событием</RadzenButton>
+            </ChildContent>
+        </Dropdown>
+    </div>
+    
+ </RadzenTemplateForm>
 
     @code {
         [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
         string predecessorIdstr = "После любой";
-        Data.TaskValidation taskValidation = new Data.TaskValidation();
         [Parameter]
         public int? taskId { get; set; }
         int projectId = 0;
+        DateTime startsAt;
         Data.Task task;
         Data.User user;
         TimeSpan? tempDT;
@@ -108,7 +131,7 @@
         }
         void redirectToIndex()
         {
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/", true);
         }
         void deleteTask()
         {
@@ -120,7 +143,6 @@
             if (tempDT != null)
             {
                 task.TimeTakes = tempDT;
-                taskValidation.TimeTakes = task.TimeTakes;
             }
             if (predecessorIdstr != "После любой")
                 task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
@@ -132,8 +154,13 @@
         }
         void mutation()
         {
-            taskService.Mutatuion(task.Id, authenticationState.Result.User.Identity.Name);
+            taskService.Mutatuion(task.Id, authenticationState.Result.User.Identity.Name, startsAt);
             redirectToIndex();
 
+        }
+
+        void OnSubmit()
+        {
+            updateTask();
         }
     }

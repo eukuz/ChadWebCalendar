@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChadCalendar", "ChadCalenda
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorChadCalendar", "BlazorChadCalendar\BlazorChadCalendar.csproj", "{B9F9E921-26CF-49D4-BD7A-165E059DA4FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChadWebCalendar", "ChadWebCalendar\ChadWebCalendar.csproj", "{D1732732-1670-4CEB-8D2F-8FD6D68E5628}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChadWebCalendar", "ChadWebCalendar\ChadWebCalendar.csproj", "{D1732732-1670-4CEB-8D2F-8FD6D68E5628}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

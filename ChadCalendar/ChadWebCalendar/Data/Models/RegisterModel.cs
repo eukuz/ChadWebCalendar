@@ -30,9 +30,8 @@ namespace ChadWebCalendar.Data.Models
                     WorkingHoursFrom = RegisterData.WorkingHoursFrom,
                     WorkingHoursTo = RegisterData.WorkingHoursTo,
                     TimeZone = RegisterData.Timezone,
-                    RemindEveryNDays = 5
+                    RemindEveryNDays = 5,
                 };
-                db.Users.Add(user);
                 //Добавляем дефолтные данные
                 Project project = new Project
                 {
@@ -42,11 +41,13 @@ namespace ChadWebCalendar.Data.Models
                     IconNumber = "📝",
                     Description = "Базовый список задач"
                 };
+                db.Users.Add(user);
                 db.Projects.Add(project);
                 db.Tasks.Add(new Task { Name = "Создать задачу", TimeTakes = new TimeSpan(0, 5, 0), NRepetitions = 0, User = user, Project = project, Accessed = DateTime.Now });
                 db.Tasks.Add(new Task { Name = "Создать событие", TimeTakes = new TimeSpan(0, 10, 0), NRepetitions = 0, User = user, Project = project, Accessed = DateTime.Now });
                 db.SaveChanges();
-
+                user.SelectedProject = project;
+                db.SaveChanges();
                 LoginModel login = new LoginModel();
                 login.LoginData.model.Login = user.Login;
                 login.LoginData.model.Password = user.Password;

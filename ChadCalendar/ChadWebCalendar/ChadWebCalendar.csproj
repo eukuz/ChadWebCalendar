@@ -26,4 +26,17 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Tasks\TaskAddTesting.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Tasks\TaskEditTesting.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Projects\ProjectAddPage.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Projects\ProjectEditPage.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Events\EventAddPage.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Events\EventEditPage.razor" />
+  </ItemGroup>
+
 </Project>
