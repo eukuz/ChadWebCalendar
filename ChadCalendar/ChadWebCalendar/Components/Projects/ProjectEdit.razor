@@ -9,20 +9,20 @@
     <ValidationSummary></ValidationSummary>
     <div class="form-group">
         <label>Название проекта</label>
-        <input class="form-control" type="text" placeholder="" @bind="project.Name">
+        <input class="form-control" type="text" placeholder="" style="width: 250px;" @bind="project.Name">
     </div>
     <div class="form-group">
         <label>Описание</label>
-        <textarea class="form-control" type="text" placeholder="" @bind="project.Description"></textarea>
+        <textarea class="form-control" type="text" placeholder="" @bind="project.Description" style="width: 250px;" ></textarea>
     </div>
     <div class="form-group">
         <label asp-for="NRepetitions" class="control-label">Количество повторений в неделю</label>
-        <input class="form-control" type="number" @bind="project.NRepetitions" min="0">
+        <input class="form-control" type="number" @bind="project.NRepetitions" min="0" style="width: 250px;">
         <span asp-validation-for="NRepetitions" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label>Частота</label>
-        <select @bind="project.Frequency">
+        <select @bind="project.Frequency"  style="width: 250px">
             <option>Никогда</option>
             <option>Каждый день</option>
             <option>Каждую неделю</option>
@@ -31,11 +31,11 @@
     </div>
     <div class="form-group">
         <label>Введите время дедлайна</label>
-        <input type="datetime-local" @bind="project.Deadline" @bind:format="yyyy-MM-ddTHH:mm" />
+        <input type="datetime-local" @bind="project.Deadline" @bind:format="yyyy-MM-ddTHH:mm" style="width: 250px;" />
     </div>
     <div class="form-group">
         <label>Выберите иконку</label>
-        <select @bind="project.IconNumber">
+        <select style="width: 100px" @bind="project.IconNumber">
             <option selected>😍</option>
             <option>🤠</option>
             <option>😀</option>
@@ -45,45 +45,6 @@
             <option>😈</option>
         </select>
     </div>
-
-<div class="form-group">
-    <label>Название события</label>
-    <input class="form-control" type="text" placeholder="" @bind="project.Name" style="width: 250px;">
-</div>
-<div class="form-group">
-    <label>Описание</label>
-    <textarea class="form-control" type="text" placeholder="" @bind="project.Description" style="width: 250px;"></textarea>
-</div>
-<div class="form-group">
-    <label asp-for="NRepetitions" class="control-label">Количество повторений в неделю</label>
-    <input class="form-control" type="number" @bind="project.NRepetitions" min="0" style="width: 250px;">
-    <span asp-validation-for="NRepetitions" class="text-danger"></span>
-</div>
-<div class="form-group">
-    <label>Частота</label>
-    <select class="form-select" style="width: 250px" @bind="project.Frequency">
-        <option>Никогда</option>
-        <option>Каждый день</option>
-        <option>Каждую неделю</option>
-        <option>Каждый месяц</option>
-    </select>
-</div>
-<div class="form-group">
-    <label>Введите время дедлайна</label>
-    <input class="form-control" type="datetime-local" @bind="project.Deadline" @bind:format="yyyy-MM-ddTHH:mm" style="width: 250px;" />
-</div>
-<div class="form-group">
-    <label>Выберите иконку</label>
-    <select class="form-select" style="width: 100px" @bind="project.IconNumber">
-        <option selected>😍</option>
-        <option>🤠</option>
-        <option>😀</option>
-        <option>⛹</option>
-        <option>☕</option>
-        <option>⌚</option>
-        <option>😈</option>
-    </select>
-</div>
 
     <div class="row">
         <div class="col-sm-3">
