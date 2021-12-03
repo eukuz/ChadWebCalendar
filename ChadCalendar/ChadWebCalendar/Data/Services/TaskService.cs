@@ -45,10 +45,8 @@ namespace ChadWebCalendar.Data.Services
         }
         public IEnumerable<Data.Task> GetTasks(User user)
         {
-            using (ApplicationContext db1 = new ApplicationContext())
-            {
-                return db.Tasks.Include(t => t.Project).Where(task => task.User == user);
-            }
+            ApplicationContext db1 = new ApplicationContext();
+            return db1.Tasks.Include(t => t.Project).Where(task => task.User == user);
         }
         public Data.Task GetPredecessor(int? id)
         {
