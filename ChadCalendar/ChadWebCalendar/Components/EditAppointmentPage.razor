@@ -132,10 +132,6 @@
 
     void editEvent()
     {
-        if (String.IsNullOrWhiteSpace(model.Text))
-        {
-            model.Text = "(Нет заголовка)";
-        }
         _event = getEvent();
         _event.Name = model.Text;
         _event.Description = model.Description;
