@@ -43,7 +43,7 @@ namespace ChadWebCalendar.Data.Services
                 if (item != null)
                 {
                     item.StartsAt = item.StartsAt.AddMinutes(-item.RemindNMinutesBefore);
-                    if (item.StartsAt <= dt)
+                    if (item.StartsAt == dt)
                     {
                         string stripped;
                         if (item.StartsAt.ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
