@@ -11,8 +11,8 @@
     {
         if (task.Project.Id != null && task.Project.Id == projectId)
         {   <div style="display:flex; width: 100%">
-                <button type="button" class="list-group-item list-group-item-success btn btn-light" @onclick="() => ChangeIsCompleted(task.Id)" style="width: 100%; overflow: hidden; word-break:break-all;">
-                    <div class="task_container" Style="justify-content: space-between; overflow:hidden;">
+                <button type="button" class="list-group-item list-group-item-success btn btn-light" @onclick="() => ChangeIsCompleted(task.Id)" style="width: 100%; overflow: hidden; word-break:break-word;">
+                    <div class="task_container" Style="justify-content: space-between; overflow:hidden; max-width: 100%;">
                         @if (task.IsCompleted == false)
                         {
                             @task.Name
