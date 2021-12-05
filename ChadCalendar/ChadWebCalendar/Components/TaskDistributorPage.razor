@@ -1,0 +1,49 @@
+﻿@using ChadWebCalendar.Data
+@using ChadWebCalendar.Data.Services
+@inject NavigationManager navigationManager
+@inject TooltipService tooltipService
+
+<div style="display: flex; flex-direction: column; margin: 0 auto;">
+    <RadzenButton Text="Равномерно" MouseEnter="@(args => ShowTooltipEvenly(args, new TooltipOptions() { Position = TooltipPosition.Bottom, Duration = null, Style = "background-color: #000; color:#fff; font-size: 1.5rem" }))" 
+                  Click="() => Distribute(DistributionType.Evenly)" 
+                  Style="background-color: #6c757d; min-width: 350px; min-height: 80px; margin: 30px auto; font-size: 1.5rem" />
+    <RadzenButton Text="Лучшее соответствие" MouseEnter="@(args => ShowTooltipBestFit(args, new TooltipOptions() { Position = TooltipPosition.Bottom, Duration = null, Style = "background-color: #000; color:#fff; font-size: 1.5rem" }))" 
+                  Click="() => Distribute(DistributionType.BestFit)" 
+                  Style="background-color: #6c757d; min-width: 350px; min-height: 80px; margin: 30px auto; font-size: 1.5rem " />
+    <RadzenButton Text="Максимум в начале" MouseEnter="@(args => ShowTooltipBeginning(args, new TooltipOptions() { Position = TooltipPosition.Bottom, Duration = null, Style = "background-color: #000; color:#fff; font-size: 1.5rem" }))" 
+                  Click="() => Distribute(DistributionType.MaxInTheBeginning)" 
+                  Style="background-color: #6c757d; min-width: 350px; min-height: 80px; margin: 30px auto; font-size: 1.5rem " />
+    <RadzenButton Text="Максимум в конце" MouseEnter="@(args => ShowTooltipEnd(args, new TooltipOptions() { Position = TooltipPosition.Bottom, Duration = null, Style = "background-color: #000; color:#fff; font-size: 1.5rem" }))" 
+                  Click="() => Distribute(DistributionType.MaxInTheEnd)" 
+                  Style="background-color: #6c757d; min-width: 350px; min-height: 80px; margin: 30px auto; font-size: 1.5rem " />
+</div>
+
+
+@code {
+    [Parameter]
+    public int projectId { get; set; }
+
+    void ShowTooltipEvenly(ElementReference elementReference, TooltipOptions options = null)
+    {
+        tooltipService.Open(elementReference, "Постараться выровнять нагрузку среди оставшихся рабочих дней ⚖️", options);
+    }
+    void ShowTooltipBestFit(ElementReference elementReference, TooltipOptions options = null)
+    {
+        tooltipService.Open(elementReference, "Сэкономить время и найти самый узкий подходящий промежуток для каждой задачи 🧠", options);
+    }
+    void ShowTooltipBeginning(ElementReference elementReference, TooltipOptions options = null)
+    {
+        tooltipService.Open(elementReference, "Распределить задачи как можно раньше, подходит для королей продуктивности 👑", options);
+    }
+    void ShowTooltipEnd(ElementReference elementReference, TooltipOptions options = null)
+    {
+        tooltipService.Open(elementReference, "Отложить задачи на самый поздний момент. Аккуратно! Прокрастинация опасна! ☠️", options);
+    }
+
+
+    private void Distribute(DistributionType distributionType)
+    {
+        TaskDistributor.Distribute(projectId, distributionType);
+        navigationManager.NavigateTo("/", true);
+    }
+}

@@ -14,8 +14,41 @@ namespace ChadWebCalendar.Data
         BestFit,
         MaxInTheEnd
     }
+    public class DayHolder
+    {
+        public DateTime date;
+        public TimeSpan freetime;
+
+        public DayHolder(DateTime date, TimeSpan freetime)
+        {
+            this.date = date;
+            this.freetime = freetime;
+        }
+    }
     public static class TaskDistributor
     {
+
+        private static List<TimeSlot> SortForEvenly(List<TimeSlot> freeTimeSlots, DateTime endOfWeek, int workingHoursTo)//For now, assyming timeslot.start.Date = timeslot.finish.Date
+        {
+
+            int totalDays = (int)Math.Ceiling((endOfWeek - DateTime.Now).TotalDays);
+            List<DayHolder> days = new List<DayHolder>();
+            for (int i = 0 ; i < totalDays; i++)
+                days.Add(new DayHolder(DateTime.Today.AddDays(i+(DateTime.Now.Hour < workingHoursTo ? 0 : 1)), new TimeSpan(0, 0, 0)));
+
+            foreach (TimeSlot freeSlot in freeTimeSlots)
+                days.FirstOrDefault(d => d.date == freeSlot.start.Date).freetime += freeSlot.GetTimeSpan;
+
+
+            days = days.OrderByDescending(d => d.freetime).ToList();
+
+            List<TimeSlot> newFreeTimeSlots = new List<TimeSlot>();
+
+            foreach (DayHolder day in days)
+                newFreeTimeSlots.AddRange(freeTimeSlots.Where(t => t.start.Date == day.date).OrderBy(t => t.GetTimeSpan));
+
+            return newFreeTimeSlots;
+        }
         public static void Distribute(int projId, DistributionType distributionType)
         {
 
@@ -40,26 +73,27 @@ namespace ChadWebCalendar.Data
 
                 if (distributionType == DistributionType.Evenly)
                 {
-                    freeTimeSlots = freeTimeSlots.OrderBy(e => e.start).ToList();
+                    freeTimeSlots = SortForEvenly(freeTimeSlots, endOfWeek, user.WorkingHoursTo);
 
                     for (int j = 0; j < tasks.Count; j++)
-                        for (int i = 0; i < freeTimeSlots.Count; i++)
+                        for (int i = 0; i < freeTimeSlots.Count; i++, i++)
+                        {
                             if (!pickedTasks[j] && (tasks[j].TimeTakes <= freeTimeSlots[i].GetTimeSpan))
                             {
                                 pickedTasks[j] = true;
                                 distributedTasks.Add(new Event(tasks[j], freeTimeSlots[i].start, 15));
                                 freeTimeSlots[i].start += (TimeSpan)tasks[j].TimeTakes;
 
-                                switchTimeSlots(freeTimeSlots, i);
+                                freeTimeSlots = SortForEvenly(freeTimeSlots, endOfWeek, user.WorkingHoursTo);
 
                                 break;
                             }
-
+                        }
                 }
                 else
                 {
                     if (distributionType == DistributionType.MaxInTheBeginning) freeTimeSlots = freeTimeSlots.OrderBy(e => e.start).ToList();
-                    else if ( distributionType == DistributionType.MaxInTheEnd) freeTimeSlots = freeTimeSlots.OrderByDescending(e => e.start).ToList();
+                    else if (distributionType == DistributionType.MaxInTheEnd) freeTimeSlots = freeTimeSlots.OrderByDescending(e => e.start).ToList();
                     else if (distributionType == DistributionType.BestFit) freeTimeSlots = freeTimeSlots.OrderBy(e => e.GetTimeSpan).ToList();
 
                     for (int i = 0; i < freeTimeSlots.Count; i++)

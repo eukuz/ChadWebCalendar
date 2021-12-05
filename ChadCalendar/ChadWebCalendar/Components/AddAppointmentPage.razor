@@ -7,9 +7,9 @@
 @using ChadWebCalendar.Data
 @inject NotificationService NotificationService
 
-<RadzenTemplateForm TItem="Appointment" Data="@model">
+<RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
     <DataAnnotationsValidator />
-    <ValidationSummary />
+    <ValidationSummary></ValidationSummary>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
             <RadzenLabel Text="Название" />
@@ -71,18 +71,10 @@
             </div>
         </div>
     </div>
-    <div class="row" style="margin-bottom: 16px">
-        <div class="col-md-3">
-            <RadzenLabel Text="Выберите цвет" />
-        </div>
-        <div class="col">
-            <input type="color" name="head" value="#e66465">
-        </div>
-    </div>
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
-            <button @onclick="addEvent" class="btn btn-primary">Готово</button>
+            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Style="background-color: blue" Text="Готово" />
         </div>
     </div>
 </RadzenTemplateForm>
@@ -100,17 +92,9 @@
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     string userName;
 
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    private void addEvent(Appointment model)
     {
         userName = authenticationState.Result.User.Identity.Name;
-    }
-
-    private async System.Threading.Tasks.Task addEvent()
-    {
-        if (String.IsNullOrWhiteSpace(model.Text))
-        {
-            model.Text = "(Нет заголовка)";
-        }
         _event = new Event
         {
             Name = model.Text,
@@ -118,19 +102,13 @@
             StartsAt = model.Start,
             FinishesAt = model.End,
             Frequency = model.Frequency,
-            RemindNMinutesBefore = model.RemindNMinutesBefore,
-            Id = model.Id
+            RemindNMinutesBefore = model.RemindNMinutesBefore
         };
         if (eventService.Create(_event, userName))
         {
-            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Событие добавлено", Detail = "Добавление события", Duration = 2000 });
-            await OnInitializedAsync();
             DialogService.Close(model);
         }
-        else
-        {
-            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Введена некорректная дата", Detail = "Добавление события", Duration = 3000 });
-        }
+        NavigationManager.NavigateTo("/", true);
     }
 
     protected override void OnParametersSet()
@@ -139,8 +117,8 @@
         model.End = End;
     }
 
-    void ShowNotification(NotificationMessage message)
+    void OnSubmit(Appointment model)
     {
-        NotificationService.Notify(message);
+        addEvent(model);
     }
 }
