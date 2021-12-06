@@ -113,7 +113,7 @@
                 task.TimeTakes = tempDT;
             }
             if (predecessorIdstr != "После любой")
-                task.Predecessor = taskService.GetPredecessor(Convert.ToInt32(predecessorIdstr));
+                task.Predecessor = taskService.GetTask(Convert.ToInt32(predecessorIdstr));
             if (taskService.AddTask(task, projectId, user))
             {
                 task = new Data.Task();

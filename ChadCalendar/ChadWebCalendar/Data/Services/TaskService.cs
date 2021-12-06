@@ -51,7 +51,10 @@ namespace ChadWebCalendar.Data.Services
         public Data.Task GetPredecessor(int? id)
         {
             if (id != null)
-                return db.Tasks.FirstOrDefault(t => t.Id == id);
+            {
+                Data.Task _task = db.Tasks.Include(t => t.Predecessor).FirstOrDefault(t => t.Id == id);
+                return _task.Predecessor;
+            }
             else
                 return null;
         }
@@ -59,12 +62,18 @@ namespace ChadWebCalendar.Data.Services
         {
             return db.Users.FirstOrDefault(u => u.Login == Name);
         }
+        public string GetNameOfTask(int? id)
+        {
+            if (id == -1)
+                return "После любой";
+            Data.Task _task = GetTask(id);
+            return _task.Name;
+        }
         public bool AddTask(Data.Task task, int? projectId, User user)
         {
             task.User = user;
             task.Accessed = DateTime.Now;
             task.NRepetitions = 1;
-            task.Predecessor = GetPredecessor(91);
             task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId);
             if (IsCorrect(task))
             {
@@ -79,8 +88,6 @@ namespace ChadWebCalendar.Data.Services
             User user = db.Users.FirstOrDefault(u => u.Login == Name);
             task.Accessed = DateTime.Now;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId); // это странное выражение нужно потому что в модели передается только Id
-            //Models.Task tempTask = task.Predecessor;
-            task.Predecessor = GetPredecessor(91/*task.Predecessor.Id*/);
             if (IsCorrect(task))
             {
                 db.Tasks.Update(task);
