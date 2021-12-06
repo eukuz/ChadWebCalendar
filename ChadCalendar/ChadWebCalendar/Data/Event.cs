@@ -12,13 +12,7 @@ namespace ChadWebCalendar.Data
         [Required]
         public DateTime FinishesAt { get; set; }
         public int RemindNMinutesBefore { get; set; }
-        public bool IsCorrect()
-        {
-            if ((StartsAt >= FinishesAt) || RemindNMinutesBefore < 0 || Name == null || StartsAt == null || FinishesAt == null)
-                return false;
-            else
-                return true;
-        }
+
         public Event(){} // Default constructor
         public Event(Task task, DateTime startsAt, int remindNMunutesBefore)
         {
