@@ -10,7 +10,7 @@ public class StartAndEndTimeValidator : ValidationAttribute
     {
         StartEndTimeModel model = value as StartEndTimeModel;
         if (model.Start >= model.End)
-            return new ValidationResult($"Введите корректное значение времени начала и конца события");
+            return new ValidationResult($"Дата начала события не может быть позже даты окончания события");
         return null;
     }
 }

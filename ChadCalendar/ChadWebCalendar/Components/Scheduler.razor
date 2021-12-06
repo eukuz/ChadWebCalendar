@@ -1,7 +1,7 @@
 ﻿@using ChadWebCalendar.Data
 @inject DialogService DialogService
 
-<RadzenScheduler @ref=@scheduler style="height: 800px;" TItem="Appointment" Data=@appointments StartProperty="StartEndTime.model.Start" EndProperty="StartEndTime.model.End"
+<RadzenScheduler @ref=@scheduler style="height: 800px;" TItem="Appointment" Data=@appointments StartProperty="StartEndTime.Start" EndProperty="StartEndTime.End"
                  TextProperty="Text" SelectedIndex="1"
                  SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect>
     <RadzenDayView StartTime=StartTime EndTime=EndTime/>
@@ -33,8 +33,8 @@
             appointment.Text = item.Name;
             appointment.Description = item.Description;
             appointment.Frequency = item.Frequency;
-            appointment.StartEndTime.model.Start = item.StartsAt;
-            appointment.StartEndTime.model.End = item.FinishesAt;
+            appointment.StartEndTime.Start = item.StartsAt;
+            appointment.StartEndTime.End = item.FinishesAt;
             appointment.RemindNMinutesBefore = item.RemindNMinutesBefore;
             appointment.Id = item.Id;
             appointment.Accessed = item.Accessed;

@@ -14,27 +14,19 @@ namespace ChadWebCalendar.Data
         public int? Id { get; set; }
         public DateTime? Accessed { get; set; }
 
-        public StartEndTimeModelValidation StartEndTime { get; set; }
+        [StartAndEndTimeValidator]
+        public StartEndTimeModel StartEndTime { get; set; }
 
         public Appointment()
         {
-            StartEndTime = new StartEndTimeModelValidation { model = new StartEndTimeModel() };
+            StartEndTime = new StartEndTimeModel();
         }
     }
 
     public class StartEndTimeModel
     {
-        [Required]
         public DateTime Start { get; set; }
-        [Required]
         public DateTime End { get; set; }
     }
-    public class StartEndTimeModelValidation
-    {
-        [Required]
-        [StartAndEndTimeValidator]
-        public StartEndTimeModel model { get; set; }
-    }
-
 }
 
