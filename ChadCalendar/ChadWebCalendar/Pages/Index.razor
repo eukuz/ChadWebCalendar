@@ -62,14 +62,14 @@
     private LoginModel model = new LoginModel();
 
     public int? projId;
-    public string? projName;
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    public string projName;
+    protected override void OnInitialized()
     {
         notificationWorker.WorkerInitialization(authenticationState.Result.User.Identity.Name);
         notificationWorker.NotificationReadyToShow += showNotification;
         projectService.ReceiveSelectedProject(authenticationState.Result.User.Identity.Name, ref projId, ref projName);
     }
-    
+
     public void Dispose()
     {
         notificationWorker.Stop();
@@ -87,7 +87,7 @@
             toastService.ShowInfo($"{item}");
         JSRuntime.InvokeVoidAsync("setTitle", "You have notification");
     }
-    
+
     private async void CreateTaskPage()
     {
         await DialogService.OpenAsync<TaskAdd>("Добавить задачу");

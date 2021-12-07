@@ -35,7 +35,7 @@
 @code {
     Data.User user;
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
         tasks = taskService.GetTasks(user);
@@ -46,10 +46,6 @@
     IEnumerable<Data.Task> tasks;
 
     public int? taskId { get; set; }
-
-    bool destroyModal = false;
-
-    bool visibleEditTask = false;
 
     private async System.Threading.Tasks.Task EditTaskPage(int? taskId)
     {

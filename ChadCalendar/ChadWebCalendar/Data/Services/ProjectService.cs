@@ -67,7 +67,7 @@ namespace ChadWebCalendar.Data.Services
             }
             return false;
         }
-        public async void Delete(int? id)
+        public void Delete(int? id)
         {
             if (id != null)
             {
@@ -80,13 +80,12 @@ namespace ChadWebCalendar.Data.Services
                     {
                         item.Project = null;
                     }
-                    db.SaveChanges();
                     db.Projects.Remove(project);
                     db.SaveChanges();
                 }
             }
         }
-        public void ReceiveSelectedProject(string? nameUser, ref int? projId, ref string projName)
+        public void ReceiveSelectedProject(string nameUser, ref int? projId, ref string projName)
         {
             if(nameUser!=null )
             {
