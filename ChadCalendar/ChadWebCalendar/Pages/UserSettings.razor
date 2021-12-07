@@ -30,14 +30,14 @@
         <label for="remindeveryndays">Напоминать про забытые задачи каждые N дней</label>
         <InputNumber id="timezone" @bind-Value="SettingsData.RemindEveryNDays" class="form-control" />
 
-        <p class="my-4"><button type="submit" class="btn btn-primary">Сохранить</button>
-                        <a type="button" href="/" class="btn btn-primary">Назад</a></p>
-
+        <p class="my-4">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a type="button" href="/" class="btn btn-primary">Назад</a>
+        </p>
     </EditForm>
 </div>
 
 @code {
-
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     protected override System.Threading.Tasks.Task OnInitializedAsync()
     {
@@ -52,9 +52,9 @@
             ConfirmPassword = user.Password,
             Timezone = user.TimeZone,
             RemindEveryNDays = user.RemindEveryNDays,
-            // тут не принимает WorkingHours.WorkingHoursFrom
+            WorkingHours = new UserSettingsViewModel.
+            WorkingHoursModel { WorkingHoursFrom = user.WorkingHoursFrom, WorkingHoursTo = user.WorkingHoursTo }
         };
         return base.OnInitializedAsync();
     }
-
 }

@@ -20,10 +20,10 @@
         <InputText id="ConfirmPassword" @bind-Value="RegisterData.ConfirmPassword" class="form-control" />
 
         <label for="workinghoursfrom">Рабочие часы начинаются с</label>
-        <InputNumber id="workinghoursfrom" @bind-Value="RegisterData.WorkingHoursFrom" class="form-control" />
+        <InputNumber id="workinghoursfrom" @bind-Value="RegisterData.RegisterWorkingHours.WorkingHoursFrom" class="form-control" />
 
         <label for="workinghoursto">Рабочие часы длятся до</label>
-        <InputNumber id="workinghoursto" @bind-Value="RegisterData.WorkingHoursTo" class="form-control" />
+        <InputNumber id="workinghoursto" @bind-Value="RegisterData.RegisterWorkingHours.WorkingHoursTo" class="form-control" />
 
         <label for="timezone">Часовой пояс UTC</label>
         <InputNumber id="timezone" @bind-Value="RegisterData.Timezone" class="form-control" />

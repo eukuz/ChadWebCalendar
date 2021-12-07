@@ -27,8 +27,8 @@ namespace ChadWebCalendar.Data.Models
                 {
                     Login = RegisterData.Login,
                     Password = RegisterData.Password,
-                    WorkingHoursFrom = RegisterData.WorkingHoursFrom,
-                    WorkingHoursTo = RegisterData.WorkingHoursTo,
+                    WorkingHoursFrom = RegisterData.RegisterWorkingHours.WorkingHoursFrom,
+                    WorkingHoursTo = RegisterData.RegisterWorkingHours.WorkingHoursTo,
                     TimeZone = RegisterData.Timezone,
                     RemindEveryNDays = 5,
                 };
@@ -54,12 +54,9 @@ namespace ChadWebCalendar.Data.Models
                 //Авторизация после регистрации
                 await _accountService.LoginAsync(login);
                 NavigationManager.NavigateTo("/", true);
-
             }
         }
     }
-
-
 }
 public class RegisterViewModel
 {
@@ -73,13 +70,23 @@ public class RegisterViewModel
     [Compare("Password", ErrorMessage = "Passwords don't match")]
     public string ConfirmPassword { get; set; }
     [Required]
-    [Range(0, 24)]
-    public int WorkingHoursFrom { get; set; }
-    [Required]
-    [Range(0, 24)]
-    public int WorkingHoursTo { get; set; }
-    [Required]
     [Range(-12, 14)]
     public int Timezone { get; set; }
 
+    [RegisterWorkingHoursValidator]
+    public RegisterWorkingHoursModel RegisterWorkingHours { get; set; }
+
+    public RegisterViewModel()
+    {
+        RegisterWorkingHours = new RegisterWorkingHoursModel();
+    }
+    public class RegisterWorkingHoursModel
+    {
+        [Required]
+        [Range(0, 24)]
+        public int WorkingHoursFrom { get; set; }
+        [Required]
+        [Range(0, 24)]
+        public int WorkingHoursTo { get; set; }
+    }
 }
