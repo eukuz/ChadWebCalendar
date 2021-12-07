@@ -92,7 +92,7 @@
         IEnumerable<Data.Project> userProjects;
         IEnumerable<Data.Task> userTasks;
         bool isValidationError = false;
-        protected override async System.Threading.Tasks.Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             taskService.db = new Data.ApplicationContext();
             tempDT = TimeSpan.Parse("00:00:00"); // инициализация для здравого показа
@@ -117,7 +117,7 @@
             if (taskService.AddTask(task, projectId, user))
             {
                 task = new Data.Task();
-                OnInitializedAsync();
+                OnInitialized();
             }
             NavigationManager.NavigateTo("/", true);
         }

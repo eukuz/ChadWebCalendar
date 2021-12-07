@@ -66,7 +66,7 @@ namespace ChadWebCalendar.Data.Services
             if (projectIDforMutation != null)
                 task = new Data.Task(_event, db.Projects.FirstOrDefault(p => p.Id == projectIDforMutation));
             else
-                task = new Data.Task(_event, db.Projects.FirstOrDefault(p => p.Id != null));
+                task = new Data.Task(_event, db.Projects.FirstOrDefault(p => true));
             task.User = user;
             db.Tasks.Add(task);
             db.Events.Remove(_event);

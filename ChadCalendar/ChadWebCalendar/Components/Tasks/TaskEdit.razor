@@ -121,7 +121,7 @@
         IEnumerable<Data.Project> userProjects;
         IEnumerable<Data.Task> userTasks;
         bool isValidationError = false;
-        protected override async System.Threading.Tasks.Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             task = taskService.GetTask(taskId);
             if (task.Predecessor != null)
@@ -156,7 +156,7 @@
                 task.Predecessor = null;
             if (taskService.Edit(task, projectId, authenticationState.Result.User.Identity.Name))
             {
-                OnInitializedAsync();
+                OnInitialized();
                 redirectToIndex();
             }
         }

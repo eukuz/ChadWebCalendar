@@ -14,7 +14,7 @@ namespace ChadWebCalendar.Data
         public int RemindNMinutesBefore { get; set; }
         public bool IsCorrect()
         {
-            if ((StartsAt >= FinishesAt) || RemindNMinutesBefore < 0 || Name == null || StartsAt == null || FinishesAt == null)
+            if ((StartsAt >= FinishesAt) || RemindNMinutesBefore < 0 || Name == null)
                 return false;
             else
                 return true;
