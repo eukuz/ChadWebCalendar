@@ -46,7 +46,7 @@
     </div>
     <div class="form-group">
         <label> После какой задачи расположить</label>
-        <select class="form-select" @bind="predecessorIdstr" style="width: 250px>
+        <select class="form-select" @bind="predecessorContainer" style="width: 250px">
             <option value="@predecessorContainer">@taskService.GetNameOfTask(predecessorContainer)</option>
             @if (predecessorContainer != Constants.TempIdForDefaultChoice)
                 {
