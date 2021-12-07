@@ -8,7 +8,7 @@ namespace ChadWebCalendar.Data.Services
     public static class Constants
     {
         // constants for NotificationsService
-        public const int MillisecondsForSleepAfterWorkerIteration = 5000;
+        public const int MillisecondsForSleepAfterWorkerIteration = 60000;
         public const int AdditionInMinutesForMinDT = 35;
         public const int MinutesBeforeForInterval = 0;
         public const int CountOfSymbolsForFullDateTime = 18;
