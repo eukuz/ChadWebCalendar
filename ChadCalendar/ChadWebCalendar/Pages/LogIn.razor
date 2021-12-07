@@ -2,17 +2,60 @@
 @using ChadWebCalendar.Data.Models
 @inherits LoginModel
 
-<div class=" col-md-6 offset-md-3">
+<div class="row justify-content-between">
+    <div id="carouselExampleInterval" class="carousel slide col-4" data-bs-ride="carousel">
+        <div class="carousel-inner" style="width: 650px; overflow: hidden;">
+            <div class="carousel-item active" data-bs-interval="2000">
+                <img src="/img/GigaChad1.jpg" class="d-block" alt="...">
+            </div>
+            <div class="carousel-item" data-bs-interval="2000">
+                <img src="/img/GigaChad2.jpg" class="d-block" alt="...">
+            </div>
+            <div class="carousel-item" data-bs-interval="2000">
+                <img src="/img/GigaChad3.jpg" class="d-block" alt="...">
+            </div>
+            <div class="carousel-item" data-bs-interval="2000">
+                <img src="/img/GigaChad4.jpg" class="d-block" alt="...">
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Предыдущий</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Следующий</span>
+            </button>
+        </div>
+    </div>
 
-    <h1>Enter</h1>
-    <EditForm Model="LoginData" OnValidSubmit="LoginAsync">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <label for="login">Login</label>
-        <InputText id="login" @bind-Value="LoginData.model.Login" class="form-control" />
-        <label for="password">Password</label>
-        <InputText id="password" @bind-Value="LoginData.model.Password" class="form-control" />
-        <p class="my-4"><button type="submit" class="btn btn-primary">Log in</button></p>
-        <a type="button" href="/register" class="btn btn-primary">Register</a>
-    </EditForm>
+    <div class="col-4" style="margin: 50px">
+        <h1>Войдите в систему</h1>
+        <EditForm Model="LoginData" OnValidSubmit="LoginAsync">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-floating mb-3">
+
+                <InputText id="login" @bind-Value="LoginData.model.Login" class="form-control" placeholder="Login" />
+                <label for="login">Логин</label>
+            </div>
+            <div class="form-floating">
+
+                <InputText id="password" @bind-Value="LoginData.model.Password" class="form-control" placeholder="Password" type="password" />
+                <label for="password">Пароль</label>
+            </div>
+            <p class="my-4">
+                <button type="submit" class="btn btn-primary">Войти</button>
+                <a href="/register" type="button" class="btn btn-primary">Регистрация</a>
+            </p>
+            
+        </EditForm>
+        
+    </div>
+
+
 </div>
+<style>
+    .carousel-inner img{
+        width: 100%;
+    }
+</style>
