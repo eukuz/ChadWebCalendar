@@ -4,13 +4,15 @@
 <RadzenScheduler @ref=@scheduler style="height: 800px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
                  TextProperty="Text" SelectedIndex="1"
                  SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect>
-    <RadzenDayView />
-    <RadzenWeekView />
+    <RadzenDayView StartTime=StartTime EndTime=EndTime/>
+    <RadzenWeekView StartTime=StartTime EndTime=EndTime />
     <RadzenMonthView />
 </RadzenScheduler>
 
 
 @code {
+    private TimeSpan StartTime = new TimeSpan(0, 0, 0);
+    private TimeSpan EndTime = new TimeSpan(23, 59, 59);
     public RadzenScheduler<Appointment> scheduler;
     ApplicationContext db = new ApplicationContext();
 

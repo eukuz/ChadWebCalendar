@@ -15,6 +15,13 @@ namespace ChadWebCalendar.Data
         public int RemindNMinutesBefore { get; set; }
         public int? Id { get; set; }
         public DateTime? Accessed { get; set; }
+        public bool IsCorrect()
+        {
+            if ((Start >= End) || RemindNMinutesBefore < 0)
+                return false;
+            else
+                return true;
+        }
     }
 }
 

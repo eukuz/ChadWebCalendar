@@ -39,9 +39,12 @@
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
+        tasks = taskService.GetTasks(user);
     }
 
     [Parameter] public int? projectId { get; set; }
+
+    IEnumerable<Data.Task> tasks;
 
     public int? taskId { get; set; }
 

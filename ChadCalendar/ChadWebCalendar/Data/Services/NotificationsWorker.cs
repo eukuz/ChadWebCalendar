@@ -33,9 +33,9 @@ namespace ChadWebCalendar.Data.Services
         }
         public void GetReadyNotifications()
         {
+            TypesOfNotification = new List<string>();
             DateTime dt = DateTime.Now.AddMinutes(Constants.MinutesBeforeForInterval);
             removeSecondsAndMilliseconds(ref dt);
-
             var enumerableEvents = db.Events.AsNoTracking().OrderBy(e => e.StartsAt).Where(e => e.User.Login == Username && e.StartsAt >= dt);
             List<Data.Event> events = enumerableEvents.ToList();
             foreach (var item in events)
@@ -43,13 +43,21 @@ namespace ChadWebCalendar.Data.Services
                 if (item != null)
                 {
                     item.StartsAt = item.StartsAt.AddMinutes(-item.RemindNMinutesBefore);
-                    if (item.StartsAt <= dt)
+                    if (item.StartsAt == dt)
                     {
                         string stripped;
                         if (item.StartsAt.ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
+                        {
                             stripped = item.StartsAt.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT);
+                        }
+                        else if (item.StartsAt.ToString().Last() == 'm')
+                        {
+                            stripped = item.StartsAt.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT + 2);
+                        }
                         else
+                        {
                             stripped = item.StartsAt.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForTrimmedDT);
+                        }
                         TypesOfNotification.Add($"Ваше событие {item.Name} начинается в {stripped}");
                     }
                 }

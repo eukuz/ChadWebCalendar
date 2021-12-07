@@ -19,7 +19,7 @@
         <input class="form-control" type="number" @bind="project.NRepetitions" min="0" style="width: 250px">
         <span asp-validation-for="NRepetitions" class="text-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-group" hidden>
         <label>Частота</label>
         <select @bind="project.Frequency" style="width: 150px">
             <option disabled>Частота</option>
