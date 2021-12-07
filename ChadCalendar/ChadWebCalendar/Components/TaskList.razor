@@ -21,7 +21,6 @@
                         {
                             <s>@task.Name</s>
                         }
-
                     </div>
                 </button>
                 <Button @onclick="() => EditTaskPage(task.Id)" style="height:100%">
@@ -35,13 +34,9 @@
 
 @code {
     Data.User user;
+    
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
-    {
-        user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
-        tasks = taskService.GetTasks(user);
-    }
-
+    
     [Parameter] public int? projectId { get; set; }
 
     IEnumerable<Data.Task> tasks;
@@ -51,13 +46,20 @@
     bool destroyModal = false;
 
     bool visibleEditTask = false;
-
+    
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
+        tasks = taskService.GetTasks(user);
+    }
+    
     private async System.Threading.Tasks.Task EditTaskPage(int? taskId)
     {
         await DialogService.OpenAsync<TaskEdit>("Изменить задачу",
             new Dictionary<string, object> { { "taskId", taskId } });
     }
-
+    
+    //Изменение состояния задач в БД при выполнении задачи
     private void ChangeIsCompleted(int? taskId)
     {
         using (ApplicationContext db = new ApplicationContext())
