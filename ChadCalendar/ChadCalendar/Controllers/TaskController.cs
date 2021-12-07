@@ -117,7 +117,7 @@ namespace ChadCalendar.Controllers
             Models.Task task = db.Tasks.Include(t => t.Project).FirstOrDefault(t => t.Id == id);
             task.IsCompleted = !task.IsCompleted;
             db.Tasks.FirstOrDefault(t => t.Id == id);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return Redirect($"~/Home/Index/{task.Project.Id}");
         }
         public async Task<IActionResult> Delete(int? id)

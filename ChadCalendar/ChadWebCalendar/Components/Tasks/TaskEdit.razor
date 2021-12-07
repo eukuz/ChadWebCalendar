@@ -48,9 +48,9 @@
         <label> После какой задачи расположить</label>
         <select @bind="predecessorContainer">
             <option value="@predecessorContainer">@taskService.GetNameOfTask(predecessorContainer)</option>
-            @if (predecessorContainer != -1)
+            @if (predecessorContainer != Constants.TempIdForDefaultChoice)
                 {
-                    <option value="-1">После любой</option>
+                    <option value="@Constants.TempIdForDefaultChoice">После любой</option>
                 } 
             @if (userTasks != null)
             {
@@ -109,7 +109,7 @@
  </RadzenTemplateForm>
 
     @code {
-        int? predecessorContainer = -1;
+        int? predecessorContainer = Constants.TempIdForDefaultChoice;
         [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
         [Parameter]
         public int? taskId { get; set; }
@@ -121,13 +121,13 @@
         IEnumerable<Data.Project> userProjects;
         IEnumerable<Data.Task> userTasks;
         bool isValidationError = false;
-        protected override async System.Threading.Tasks.Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             task = taskService.GetTask(taskId);
             if (task.Predecessor != null)
                 predecessorContainer = task.Predecessor.Id;
             else
-                predecessorContainer = -1;
+                predecessorContainer = Constants.TempIdForDefaultChoice;
             if (task.Project != null)
                 projectId = (int)task.Project.Id;
             tempDT = task.TimeTakes;
@@ -150,13 +150,13 @@
             {
                 task.TimeTakes = tempDT;
             }
-            if (predecessorContainer != -1)
+            if (predecessorContainer != Constants.TempIdForDefaultChoice)
                 task.Predecessor = taskService.GetTask(predecessorContainer);
             else
                 task.Predecessor = null;
             if (taskService.Edit(task, projectId, authenticationState.Result.User.Identity.Name))
             {
-                OnInitializedAsync();
+                OnInitialized();
                 redirectToIndex();
             }
         }

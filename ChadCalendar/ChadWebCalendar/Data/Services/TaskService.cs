@@ -9,6 +9,7 @@ namespace ChadWebCalendar.Data.Services
     public class TaskService
     {
         public ApplicationContext db = new ApplicationContext();
+
         public bool IsCorrect(in Data.Task task)
         {
             if (task.Name != null && task.TimeTakes != null && task.Name != "")
@@ -27,48 +28,8 @@ namespace ChadWebCalendar.Data.Services
             }
         }
 
-        public IEnumerable<Project> GetProjects(User user)
-        {
-            return db.Projects.Where(proj => proj.User == user);
-        }
-        public Data.Project GetSelectedProject(Data.User _user)
-        {
-            return db.Projects.FirstOrDefault(p => (p.User.Id == _user.Id) && (p.Id == _user.SelectedProjectId));
-        }
-        public Data.Project GetFirstProject(Data.User _user)
-        {
-            return db.Projects.FirstOrDefault(p => p.User.Id == _user.Id);
-        }
-        public Data.Task GetTask(int? id)
-        {
-            return db.Tasks.Include(t => t.Project).Include(t => t.Predecessor).FirstOrDefault(t => t.Id == id);
-        }
-        public IEnumerable<Data.Task> GetTasks(User user)
-        {
-            ApplicationContext db1 = new ApplicationContext();
-            return db1.Tasks.Include(t => t.Project).Where(task => task.User == user);
-        }
-        public Data.Task GetPredecessor(int? id)
-        {
-            if (id != null)
-            {
-                Data.Task _task = db.Tasks.Include(t => t.Predecessor).FirstOrDefault(t => t.Id == id);
-                return _task.Predecessor;
-            }
-            else
-                return null;
-        }
-        public Data.User GetUser(string Name)
-        {
-            return db.Users.FirstOrDefault(u => u.Login == Name);
-        }
-        public string GetNameOfTask(int? id)
-        {
-            if (id == -1)
-                return "После любой";
-            Data.Task _task = GetTask(id);
-            return _task.Name;
-        }
+
+        // CRUD
         public bool AddTask(Data.Task task, int? projectId, User user)
         {
             task.User = user;
@@ -117,8 +78,53 @@ namespace ChadWebCalendar.Data.Services
             db.Tasks.Remove(task);
             await db.SaveChangesAsync();
         }
+        // CRUD end
+
+        // Getters for components
+        public IEnumerable<Project> GetProjects(User user)
+        {
+            return db.Projects.Where(proj => proj.User == user);
+        }
+        public Data.Project GetSelectedProject(Data.User _user)
+        {
+            return db.Projects.FirstOrDefault(p => (p.User.Id == _user.Id) && (p.Id == _user.SelectedProjectId));
+        }
+        public Data.Project GetFirstProject(Data.User _user)
+        {
+            return db.Projects.FirstOrDefault(p => p.User.Id == _user.Id);
+        }
+        public Data.Task GetTask(int? id)
+        {
+            return db.Tasks.Include(t => t.Project).Include(t => t.Predecessor).FirstOrDefault(t => t.Id == id);
+        }
+        public IEnumerable<Data.Task> GetTasks(User user)
+        {
+            ApplicationContext db1 = new ApplicationContext();
+            return db1.Tasks.Include(t => t.Project).Where(task => task.User == user);
+        }
+        public Data.Task GetPredecessor(int? id)
+        {
+            if (id != null)
+            {
+                Data.Task _task = db.Tasks.Include(t => t.Predecessor).FirstOrDefault(t => t.Id == id);
+                return _task.Predecessor;
+            }
+            else
+                return null;
+        }
+        public Data.User GetUser(string Name)
+        {
+            return db.Users.FirstOrDefault(u => u.Login == Name);
+        }
+        public string GetNameOfTask(int? id)
+        {
+            if (id == Constants.TempIdForDefaultChoice)
+                return "После любой";
+            Data.Task _task = GetTask(id);
+            return _task.Name;
+        }
+        // Getters end
+
+
     }
 }
-
-
-//34 строчка в TaskAdd and TaskEdit (вырезано т.к дает ошибку)
