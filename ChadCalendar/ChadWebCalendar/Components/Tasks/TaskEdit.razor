@@ -1,4 +1,4 @@
-﻿@using ChadWebCalendar.Data.Services
+@using ChadWebCalendar.Data.Services
 @inject TaskService taskService
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
@@ -9,21 +9,21 @@
     <DataAnnotationsValidator />
     <ValidationSummary></ValidationSummary>
     <div class="form-group">
-        <label>Название задачи </label>
-        <input type="text" placeholder="" @bind="task.Name">
+        <label>Название задачи</label>
+        <input class="form-control" type="text" placeholder="" @bind="task.Name" style="width: 250px">
         <ValidationMessage For="() => task" />
     </div>
     <div class="form-group">
         <label>Время на задачу</label>
-        <input type="text" @bind="tempDT" min="0">
+        <input class="form-control" type="text" @bind="tempDT" min="0" style="width: 250px">
     </div>
     <div class="form-group">
         <label>Описание</label>
-        <textarea class="form-control" type="text" placeholder="" @bind="task.Description"></textarea>
+        <textarea class="form-control" type="text" placeholder="" @bind="task.Description" style="width: 250px"></textarea>
     </div>
     <div class="form-group">
         <label>Дедлайн</label>
-        <input class="form-control" type="datetime-local" @bind="task.Deadline" @bind:format="yyyy-MM-ddTHH:mm" />
+        <input class="form-control" type="datetime-local" @bind="task.Deadline" @bind:format="yyyy-MM-ddTHH:mm" style="width: 250px"/>
     </div>
     <div class="form-group">
         <label>Выберите проект для задачи</label>
@@ -33,7 +33,7 @@
             {
                 task.Project = new Data.Project { Id = 0 };
             }
-            <select @bind="projectId">
+            <select @bind="projectId"  class="form-control" style="width: 250px">
                 @foreach (var proj in userProjects)
                 {
                     <option value="@proj.Id">@proj.Name</option>
@@ -63,11 +63,11 @@
     </div>
     <div class="form-group">
         <label>Максимум в день</label>
-        <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0">
+        <input class="form-control" type="number" placeholder="" @bind="task.MaxPerDay" min="0" style="width: 100px">
     </div>
     <div class="form-group" hidden>
         <label>Частота</label>
-        <select @bind="task.Frequency">
+        <select  class="form-select" @bind="task.Frequency" style="width: 250px">
             <option disabled>Частота</option>
             <option>Никогда</option>
             <option>Каждый день</option>
@@ -108,68 +108,68 @@
     
  </RadzenTemplateForm>
 
-    @code {
-        int? predecessorContainer = Constants.TempIdForDefaultChoice;
-        [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
-        [Parameter]
-        public int? taskId { get; set; }
-        int projectId = 0;
-        DateTime startsAt;
-        Data.Task task;
-        Data.User user;
-        TimeSpan? tempDT;
-        IEnumerable<Data.Project> userProjects;
-        IEnumerable<Data.Task> userTasks;
-        bool isValidationError = false;
-        protected override void OnInitialized()
+@code {
+    int? predecessorContainer = Constants.TempIdForDefaultChoice;
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    [Parameter]
+    public int? taskId { get; set; }
+    int projectId = 0;
+    DateTime startsAt;
+    Data.Task task;
+    Data.User user;
+    TimeSpan? tempDT;
+    IEnumerable<Data.Project> userProjects;
+    IEnumerable<Data.Task> userTasks;
+    bool isValidationError = false;
+    protected override void OnInitialized()
+    {
+        task = taskService.GetTask(taskId);
+        if (task.Predecessor != null)
+            predecessorContainer = task.Predecessor.Id;
+        else
+            predecessorContainer = Constants.TempIdForDefaultChoice;
+        if (task.Project != null)
+            projectId = (int)task.Project.Id;
+        tempDT = task.TimeTakes;
+        user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
+        userTasks = taskService.GetTasks(user);
+        userProjects = taskService.GetProjects(user);
+    }
+    void redirectToIndex()
+    {
+        NavigationManager.NavigateTo("/", true);
+    }
+    void deleteTask()
+    {
+        taskService.Delete(task);
+        redirectToIndex();
+    }
+    void updateTask()
+    {
+        if (tempDT != null)
         {
-            task = taskService.GetTask(taskId);
-            if (task.Predecessor != null)
-                predecessorContainer = task.Predecessor.Id;
-            else
-                predecessorContainer = Constants.TempIdForDefaultChoice;
-            if (task.Project != null)
-                projectId = (int)task.Project.Id;
-            tempDT = task.TimeTakes;
-            user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
-            userTasks = taskService.GetTasks(user);
-            userProjects = taskService.GetProjects(user);
+            task.TimeTakes = tempDT;
         }
-        void redirectToIndex()
+        if (predecessorContainer != Constants.TempIdForDefaultChoice)
+            task.Predecessor = taskService.GetTask(predecessorContainer);
+        else
+            task.Predecessor = null;
+        if (taskService.Edit(task, projectId, authenticationState.Result.User.Identity.Name))
         {
-            NavigationManager.NavigateTo("/", true);
-        }
-        void deleteTask()
-        {
-            taskService.Delete(task);
+            OnInitialized();
             redirectToIndex();
-        }
-        void updateTask()
-        {
-            if (tempDT != null)
-            {
-                task.TimeTakes = tempDT;
-            }
-            if (predecessorContainer != Constants.TempIdForDefaultChoice)
-                task.Predecessor = taskService.GetTask(predecessorContainer);
-            else
-                task.Predecessor = null;
-            if (taskService.Edit(task, projectId, authenticationState.Result.User.Identity.Name))
-            {
-                OnInitialized();
-                redirectToIndex();
-            }
-        }
-        void mutation()
-        {
-            updateTask();
-            taskService.Mutatuion(task.Id, authenticationState.Result.User.Identity.Name, startsAt);
-            redirectToIndex();
-
-        }
-
-        void OnSubmit()
-        {
-            updateTask();
         }
     }
+    void mutation()
+    {
+        updateTask();
+        taskService.Mutatuion(task.Id, authenticationState.Result.User.Identity.Name, startsAt);
+        redirectToIndex();
+
+    }
+
+    void OnSubmit()
+    {
+        updateTask();
+    }
+}

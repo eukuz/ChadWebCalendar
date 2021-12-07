@@ -39,4 +39,9 @@
     <_ContentIncludedByDefault Remove="Pages\Events\EventEditPage.razor" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
 </Project>
