@@ -15,7 +15,9 @@ namespace ChadWebCalendar.Data.Services
         public const int NumberOfInitialTimePosition = 11;
         public const int LenForFullDT = 4;
         public const int LenForTrimmedDT = 5;
-        //
+
+        // constants for task Components
+        public const int TempIdForDefaultChoice = -1;
 
         //здесь другие константы
     }

@@ -17,32 +17,9 @@ namespace ChadWebCalendar.Data.Services
             else
                 return false;
         }
-        public int? GetId(string Name)
-        {
-            Data.User user = db.Users.FirstOrDefault(e => e.Login == Name);
-            return user.Id;
-        }
-        public Data.User GetUser(string Name)
-        {
-            return db.Users.FirstOrDefault(u => u.Login == Name);
-        }
-        public Data.Event GetEventById(int? id)
-        {
-            if (id != null)
-                return db.Events.FirstOrDefault(e => e.Id == id);
-            else
-                return null;
-        }
         
-        public IEnumerable<Data.Event> GetEvents(int? userId)
-        {
-            if (userId != null)
-            {
-                return db.Events.Where(e => e.User.Id == userId);
-            }
-            else
-                return null;
-        }
+
+        // CRUD
         public bool Create(Event _event, string Name)
         {
             User user = db.Users.FirstOrDefault(u => u.Login == Name);
@@ -95,5 +72,39 @@ namespace ChadWebCalendar.Data.Services
             db.Events.Remove(_event);
             await db.SaveChangesAsync();
         }
+
+        //CRUD END
+
+        // GETTERS
+        public int? GetId(string Name)
+        {
+            Data.User user = db.Users.FirstOrDefault(e => e.Login == Name);
+            return user.Id;
+        }
+        public Data.User GetUser(string Name)
+        {
+            return db.Users.FirstOrDefault(u => u.Login == Name);
+        }
+        public Data.Event GetEventById(int? id)
+        {
+            if (id != null)
+                return db.Events.FirstOrDefault(e => e.Id == id);
+            else
+                return null;
+        }
+
+        public IEnumerable<Data.Event> GetEvents(int? userId)
+        {
+            if (userId != null)
+            {
+                return db.Events.Where(e => e.User.Id == userId);
+            }
+            else
+                return null;
+        }
+
+        // GETTERS END
+
+
     }
 }
