@@ -10,13 +10,13 @@
             <ValidationSummary />
 
             <label for="login">Логин</label>
-            <InputText id="login" @bind-Value="RegisterData.Login" class="form-control" />
+            <InputText  id="login" @bind-Value="RegisterData.Login" class="form-control" />
 
             <label for="password">Пароль</label>
-            <InputText id="password" @bind-Value="RegisterData.Password" class="form-control" />
+            <InputText type="password" id="password" @bind-Value="RegisterData.Password" class="form-control" />
 
             <label for="confirmpassword">Подтвердите пароль</label>
-            <InputText id="ConfirmPassword" @bind-Value="RegisterData.ConfirmPassword" class="form-control" />
+            <InputText type="password" id="ConfirmPassword" @bind-Value="RegisterData.ConfirmPassword" class="form-control" />
 
             <label for="workinghoursfrom">Рабочие часы начинаются с</label>
             <InputNumber id="workinghoursfrom" @bind-Value="RegisterData.WorkingHoursFrom" class="form-control" />

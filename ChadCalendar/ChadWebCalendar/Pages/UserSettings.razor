@@ -12,10 +12,10 @@
                 <ValidationSummary />
 
                 <label for="password">Пароль</label>
-                <InputText id="password" @bind-Value="SettingsData.Password" class="form-control" />
+                <InputText id="password" type="password" @bind-Value="SettingsData.Password" class="form-control" />
 
                 <label for="confirmpassword">Подтвердите пароль</label>
-                <InputText id="ConfirmPassword" @bind-Value="SettingsData.ConfirmPassword" class="form-control" />
+                <InputText id="ConfirmPassword" type="password" @bind-Value="SettingsData.ConfirmPassword" class="form-control" />
 
                 <label for="workinghoursfrom">Рабочие часы начинаются с</label>
                 <InputNumber id="workinghoursfrom" @bind-Value="SettingsData.WorkingHoursFrom" class="form-control" />
