@@ -57,14 +57,18 @@
 
 @code{
 
-    [CascadingParameter]
-    private Task<AuthenticationState> authenticationState { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    
     private List<ChadWebCalendar.Data.Task> Tasks = new List<ChadWebCalendar.Data.Task>();
+    
     private IList<Claim> userClaim = new List<Claim>();
+    
     NotificationsWorker notificationWorker = new NotificationsWorker();
+    
     private LoginModel model = new LoginModel();
 
     public int? projId;
+
     public string projName;
     protected override void OnInitialized()
     {
@@ -81,7 +85,6 @@
     {
         await DialogService.OpenAsync<TaskDistributorPage>($"👩‍💼 Распланировать задачи из проекта: {projName} 👩‍💼",
             new Dictionary<string, object> { { "projectId", projectId } });
-
     }
 
     private void showNotification()
@@ -107,7 +110,7 @@
         notificationWorker.Stop();
         await _accountService.LogoutAsync();
     }
-
+    //Метод для получения проекта при нажатии в компоненте ProjectList
     private void GetProjectId(Project pr)
     {
         projId = pr.Id;
