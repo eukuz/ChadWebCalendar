@@ -27,8 +27,8 @@
                 <label for="timezone">Часовой пояс UTC</label>
                 <InputNumber id="timezone" @bind-Value="SettingsData.Timezone" class="form-control" />
 
-                <label for="remindeveryndays">Напоминать про забытые задачи каждые N дней</label>
-                <InputNumber id="timezone" @bind-Value="SettingsData.RemindEveryNDays" class="form-control" />
+                <label for="remindeveryndays" hidden>Напоминать про забытые задачи каждые N дней</label>
+                <InputNumber id="timezone" hidden @bind-Value="SettingsData.RemindEveryNDays" class="form-control" />
 
                 <p class="my-4">
                     <button type="submit" class="btn btn-primary">Сохранить</button>
