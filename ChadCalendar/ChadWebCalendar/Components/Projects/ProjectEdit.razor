@@ -65,11 +65,12 @@
         [Parameter]
         public int? projectId { get; set; }
         Data.Project project;
+        Data.Project prevProject;
         string userName;
         protected override void OnInitialized()
         {
+            modelInitialziation();
             userName = authenticationState.Result.User.Identity.Name;
-            project = projectService.GetProjectById(projectId);
         }
         void redirectToIndex()
         {
@@ -87,6 +88,17 @@
         {
             projectService.Delete(project.Id);
             redirectToIndex();
+        }
+        void modelInitialziation()
+        {
+            project = projectService.GetProjectById(projectId);
+            prevProject = projectService.GetProjectByIdAsNoTracking(projectId);
+            project.Name = prevProject.Name;
+            project.Deadline = prevProject.Deadline;
+            project.Description = prevProject.Description;
+            project.Frequency = prevProject.Frequency;
+            project.NRepetitions = prevProject.NRepetitions;
+            project.IconNumber = prevProject.IconNumber;
         }
         void OnSubmit()
         {

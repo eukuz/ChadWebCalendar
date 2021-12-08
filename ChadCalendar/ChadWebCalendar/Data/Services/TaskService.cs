@@ -96,6 +96,10 @@ namespace ChadWebCalendar.Data.Services
         {
             return db.Tasks.Include(t => t.Project).Include(t => t.Predecessor).FirstOrDefault(t => t.Id == id);
         }
+        public Data.Task GetTaskAsNoTracking(int? id)
+        {
+            return db.Tasks.Include(t => t.Project).Include(t => t.Predecessor).AsNoTracking().FirstOrDefault(t => t.Id == id);
+        }
         public IEnumerable<Data.Task> GetTasks(User user)
         {
             ApplicationContext db1 = new ApplicationContext();

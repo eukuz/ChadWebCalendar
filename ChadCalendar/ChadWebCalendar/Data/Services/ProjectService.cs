@@ -16,6 +16,13 @@ namespace ChadWebCalendar.Data.Services
             else
                 return null;
         }
+        public Data.Project GetProjectByIdAsNoTracking(int? id)
+        {
+            if (id != null)
+                return db.Projects.AsNoTracking().FirstOrDefault(p => p.Id == id);
+            else
+                return null;
+        }
         public void UpdateSelectedProject(string UserLogin, int? projectId)
         {
             using (ApplicationContext db = new ApplicationContext()) // обновить выбранный проект
