@@ -65,9 +65,8 @@
         [Parameter]
         public int? projectId { get; set; }
         Data.Project project;
-        bool isHaveError = false;
         string userName;
-        protected override async System.Threading.Tasks.Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             userName = authenticationState.Result.User.Identity.Name;
             project = projectService.GetProjectById(projectId);
@@ -80,7 +79,7 @@
         {
             if (projectService.Edit(project.Id, userName))
             {
-                OnInitializedAsync();
+                OnInitialized();
                 redirectToIndex();
             }
         }

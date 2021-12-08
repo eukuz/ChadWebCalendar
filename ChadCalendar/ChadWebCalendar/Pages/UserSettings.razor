@@ -3,6 +3,7 @@
 @using ChadWebCalendar.Data
 @using ChadWebCalendar.Data.Models
 @inherits UserSettingsModel
+
     <div class="container" style="max-width: 600px;">
         <h1 style="text-align: center;">Настройки пользователя @SettingsData.Login</h1>
         <div class="container" style="max-width: 300px;">
@@ -18,10 +19,10 @@
                 <InputText id="ConfirmPassword" type="password" @bind-Value="SettingsData.ConfirmPassword" class="form-control" />
 
                 <label for="workinghoursfrom">Рабочие часы начинаются с</label>
-                <InputNumber id="workinghoursfrom" @bind-Value="SettingsData.WorkingHoursFrom" class="form-control" />
+                <InputNumber id="workinghoursfrom" @bind-Value="SettingsData.WorkingHours.WorkingHoursFrom" class="form-control" />
 
                 <label for="workinghoursto">Рабочие часы длятся до</label>
-                <InputNumber id="workinghoursto" @bind-Value="SettingsData.WorkingHoursTo" class="form-control" />
+                <InputNumber id="workinghoursto" @bind-Value="SettingsData.WorkingHours.WorkingHoursTo" class="form-control" />
 
                 <label for="timezone">Часовой пояс UTC</label>
                 <InputNumber id="timezone" @bind-Value="SettingsData.Timezone" class="form-control" />
@@ -52,10 +53,10 @@
                     Login = user.Login,
                     Password = user.Password,
                     ConfirmPassword = user.Password,
-                    WorkingHoursFrom = user.WorkingHoursFrom,
-                    WorkingHoursTo = user.WorkingHoursTo,
                     Timezone = user.TimeZone,
-                    RemindEveryNDays = user.RemindEveryNDays
+                    RemindEveryNDays = user.RemindEveryNDays,
+                    WorkingHours = new UserSettingsViewModel.
+                    WorkingHoursModel { WorkingHoursFrom = user.WorkingHoursFrom, WorkingHoursTo = user.WorkingHoursTo }
                 };
                 return base.OnInitializedAsync();
             }
