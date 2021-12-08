@@ -86,8 +86,6 @@
     public DateTime End { get; set; }
 
     Appointment model = new Appointment();
-    private int? Id;
-
     Data.Event _event;
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     string userName;

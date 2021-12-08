@@ -25,7 +25,7 @@
 
     List<Appointment> appointments = new();
 
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         foreach (var item in GetEvents())
         {

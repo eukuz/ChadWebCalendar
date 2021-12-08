@@ -109,7 +109,7 @@
     Data.Event _event;
 
     Data.User user;
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         DialogService.OnClose += Close;
         user = projectService.GetUser(authenticationState.Result.User.Identity.Name);

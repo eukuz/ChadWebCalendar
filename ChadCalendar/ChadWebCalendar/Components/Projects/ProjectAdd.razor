@@ -58,8 +58,7 @@
     Data.Project project;
     string userName;
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
-    bool isHaveError = false;
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         project = new Data.Project();
         userName = authenticationState.Result.User.Identity.Name;
@@ -73,7 +72,7 @@
         }
         if (projectService.Create(project, userName))
         {
-            OnInitializedAsync();
+            OnInitialized();
             NavigationManager.NavigateTo("/", true);
         }
     }
