@@ -50,7 +50,7 @@
             <RadzenLabel Text="Начало" />
         </div>
         <div class="col">
-            <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true" />
+            <RadzenDatePicker @bind-Value="@model.StartEndTime.Start" Name="Start" ShowTime="true" />
         </div>
     </div>
     <div class="row" style="margin-bottom: 16px">
@@ -58,7 +58,7 @@
             <RadzenLabel Text="Конец" />
         </div>
         <div class="col">
-            <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true" />
+            <RadzenDatePicker Name="End" @bind-Value="@model.StartEndTime.End" ShowTime="true" />
         </div>
     </div>
     <div class="row" style="margin-bottom: 16px">
@@ -145,8 +145,8 @@
         _event.Name = model.Text;
         _event.Description = model.Description;
         _event.Frequency = model.Frequency;
-        _event.StartsAt = model.Start;
-        _event.FinishesAt = model.End;
+        _event.StartsAt = model.StartEndTime.Start;
+        _event.FinishesAt = model.StartEndTime.End;
         _event.RemindNMinutesBefore = model.RemindNMinutesBefore;
         _event.Id = (int)model.Id;
 

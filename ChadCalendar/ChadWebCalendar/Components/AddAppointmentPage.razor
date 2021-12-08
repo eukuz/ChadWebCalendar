@@ -47,7 +47,7 @@
             <RadzenLabel Text="Начало" />
         </div>
         <div class="col">
-            <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true" />
+            <RadzenDatePicker @bind-Value="@model.StartEndTime.Start" Name="Start" ShowTime="true" />
         </div>
     </div>
     <ValidationMessage For="() => _event" />
@@ -56,7 +56,7 @@
             <RadzenLabel Text="Конец" />
         </div>
         <div class="col">
-            <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true" />
+            <RadzenDatePicker Name="End" @bind-Value="@model.StartEndTime.End" ShowTime="true" />
         </div>
     </div>
     <div class="row" style="margin-bottom: 16px">
@@ -97,8 +97,8 @@
         {
             Name = model.Text,
             Description = model.Description,
-            StartsAt = model.Start,
-            FinishesAt = model.End,
+            StartsAt = model.StartEndTime.Start,
+            FinishesAt = model.StartEndTime.End,
             Frequency = model.Frequency,
             RemindNMinutesBefore = model.RemindNMinutesBefore
         };
@@ -111,8 +111,8 @@
 
     protected override void OnParametersSet()
     {
-        model.Start = Start;
-        model.End = End;
+        model.StartEndTime.Start = Start;
+        model.StartEndTime.End = End;
     }
 
     void OnSubmit(Appointment model)

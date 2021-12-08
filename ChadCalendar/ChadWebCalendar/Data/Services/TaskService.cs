@@ -28,7 +28,6 @@ namespace ChadWebCalendar.Data.Services
             }
         }
 
-
         // CRUD
         public bool AddTask(Data.Task task, int? projectId, User user)
         {

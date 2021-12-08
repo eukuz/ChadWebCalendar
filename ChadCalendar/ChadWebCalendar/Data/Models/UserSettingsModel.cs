@@ -19,7 +19,7 @@ namespace ChadWebCalendar.Data.Models
         {
 
         }
-        public UserSettingsViewModel SettingsData { get; set; } 
+        public UserSettingsViewModel SettingsData { get; set; }
         protected async System.Threading.Tasks.Task RegisterAsync()
         {
             using (ApplicationContext db = new ApplicationContext())
@@ -29,8 +29,8 @@ namespace ChadWebCalendar.Data.Models
 
                 user.Login = SettingsData.Login;
                 user.Password = SettingsData.Password;
-                user.WorkingHoursFrom = SettingsData.WorkingHoursFrom;
-                user.WorkingHoursTo = SettingsData.WorkingHoursTo;
+                user.WorkingHoursFrom = SettingsData.WorkingHours.WorkingHoursFrom;
+                user.WorkingHoursTo = SettingsData.WorkingHours.WorkingHoursTo;
                 user.TimeZone = SettingsData.Timezone;
                 user.RemindEveryNDays = SettingsData.RemindEveryNDays;
 
@@ -48,28 +48,36 @@ namespace ChadWebCalendar.Data.Models
         }
     }
 
+    public class UserSettingsViewModel
+    {
+        public string Login { get; set; }
+        [Required]
+        public string Password { get; set; }
+        [Required]
+        [Compare("Password", ErrorMessage = "Passwords don't match")]
+        public string ConfirmPassword { get; set; }
+        public int Timezone { get; set; }
+        [Required]
+        [Range(0, int.MaxValue)]
+        public int RemindEveryNDays { get; set; }
 
+
+
+        [UserWorkingHoursValidator]
+        public WorkingHoursModel WorkingHours { get; set; }
+
+        public UserSettingsViewModel()
+        {
+            WorkingHours = new WorkingHoursModel();
+        }
+        public class WorkingHoursModel
+        {
+            [Required]
+            [Range(0, 24)]
+            public int WorkingHoursFrom { get; set; }
+            [Required]
+            [Range(0, 24)]
+            public int WorkingHoursTo { get; set; }
+        }
+    }
 }
-public class UserSettingsViewModel
-{
-    public string Login { get; set; }
-    [Required]
-    public string Password { get; set; }
-    [Required]
-    [Compare("Password", ErrorMessage = "Passwords don't match")]
-    public string ConfirmPassword { get; set; }
-    [Required]
-    [Range(0, 24)]
-    public int WorkingHoursFrom { get; set; }
-    [Required]
-    [Range(0, 24)]
-    public int WorkingHoursTo { get; set; }
-    [Required]
-    [Range(-12, 14)]
-    public int Timezone { get; set; }
-    [Required]
-    [Range(0,int.MaxValue)]
-    public int RemindEveryNDays { get; set; }
-
-}
-
