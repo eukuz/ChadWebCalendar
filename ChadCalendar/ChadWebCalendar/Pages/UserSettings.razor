@@ -4,56 +4,61 @@
 @using ChadWebCalendar.Data.Models
 @inherits UserSettingsModel
 
-<div class=" col-md-6 offset-md-3">
-    <h1>Настройки пользователя @SettingsData.Login</h1>
+    <div class="container" style="max-width: 600px;">
+        <h1 style="text-align: center;">Настройки пользователя @SettingsData.Login</h1>
+        <div class="container" style="max-width: 300px;">
 
-    <EditForm Model="SettingsData" OnValidSubmit="RegisterAsync">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+            <EditForm Model="SettingsData" OnValidSubmit="RegisterAsync">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
 
-        <label for="password">Пароль</label>
-        <InputText id="password" @bind-Value="SettingsData.Password" class="form-control" />
+                <label for="password">Пароль</label>
+                <InputText id="password" type="password" @bind-Value="SettingsData.Password" class="form-control" />
 
-        <label for="confirmpassword">Подтвердите пароль</label>
-        <InputText id="ConfirmPassword" @bind-Value="SettingsData.ConfirmPassword" class="form-control" />
+                <label for="confirmpassword">Подтвердите пароль</label>
+                <InputText id="ConfirmPassword" type="password" @bind-Value="SettingsData.ConfirmPassword" class="form-control" />
 
-        <label for="workinghoursfrom">Рабочие часы начинаются с</label>
-        <InputNumber id="workinghoursfrom" @bind-Value="SettingsData.WorkingHours.WorkingHoursFrom" class="form-control" />
+                <label for="workinghoursfrom">Рабочие часы начинаются с</label>
+                <InputNumber id="workinghoursfrom" @bind-Value="SettingsData.WorkingHours.WorkingHoursFrom" class="form-control" />
 
-        <label for="workinghoursto">Рабочие часы длятся до</label>
-        <InputNumber id="workinghoursto" @bind-Value="SettingsData.WorkingHours.WorkingHoursTo" class="form-control" />
+                <label for="workinghoursto">Рабочие часы длятся до</label>
+                <InputNumber id="workinghoursto" @bind-Value="SettingsData.WorkingHours.WorkingHoursTo" class="form-control" />
 
-        <label for="timezone">Часовой пояс UTC</label>
-        <InputNumber id="timezone" @bind-Value="SettingsData.Timezone" class="form-control" />
+                <label for="timezone">Часовой пояс UTC</label>
+                <InputNumber id="timezone" @bind-Value="SettingsData.Timezone" class="form-control" />
 
-        <label for="remindeveryndays">Напоминать про забытые задачи каждые N дней</label>
-        <InputNumber id="timezone" @bind-Value="SettingsData.RemindEveryNDays" class="form-control" />
+                <label for="remindeveryndays">Напоминать про забытые задачи каждые N дней</label>
+                <InputNumber id="timezone" @bind-Value="SettingsData.RemindEveryNDays" class="form-control" />
 
-        <p class="my-4">
-            <button type="submit" class="btn btn-primary">Сохранить</button>
-            <a type="button" href="/" class="btn btn-primary">Назад</a>
-        </p>
-    </EditForm>
-</div>
+                <p class="my-4">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <a type="button" href="/" class="btn btn-primary">Назад</a>
+                </p>
 
-@code {
-    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
-    protected override System.Threading.Tasks.Task OnInitializedAsync()
-    {
-        string Login = authenticationState.Result.User.Identity.Name;
-        User user;
-        using (ApplicationContext db = new ApplicationContext())
-            user = db.Users.FirstOrDefault(u => u.Login == Login);
-        SettingsData = new UserSettingsViewModel
-        {
-            Login = user.Login,
-            Password = user.Password,
-            ConfirmPassword = user.Password,
-            Timezone = user.TimeZone,
-            RemindEveryNDays = user.RemindEveryNDays,
-            WorkingHours = new UserSettingsViewModel.
-            WorkingHoursModel { WorkingHoursFrom = user.WorkingHoursFrom, WorkingHoursTo = user.WorkingHoursTo }
-        };
-        return base.OnInitializedAsync();
-    }
-}
+            </EditForm>
+        </div>
+    </div>
+
+        @code {
+
+            [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+            protected override System.Threading.Tasks.Task OnInitializedAsync()
+            {
+                string Login = authenticationState.Result.User.Identity.Name;
+                User user;
+                using (ApplicationContext db = new ApplicationContext())
+                    user = db.Users.FirstOrDefault(u => u.Login == Login);
+                SettingsData = new UserSettingsViewModel
+                {
+                    Login = user.Login,
+                    Password = user.Password,
+                    ConfirmPassword = user.Password,
+                    Timezone = user.TimeZone,
+                    RemindEveryNDays = user.RemindEveryNDays,
+                    WorkingHours = new UserSettingsViewModel.
+                    WorkingHoursModel { WorkingHoursFrom = user.WorkingHoursFrom, WorkingHoursTo = user.WorkingHoursTo }
+                };
+                return base.OnInitializedAsync();
+            }
+
+        }

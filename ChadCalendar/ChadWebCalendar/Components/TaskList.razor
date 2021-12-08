@@ -10,24 +10,24 @@
     @foreach (var task in tasks)
     {
         if (task.Project != null && task.Project.Id == projectId)
-        {
-            <button type="button" class="list-group-item list-group-item-success btn btn-light" @onclick="() => ChangeIsCompleted(task.Id)">
-                <div class="task_container" Style="justify-content: space-between;">
-                    @if (task.IsCompleted == false)
-                    {
-                        @task.Name
-                    }
-                    else
-                    {
-                        <s>@task.Name</s>
-                    }
-                    
-                </div>
-                
-            </button>
-            <Button @onclick="() => EditTaskPage(task.Id)">
-                &#9881;
-            </Button>
+        {   <div style="display:flex; width: 100%">
+                <button type="button" class="list-group-item list-group-item-success btn btn-light" @onclick="() => ChangeIsCompleted(task.Id)" style="width: 100%; overflow: hidden; word-break:break-word;">
+                    <div class="task_container" Style="justify-content: space-between; overflow:hidden; max-width: 100%;">
+                        @if (task.IsCompleted == false)
+                        {
+                            @task.Name
+                        }
+                        else
+                        {
+                            <s>@task.Name</s>
+                        }
+
+                    </div>
+                </button>
+                <Button @onclick="() => EditTaskPage(task.Id)" style="height:100%">
+                    &#9881;
+                </Button>
+            </div>
         }
  
      }
@@ -36,7 +36,7 @@
 @code {
     Data.User user;
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
         tasks = taskService.GetTasks(user);
@@ -45,12 +45,7 @@
     [Parameter] public int? projectId { get; set; }
 
     IEnumerable<Data.Task> tasks;
-
     public int? taskId { get; set; }
-
-    bool destroyModal = false;
-
-    bool visibleEditTask = false;
 
     private async System.Threading.Tasks.Task EditTaskPage(int? taskId)
     {

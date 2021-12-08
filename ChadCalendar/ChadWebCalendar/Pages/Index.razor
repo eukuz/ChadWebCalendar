@@ -23,17 +23,17 @@
                 <NavigationMenu></NavigationMenu>
             </div>
             <div class="main_container">
-                <div class="projectlist">
+                <div class="projectlist" style="width: 60px;">
                     <ProjectList GetProject="GetProjectId" />
                 </div>
                 <div class="tasklist">
-                    <div Style="display: flex; justify-content: space-between; width: 100%; overflow: hidden;">
-                        <Button Type="@ButtonType.Default" OnClick="() => Distribute(projId)" style="height: 50px">👩‍💼</Button>
-                        <Button OnClick="@(() => EditProjectPage(projId))" Style="height: 50px; width:100%; overflow: hidden; overflow-wrap: break-word">
+                    <div Style="display: flex; justify-content: space-between; width: 100%; overflow: hidden; ">
+                        <Button Type="@ButtonType.Default" OnClick="() => Distribute(projId)" style="height: 50px; font-size: 18px;">👩‍💼</Button>
+                        <Button OnClick="@(() => EditProjectPage(projId))" Style="height: 50px; width: 100%; overflow: hidden; overflow-wrap: break-word; font-size: 18px;">
                             @projName
                         </Button>
-                        <Button OnClick="CreateTaskPage" style="height: 50px; width: 62px;">
-                            +
+                        <Button OnClick="CreateTaskPage" style="height: 50px; width: 62px; font-size: 18px;">
+                            &#10133;
                         </Button>
                     </div>
                     <TaskList projectId="@projId" />
@@ -65,14 +65,14 @@
     private LoginModel model = new LoginModel();
 
     public int? projId;
-    public string? projName;
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    public string projName;
+    protected override void OnInitialized()
     {
         notificationWorker.WorkerInitialization(authenticationState.Result.User.Identity.Name);
         notificationWorker.NotificationReadyToShow += showNotification;
         projectService.ReceiveSelectedProject(authenticationState.Result.User.Identity.Name, ref projId, ref projName);
     }
-    
+
     public void Dispose()
     {
         notificationWorker.Stop();
@@ -90,7 +90,7 @@
             toastService.ShowInfo($"{item}");
         JSRuntime.InvokeVoidAsync("setTitle", "You have notification");
     }
-    
+
     private async void CreateTaskPage()
     {
         await DialogService.OpenAsync<TaskAdd>("Добавить задачу");
