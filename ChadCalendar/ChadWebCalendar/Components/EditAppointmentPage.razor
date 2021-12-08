@@ -10,7 +10,6 @@
 @using AntDesign;
 @inject ProjectService projectService
 
-
 <RadzenTemplateForm TItem="Appointment" Data="@model" Submit="@OnSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary></ValidationSummary>
@@ -103,6 +102,7 @@
     [Parameter]
     public Appointment Appointment { get; set; }
     Appointment model = new Appointment();
+    bool isClose = true;
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
 
     string userName;
@@ -111,9 +111,17 @@
     Data.User user;
     protected override void OnInitialized()
     {
+        DialogService.OnClose += Close;
         user = projectService.GetUser(authenticationState.Result.User.Identity.Name);
     }
 
+    public void Close(dynamic result)
+    {
+        if (isClose == true)
+        {
+            NavigationManager.NavigateTo("/", true);
+        }
+    }
     protected override void OnParametersSet()
     {
         model = Appointment;
@@ -132,6 +140,7 @@
 
     void editEvent()
     {
+        isClose = false;
         _event = getEvent();
         _event.Name = model.Text;
         _event.Description = model.Description;
