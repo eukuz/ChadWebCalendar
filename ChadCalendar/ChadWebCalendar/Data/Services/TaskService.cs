@@ -17,7 +17,7 @@ namespace ChadWebCalendar.Data.Services
             else
                 return false;
         }
-        private void removeDependencies(Data.Task task)
+        public void removeDependencies(Data.Task task)
         {
             var PredecessorDependecies = db.Tasks.Where(t => t.Predecessor == task);
             foreach (var item in PredecessorDependecies)
