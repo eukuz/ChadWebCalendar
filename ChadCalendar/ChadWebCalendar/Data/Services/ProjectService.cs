@@ -11,8 +11,9 @@ namespace ChadWebCalendar.Data.Services
         ApplicationContext db = new ApplicationContext();
         public Data.Project GetProjectById(int? id)
         {
+            ApplicationContext db1 = new ApplicationContext();
             if (id != null)
-                return db.Projects.FirstOrDefault(p => p.Id == id);
+                return db1.Projects.FirstOrDefault(p => p.Id == id);
             else
                 return null;
         }
