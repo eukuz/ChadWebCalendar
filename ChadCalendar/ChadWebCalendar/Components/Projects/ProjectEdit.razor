@@ -68,8 +68,8 @@
         string userName;
         protected override void OnInitialized()
         {
-            userName = authenticationState.Result.User.Identity.Name;
             project = projectService.GetProjectById(projectId);
+            userName = authenticationState.Result.User.Identity.Name;
         }
         void redirectToIndex()
         {

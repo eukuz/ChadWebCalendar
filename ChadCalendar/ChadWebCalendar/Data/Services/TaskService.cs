@@ -17,7 +17,7 @@ namespace ChadWebCalendar.Data.Services
             else
                 return false;
         }
-        private void removeDependencies(Data.Task task)
+        public void removeDependencies(Data.Task task)
         {
             var PredecessorDependecies = db.Tasks.Where(t => t.Predecessor == task);
             foreach (var item in PredecessorDependecies)
@@ -43,9 +43,11 @@ namespace ChadWebCalendar.Data.Services
             }
             return false;
         }
-        public bool Edit(Data.Task task, int projectId, string Name)
+        public bool Edit(Data.Task task, int? projectId, string Login)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == Name);
+            User user;
+            if (Login != String.Empty)
+                user = db.Users.FirstOrDefault(u => u.Login == Login);
             task.Accessed = DateTime.Now;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId); // это странное выражение нужно потому что в модели передается только Id
             if (IsCorrect(task))
@@ -60,7 +62,8 @@ namespace ChadWebCalendar.Data.Services
         {
             if (task != null)
             {
-                task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
+                if (task.Project != null)
+                    task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
                 removeDependencies(task);
                 db.Tasks.Remove(task);
                 await db.SaveChangesAsync();
@@ -68,14 +71,15 @@ namespace ChadWebCalendar.Data.Services
         }
         public async void Mutatuion(int? id, string Name, DateTime StartsAt)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == Name);
-            Data.Task task = db.Tasks.FirstOrDefault(t => id == t.Id); // это странное выражение нужно потому что в модели передается только Id
+            ApplicationContext db1 = new ApplicationContext();
+            User user = db1.Users.FirstOrDefault(u => u.Login == Name);
+            Data.Task task = db1.Tasks.FirstOrDefault(t => id == t.Id); // это странное выражение нужно потому что в модели передается только Id
             removeDependencies(task); // избавляемся от зависимостей
             Event _event = new Event(task, StartsAt, 15);
             _event.User = user;
-            db.Events.Add(_event);
-            db.Tasks.Remove(task);
-            await db.SaveChangesAsync();
+            db1.Events.Add(_event);
+            db1.Tasks.Remove(task);
+            await db1.SaveChangesAsync();
         }
         // CRUD end
 
@@ -95,6 +99,10 @@ namespace ChadWebCalendar.Data.Services
         public Data.Task GetTask(int? id)
         {
             return db.Tasks.Include(t => t.Project).Include(t => t.Predecessor).FirstOrDefault(t => t.Id == id);
+        }
+        public Data.Task GetTaskAsNoTracking(int? id)
+        {
+            return db.Tasks.Include(t => t.Project).Include(t => t.Predecessor).AsNoTracking().FirstOrDefault(t => t.Id == id);
         }
         public IEnumerable<Data.Task> GetTasks(User user)
         {

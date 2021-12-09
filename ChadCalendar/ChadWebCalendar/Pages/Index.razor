@@ -83,7 +83,7 @@
     }
     private async void Distribute(int? projectId)
     {
-        await DialogService.OpenAsync<TaskDistributorPage>($"👩‍💼 Распланировать задачи из проекта: {projName} 👩‍💼",
+        await DialogService.OpenAsync<TaskDistributorPage>($"👩‍💼 Выберите способ распределения задач из проекта \"{projName}\"  на эту неделю: ",
             new Dictionary<string, object> { { "projectId", projectId } });
     }
 

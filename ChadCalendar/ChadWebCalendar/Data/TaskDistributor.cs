@@ -1,4 +1,5 @@
 ﻿
+using ChadWebCalendar.Data.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -52,6 +53,7 @@ namespace ChadWebCalendar.Data
         public static void Distribute(int projId, DistributionType distributionType)
         {
 
+            TaskService taskService = new TaskService();
             List<Data.Event> distributedTasks = new List<Data.Event>();
             using (ApplicationContext db = new ApplicationContext())
             {
@@ -67,7 +69,7 @@ namespace ChadWebCalendar.Data
                 eventsOfTheWeek = eventsOfTheWeek.OrderBy(e => e.StartsAt).ToList();
 
                 List<TimeSlot> freeTimeSlots = findFreeTimeSlots(eventsOfTheWeek, endOfWeek);
-                List<Task> tasks = new List<Task>(db.Tasks.Where(t => t.Project.Id == project.Id && t.AllowedToDistribute));
+                List<Task> tasks = new List<Task>(db.Tasks.Include(t=> t.Project).Where(t => t.Project.Id == project.Id && t.AllowedToDistribute && t.IsCompleted == false));
                 tasks = tasks.OrderByDescending(t => t.TimeTakes).ToList();
                 bool[] pickedTasks = new bool[tasks.Count];
 
@@ -76,7 +78,7 @@ namespace ChadWebCalendar.Data
                     freeTimeSlots = SortForEvenly(freeTimeSlots, endOfWeek, user.WorkingHoursTo);
 
                     for (int j = 0; j < tasks.Count; j++)
-                        for (int i = 0; i < freeTimeSlots.Count; i++, i++)
+                        for (int i = 0; i < freeTimeSlots.Count; i++)
                         {
                             if (!pickedTasks[j] && (tasks[j].TimeTakes <= freeTimeSlots[i].GetTimeSpan))
                             {
@@ -110,11 +112,19 @@ namespace ChadWebCalendar.Data
                 db.Events.AddRange(distributedTasks);
 
                 for (int i = 0; i < tasks.Count; i++)
-                    if (pickedTasks[i])
+                    if (pickedTasks[i]) {
+                        var PredecessorDependecies = db.Tasks.Where(t => t.Predecessor == tasks[i]);
+                        foreach (var item in PredecessorDependecies)
+                        {
+                            item.Predecessor = null;
+                            db.Tasks.Update(item);
+                        }
                         db.Tasks.Remove(tasks[i]);
-
+                    }
                 db.SaveChanges();
             }
+
+
         }
         private static void switchTimeSlots(in List<TimeSlot> freeTimeSlots, int i)
         {
