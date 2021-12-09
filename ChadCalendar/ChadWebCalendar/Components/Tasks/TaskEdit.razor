@@ -126,7 +126,7 @@
     bool isValidationError = false;
     protected override void OnInitialized()
     {
-        modelInitialization();
+        task = taskService.GetTask(taskId);
         if (task.Predecessor != null)
             predecessorContainer = task.Predecessor.Id;
         else
@@ -171,21 +171,6 @@
         taskService.Mutatuion(task.Id, authenticationState.Result.User.Identity.Name, startsAt);
         redirectToIndex();
 
-    }
-
-    void modelInitialization() // ПРОСТИТЕ МЕНЯ НО МНЕ ПРИШЛОСЬ
-    {
-        task = taskService.GetTask(taskId);
-        prevTask = taskService.GetTaskAsNoTracking(taskId);
-        task.Name = prevTask.Name;
-        task.AllowedToDistribute = prevTask.AllowedToDistribute;
-        task.Deadline = prevTask.Deadline;
-        task.Description = prevTask.Description;
-        task.Frequency = prevTask.Frequency;
-        task.MaxPerDay = prevTask.MaxPerDay;
-        task.Predecessor = prevTask.Predecessor;
-        task.Project = prevTask.Project;
-        task.TimeTakes = prevTask.TimeTakes;
     }
 
     void OnSubmit()

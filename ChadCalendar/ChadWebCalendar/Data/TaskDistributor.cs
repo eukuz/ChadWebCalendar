@@ -67,7 +67,7 @@ namespace ChadWebCalendar.Data
                 eventsOfTheWeek = eventsOfTheWeek.OrderBy(e => e.StartsAt).ToList();
 
                 List<TimeSlot> freeTimeSlots = findFreeTimeSlots(eventsOfTheWeek, endOfWeek);
-                List<Task> tasks = new List<Task>(db.Tasks.Where(t => t.Project.Id == project.Id && t.AllowedToDistribute));
+                List<Task> tasks = new List<Task>(db.Tasks.Where(t => t.Project.Id == project.Id && t.AllowedToDistribute && t.IsCompleted == false));
                 tasks = tasks.OrderByDescending(t => t.TimeTakes).ToList();
                 bool[] pickedTasks = new bool[tasks.Count];
 

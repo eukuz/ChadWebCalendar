@@ -42,15 +42,15 @@ namespace ChadWebCalendar.Data.Services
             {
                 if (item != null)
                 {
-                    item.StartsAt = item.StartsAt.AddMinutes(-item.RemindNMinutesBefore);
-                    if (item.StartsAt == dt)
+                    DateTime TimeToNotificate = item.StartsAt.AddMinutes(-(item.RemindNMinutesBefore));
+                    if (TimeToNotificate == dt)
                     {
                         string stripped;
-                        if (item.StartsAt.ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
+                        if (TimeToNotificate.ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
                         {
                             stripped = item.StartsAt.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT);
                         }
-                        else if (item.StartsAt.ToString().Last() == 'm')
+                        else if (TimeToNotificate.ToString().Last() == 'm')
                         {
                             stripped = item.StartsAt.ToString().Substring(Constants.NumberOfInitialTimePosition, Constants.LenForFullDT + 2);
                         }
@@ -108,7 +108,7 @@ namespace ChadWebCalendar.Data.Services
             tempOfNotification = "";
             foreach (var item in taskDeadlines)
             {
-                if (item != null && item.Deadline - dt > (dt - dt))
+                if (!item.IsCompleted && item != null && item.Deadline - dt > (dt - dt))
                 {
                     string stripped;
                     if (item.ToString().Count() == Constants.CountOfSymbolsForFullDateTime)
