@@ -43,9 +43,11 @@ namespace ChadWebCalendar.Data.Services
             }
             return false;
         }
-        public bool Edit(Data.Task task, int projectId, string Name)
+        public bool Edit(Data.Task task, int? projectId, string Login)
         {
-            User user = db.Users.FirstOrDefault(u => u.Login == Name);
+            User user;
+            if (Login != String.Empty)
+                user = db.Users.FirstOrDefault(u => u.Login == Login);
             task.Accessed = DateTime.Now;
             task.Project = db.Projects.FirstOrDefault(p => p.Id == projectId); // это странное выражение нужно потому что в модели передается только Id
             if (IsCorrect(task))
@@ -60,7 +62,8 @@ namespace ChadWebCalendar.Data.Services
         {
             if (task != null)
             {
-                task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
+                if (task.Project != null)
+                    task.Project = db.Projects.FirstOrDefault(p => p.Id == task.Project.Id);
                 removeDependencies(task);
                 db.Tasks.Remove(task);
                 await db.SaveChangesAsync();
