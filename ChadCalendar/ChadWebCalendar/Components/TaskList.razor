@@ -7,10 +7,11 @@
 @using ChadWebCalendar.Data
 
 <div class="list-group" style="height: 800px; width: 100%; overflow: auto; font-size: 30px; word-wrap: break-word ">
-    @foreach (var task in tasks)
+    @foreach (var task in taskService.GetTasks(user))
     {
         if (task.Project != null && task.Project.Id == projectId)
-        {   <div style="display:flex; width: 100%">
+        {
+            <div style="display:flex; width: 100%">
                 <button type="button" class="list-group-item list-group-item-success btn btn-light" @onclick="() => ChangeIsCompleted(task.Id)" style="width: 100%; overflow: hidden; word-break:break-word;">
                     <div class="task_container" Style="justify-content: space-between; overflow:hidden; max-width: 100%;">
                         @if (task.IsCompleted == false)
@@ -21,6 +22,7 @@
                         {
                             <s>@task.Name</s>
                         }
+
                     </div>
                 </button>
                 <Button @onclick="() => EditTaskPage(task.Id)" style="height:100%">
@@ -28,8 +30,7 @@
                 </Button>
             </div>
         }
- 
-     }
+    }
 </div>
 
 @code {
@@ -43,12 +44,9 @@
     protected override void OnInitialized()
     {
         user = taskService.GetUser(authenticationState.Result.User.Identity.Name);
-        tasks = taskService.GetTasks(user);
     }
 
     [Parameter] public int? projectId { get; set; }
-
-    IEnumerable<Data.Task> tasks;
     public int? taskId { get; set; }
 
     private async System.Threading.Tasks.Task EditTaskPage(int? taskId)
